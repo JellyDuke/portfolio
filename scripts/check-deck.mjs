@@ -82,7 +82,7 @@ function setup({ width = 1920, height = 1080, reduced = false, webgl = true } = 
   }
   const api = { window, document, tick, wheel, fire, click, overflow, errors, renders,
     get active() { return document.documentElement.dataset.activeSection; },
-    runScene() { window.THREE = { ...THREE, WebGLRenderer: Renderer }; window.createAssembly = createAssembly; window.createStudioEnvironment = createStudioEnvironment; window.eval(read('scene.js').replace(/^import .*?;\n/gm, '')); tick(); },
+    runScene() { window.THREE = { ...THREE, WebGLRenderer: Renderer }; window.createAssembly = createAssembly; window.createStudioEnvironment = createStudioEnvironment; window.eval(read('scene.js').replace(/^import .*?;\r?\n/gm, '')); tick(); },
     destroy() { window.dispatchEvent(new window.Event('pagehide')); window.gsap.globalTimeline.clear(); clock.uninstall(); window.close(); },
   };
   applications.push(api); return api;
