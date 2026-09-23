@@ -1,0 +1,4 @@
+interface:
+  display_name: "포트폴리오 소프트웨어 규칙"
+  short_description: "한글 주석·이름·설계·테스트 규칙으로 유지보수성을 높입니다"
+  default_prompt: "Use $portfolio-software-standards to implement this repository change with consistent, maintainable engineering conventions."

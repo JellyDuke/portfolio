@@ -13,6 +13,7 @@ const read = name => fs.readFileSync(path.join(dist, name), 'utf8');
 const html = read('index.html');
 const applications = [];
 
+/** 실제 배포 문서와 같은 CSS 순서로 각 화면 크기의 동작을 검증한다. */
 function setup({ width = 1920, height = 1080, reduced = false, webgl = true } = {}) {
   const errors = [];
   const console = new VirtualConsole();
@@ -31,17 +32,20 @@ function setup({ width = 1920, height = 1080, reduced = false, webgl = true } = 
   // JSDOM has no layout engine. These dimensions are input fixtures, not visual QA.
   Object.defineProperties(window.HTMLElement.prototype, {
     offsetWidth: { configurable: true, get() { return 600; } },
-    offsetHeight: { configurable: true, get() { return this.classList.contains('card-details') ? 44 : cardHeight; } },
+    offsetHeight: { configurable: true, get() { return cardHeight; } },
     clientHeight: { configurable: true, get() {
-      const details = this.classList.contains('card-content') && this.parentElement.querySelector('.card-details');
-      return cardHeight - 132 - (details && !details.hidden ? 56 : 0);
+      return cardHeight - 132;
     } },
     scrollHeight: { configurable: true, get() { return Math.max(this.clientHeight, cardHeight - 132 + (overflow.has(this) ? 300 : 0)); } },
   });
   window.HTMLElement.prototype.getBoundingClientRect = function () { return { x: 0, y: 100, left: 0, top: 100, right: 600, bottom: 500, width: 600, height: 400 }; };
   window.HTMLDialogElement.prototype.showModal = function () { this.open = true; };
   window.HTMLDialogElement.prototype.close = function () { this.open = false; this.dispatchEvent(new window.Event('close')); };
-  const style = document.createElement('style'); style.textContent = read('styles.css') + '\n' + read('deck.css'); document.head.append(style);
+  const stylesheetPaths = [...document.querySelectorAll('link[rel="stylesheet"]')]
+    .map(link => new URL(link.href).pathname.replace(/^\//, ''));
+  const style = document.createElement('style');
+  style.textContent = stylesheetPaths.map(read).join('\n');
+  document.head.append(style);
   // JSDOM does not evaluate viewport media queries. Select the real source rules
   // for each fixture to check the cascade, without claiming rendered geometry.
   const viewportCSS = rules => [...rules].map(rule => {
@@ -97,20 +101,14 @@ try {
   assert.equal(app.active, 'home');
   assert.equal(q('#motion-toggle'), null);
   assert.equal(q('.scene-heading'), null, 'Remove duplicated decorative labels above the 3D model');
-  assert.equal(app.window.getComputedStyle(q('.identity img')).width, '208px', 'The 1920×1080 portrait rule must be selected');
-  assert.equal(app.window.getComputedStyle(q('.identity img')).height, '267px');
-  // The reader occupies a separate flex row, never an absolute overlay. JSDOM
-  // can verify this layout contract, but cannot prove the rendered geometry.
+  assert.equal(app.window.getComputedStyle(q('.identity img')).width, '160px', 'The 1920×1080 portrait must stay at its fixed desktop size');
+  assert.equal(app.window.getComputedStyle(q('.identity img')).height, '205px');
+  assert.equal(app.window.getComputedStyle(q('#about .card-flow')).alignContent, 'center', 'The desktop introduction must be vertically centered');
+  assert.equal(app.window.getComputedStyle(q('#about .card-flow')).alignItems, 'center');
   assert.equal(app.window.getComputedStyle(q('#home')).display, 'flex');
   assert.equal(app.window.getComputedStyle(q('#home')).flexDirection, 'column');
   assert.equal(app.window.getComputedStyle(q('#home .card-content')).minHeight, '0');
-  for (const card of app.document.querySelectorAll('.section-card')) {
-    const details = card.querySelector('.card-details');
-    assert.equal(details.previousElementSibling, card.querySelector('.card-content'), 'Read-all must follow the body in its own row');
-    assert.equal(app.window.getComputedStyle(details).position, 'static', 'Reader buttons must not overlay any card');
-    assert.equal(app.window.getComputedStyle(details).flexShrink, '0');
-  }
-  assert.equal(q('#home .card-details').hidden, true);
+  assert.equal(app.document.querySelectorAll('.card-details').length, 0, 'Full-view buttons must not be rendered');
 
   const wheel = app.wheel(1);
   assert.ok(wheel.defaultPrevented);
@@ -143,21 +141,12 @@ try {
 
   // A long card must not consume the wheel in an inner scroller.
   const content = q('#about .card-content'); app.overflow.add(content);
-  app.window.dispatchEvent(new app.window.Event('resize')); app.tick();
-  assert.equal(q('#about .card-details').hidden, false);
-  app.window.dispatchEvent(new app.window.Event('resize')); app.tick();
-  assert.equal(q('#about .card-details').hidden, false, 'Reserving a reader row must not toggle the button off');
-  app.overflow.delete(content);
-  app.window.dispatchEvent(new app.window.Event('resize')); app.tick();
-  assert.equal(q('#about .card-details').hidden, true, 'An expanded viewport must release the reserved reader row');
-  app.overflow.add(content);
-  app.window.dispatchEvent(new app.window.Event('resize')); app.tick();
   app.wheel(1, { target: content }); assert.equal(app.active, 'experience'); app.tick();
   app.click('#site-nav a[href="#education"]');
   app.click('.training > summary'); assert.ok(q('.content-dialog').open);
   assert.ok(q('.dialog-content .training').open);
   app.fire('.content-dialog','click',{clientX:200,clientY:200});
-  assert.ok(q('.content-dialog').open,'Clicking inside the reader keeps it open');
+  assert.ok(q('.content-dialog').open,'Clicking inside the training dialog keeps it open');
   assert.equal(app.wheel(1, { target: q('.dialog-content') }).defaultPrevented, false);
   assert.equal(app.active, 'education'); app.click('.dialog-close'); assert.equal(q('.content-dialog').open, false);
 
@@ -243,12 +232,6 @@ try {
   assert.equal(mobile.document.querySelector('#job-2').classList.contains('job-active'), true);
   assert.equal(mobile.document.querySelector('.job-tabs button:nth-child(3)').getAttribute('aria-pressed'), 'true');
   assert.equal(Number(mobile.window.gsap.getProperty(mobile.document.querySelector('#job-2'), 'opacity')), 1, 'Rapid company selection settles on the final readable employer');
-  const mobileContent = mobile.document.querySelector('#experience .card-content');
-  mobile.overflow.add(mobileContent); mobile.window.dispatchEvent(new mobile.window.Event('resize')); mobile.tick();
-  mobile.click('#experience .card-details');
-  assert.equal(mobile.document.querySelectorAll('.dialog-content .experience-item.job-active').length, 3, 'The mobile reader includes every employer');
-  mobile.fire('.content-dialog','click',{clientX:0,clientY:0});
-  assert.equal(mobile.document.querySelector('.content-dialog').open,false,'Backdrop click closes the full reader');
   mobile.wheel(1); assert.equal(mobile.active, 'skills'); mobile.tick();
   assert.ok(!mobile.document.documentElement.classList.contains('motion-reduced'), 'Short viewports do not disable animation');
 
@@ -301,6 +284,6 @@ try {
   }
   for (const value of ['PostgreSQL', 'Supabase', 'CCTV·영상보안 시스템', '010-4335-4586', 'wnghqkr30520@naver.com']) assert.ok(html.includes(value));
   applications.forEach(application => assert.equal(application.errors.length, 0, application.errors.map(error => error.message).join('\n')));
-  console.log('PASS: reader buttons in separate layout rows, reader show/hide after resize, actual packaged GSAP runtime, first-notch next-section routing, whole-card tween, staggered content reveal, gesture lock, reverse, keyboard, swipe, long-card reader, hero tabs, always-on motion including old/OS preferences, mobile routing, Three.js geometry/materials/mixer/pause/fallback, modified links, reader backdrop, pinch zoom, packaged font, assets and retained content.');
+  console.log('PASS: no full-view buttons, fixed desktop portrait sizing, centered desktop introduction, packaged GSAP runtime, first-notch next-section routing, whole-card tween, staggered content reveal, gesture lock, reverse, keyboard, swipe, hero tabs, always-on motion including old/OS preferences, mobile routing, Three.js geometry/materials/mixer/pause/fallback, modified links, training dialog backdrop, pinch zoom, packaged font, assets and retained content.');
   console.log('UNVERIFIED: browser layout at 1920×1080 and actual GPU pixels. JSDOM dimensions are fixtures; this test is not visual QA.');
 } finally { applications.forEach(application => application.destroy()); }

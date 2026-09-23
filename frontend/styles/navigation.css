@@ -1,0 +1,14 @@
+/* 상단 브랜드, 내비게이션과 메뉴 조작 영역을 담당한다. */
+.site-header{height:80px;position:sticky;top:0;z-index:30;background:var(--paper)}
+.header-inner{width:min(1744px,calc(100% - 96px));height:100%;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:12px;font-size:1rem;font-weight:750;white-space:nowrap}
+.brand-mark{display:grid;place-items:center;color:#fff;width:36px;height:36px;background:var(--blue);border-radius:8px;font-size:1.4rem;font-weight:750;line-height:1;letter-spacing:-2px;padding-right:2px}
+.brand-note{margin-left:10px;color:var(--muted);font-size:.8125rem;font-weight:450}
+#site-nav{display:flex;align-items:center;gap:26px}
+#site-nav>a{display:flex;align-items:center;min-height:44px;font-size:.875rem;font-weight:550;color:var(--muted);position:relative;white-space:nowrap;transition:color .2s}
+#site-nav>a:not(.nav-contact)::after{content:'';position:absolute;inset:auto 0 2px;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .25s}
+#site-nav>a:hover,#site-nav>a[aria-current]{color:var(--blue)}
+#site-nav>a:hover::after,#site-nav>a[aria-current]::after{transform:scaleX(1)}
+#site-nav>.nav-contact{padding:10px 16px;border:1px solid #cbd6e5;border-radius:8px;gap:10px;color:var(--ink);background:#fff}
+.nav-contact .icon{width:16px;height:16px}
+.menu-button{display:none;width:44px;height:44px;padding:10px;border:0;background:transparent}

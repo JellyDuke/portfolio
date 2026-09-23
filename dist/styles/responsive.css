@@ -1,0 +1,32 @@
+/* 일반 컴포넌트의 태블릿·모바일 반응형 규칙을 모은다. */
+@media(max-width:1100px){
+  .brand-note{display:none}#site-nav{gap:18px}.header-inner{width:calc(100% - 56px)}.identity{gap:22px}.identity strong{font-size:2rem}
+  .story-panel h1,.story-panel h2{font-size:2.4rem}.hero-actions{gap:10px}.button{padding-inline:17px}.about-values>li{gap:18px}.about-values h3{font-size:1.4rem}.about-values p{font-size:1rem}
+  .experience-item{grid-template-columns:132px 1fr;gap:22px}.job-heading h3{font-size:1.3rem}.job-details{column-gap:18px}
+  .skills-layout{grid-template-columns:.7fr 1.5fr}.skill-row{grid-template-columns:148px 1fr;gap:16px}.skill-row h3{gap:8px;font-size:.9375rem}.skill-tags li{font-size:.875rem}.skill-scene{height:315px}
+  .project-card{min-height:390px}.project-card-body{padding-top:36px}
+}
+@media(max-width:850px){
+  .site-header{height:68px}.header-inner{width:calc(100% - 40px)}.brand-note{display:inline}
+  .menu-button{display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center}
+  .menu-button span{display:block;width:21px;height:2px;background:var(--ink);transition:transform .2s}
+  .menu-button[aria-expanded='true'] span:first-child{transform:translateY(4px) rotate(45deg)}.menu-button[aria-expanded='true'] span:last-child{transform:translateY(-4px) rotate(-45deg)}
+  #site-nav{display:none;position:absolute;top:67px;left:0;right:0;padding:16px 20px 22px;background:var(--paper);border-bottom:1px solid var(--line);box-shadow:0 16px 24px -20px #14284166}
+  #site-nav.open{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}#site-nav>a{padding:10px 14px;min-height:46px}#site-nav>a::after{display:none}
+  .page-width{width:calc(100% - 40px)}.section{padding-block:48px}
+  .story-layout{grid-template-columns:1fr 1fr}.identity img{width:132px;height:169px}.identity{gap:18px}.identity strong{font-size:1.8rem}.identity span{font-size:.875rem}
+  .story-panel h1,.story-panel h2{font-size:2rem}.story-panel>p{font-size:1rem}.story-panel>p br{display:none}.story-bottom{gap:14px}.story-choice-copy small{display:none}.story-choice-copy strong{font-size:.875rem}.story-skip{font-size:0;gap:0}.hero-actions{gap:10px}.button{font-size:.875rem}.about-values>li{grid-template-columns:1fr;gap:10px}.about-values .icon{display:none}.about-body>p{font-size:1rem}.about-signature{margin-top:24px}
+  .job-details{grid-template-columns:1fr}.skills-layout{grid-template-columns:1fr}.skills-visual{display:none}.skill-row{grid-template-columns:170px 1fr}.project-card-body h3{font-size:1.8rem}.project-card-top{flex-wrap:wrap;gap:5px}.project-card-body p{font-size:.9375rem}
+}
+@media(max-width:600px){
+  .brand-note{font-size:.75rem}.brand-mark{width:32px;height:32px}.page-width{width:calc(100% - 32px)}
+  h2{font-size:var(--section-title-size)}.section-heading>p{font-size:.9375rem;margin-top:10px}
+  .story-layout{grid-template-columns:1fr}.identity{grid-column:1;gap:22px}.identity img{width:104px;height:133px;border-radius:7px}.identity strong{font-size:1.8rem;margin-bottom:9px}.identity .identity-name-en{font-size:.8125rem}.identity .identity-location{font-size:.75rem}.story-copy{grid-column:1}.story-visual{display:none}
+  .story-panel h1,.story-panel h2{font-size:clamp(1.9rem,7.3vw,2.5rem);line-height:1.25}.story-panel>p{font-size:.9375rem;margin-top:16px;line-height:1.75}.hero-actions{margin-top:22px;gap:12px}.button{min-height:46px;padding:10px 15px}
+  .story-bottom{gap:10px;padding-top:10px}.story-select{gap:12px}.story-select button{min-height:48px;padding:6px 0 10px}.story-choice-copy strong{font-size:.8125rem;white-space:nowrap}.story-skip>span{width:32px;height:32px;font-size:1rem}
+  .about-section{grid-template-columns:1fr}.about-body>p{margin-top:18px;line-height:1.7}.about-signature{display:none}.about-values>li{grid-template-columns:24px 1fr;gap:16px}.about-values .icon{display:block;width:22px;height:22px}.about-values h3{font-size:1.1875rem}.about-values p{font-size:.9375rem;line-height:1.7;margin-top:8px}.desktop-break{display:none}
+  .experience-item{grid-template-columns:1fr;gap:18px}.experience-date{flex-direction:row;align-items:center;flex-wrap:wrap;gap:12px}.job-heading h3{font-size:1.4rem}.job-details{font-size:.9375rem;gap:7px}.job-tags{margin-top:18px}
+  .skill-row{grid-template-columns:1fr;gap:10px}.skill-row h3{font-size:.9375rem;gap:10px}.skill-tags{gap:3px 16px}.skill-tags li{font-size:.8125rem}.skill-tags li:not(:last-child)::after{right:-9px;top:10px}
+  .project-grid{grid-template-columns:1fr}.project-card{min-height:0}.project-card-top{flex-wrap:nowrap;font-size:.75rem}.project-card-body{padding-top:22px}.project-card-body h3{font-size:1.5rem}.project-card-body p{font-size:.875rem;line-height:1.65;margin-top:12px}.project-tools{margin-top:16px;font-size:.75rem;gap:3px 14px}.project-card-footer{margin-top:20px;padding-top:14px;font-size:.875rem}.project-update-note{font-size:.8125rem;margin-top:18px}
+  .education-grid{grid-template-columns:1fr 1fr}.column-heading{font-size:.9375rem;padding-bottom:12px}.education-item time{font-size:.75rem}.education-item h4{font-size:1.0625rem}.education-item p{font-size:.8125rem}.education-meta{font-size:.75rem}.training summary{padding:18px;gap:12px}.training-summary strong{font-size:.875rem}.training-meta{font-size:.75rem}.training-topics{grid-template-columns:1fr}.training-content{padding:0 18px 20px}.site-footer{font-size:.75rem}
+}

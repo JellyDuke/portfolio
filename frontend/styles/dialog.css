@@ -1,0 +1,15 @@
+/* 교육 상세 대화상자의 배치와 읽기 화면을 담당한다. */
+.content-dialog{width:min(1000px,calc(100% - 32px));max-height:calc(100svh - 40px);padding:0;border:0;border-radius:16px;color:var(--ink);background:#fff;box-shadow:0 28px 90px #17171740;scrollbar-color:#8c9bb2 #f5f7fa}
+.content-dialog::backdrop{background:#14284188;backdrop-filter:blur(6px)}
+.dialog-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 26px;border-bottom:1px solid var(--line);background:#fff}
+.dialog-top h2{font-size:1.25rem}.dialog-close{min-height:44px;padding:8px 12px;background:var(--soft);border:1px solid var(--line);border-radius:6px;font-size:.875rem}.dialog-close span{font-size:1.2rem;margin-left:12px}
+.dialog-content{padding:30px}.dialog-content .card-flow{height:auto;min-height:0;display:block}
+.dialog-content .job-tabs,.dialog-content .story-visual,.dialog-content .story-bottom,.dialog-content .scene-host,.dialog-content .scene-turn,.dialog-content .hero-actions,.dialog-content .skills-visual{display:none}
+.dialog-content .story-layout{display:block;width:100%;height:auto}
+.dialog-content .story-layout>.identity{margin-bottom:30px}
+.dialog-content .story-panels{display:block}.dialog-content .story-panel{visibility:visible!important;opacity:1!important;margin-block:24px;transform:none!important}
+.dialog-content .story-panel h1,.dialog-content .story-panel h2{font-size:2rem}
+.dialog-content .about-values{margin-top:28px}.dialog-content .about-body h2{font-size:2.3rem}
+.dialog-content .experience-list,.dialog-content .skills-layout,.dialog-content .project-grid{display:block}
+.dialog-content .experience-item{display:grid}.dialog-content .project-card+.project-card{margin-top:20px}
+.dialog-content .project-card{min-height:0}.dialog-content .project-card-body{padding-top:24px}.dialog-content .site-footer{margin-top:30px}

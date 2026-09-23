@@ -18,6 +18,17 @@
 - Treat `dist/` as generated Sites output. Run `npm run build` instead of editing
   it directly.
 
+## Engineering conventions
+
+- For changes or reviews involving frontend, backend, scripts, tests, assets,
+  configuration, or technical documentation, use the repository skill at
+  `.agents/skills/portfolio-software-standards/`.
+- Apply its Korean documentation, naming, module-boundary, error-handling,
+  security, testing, and maintainability rules to every newly written or
+  directly modified scope.
+- Do not perform a repository-wide mechanical rewrite merely to conform old
+  code. Improve existing code when it is part of the requested change.
+
 ## Semi-automatic Sites deployment
 
 The repository owner authorizes Codex to deploy only after a new commit is already

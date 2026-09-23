@@ -1,59 +1,4 @@
-/* One viewport, one card. Content and the optional reader always occupy separate rows. */
-:root{--header-height:80px;--deck-width:min(1744px,calc(100% - 96px));--deck-height:calc(100svh - 160px);--card-padding:48px}
-.site-header{height:var(--header-height)}.header-inner{width:var(--deck-width)}
-.reading-progress{position:fixed;inset:0 0 auto;height:2px;z-index:40;pointer-events:none}
-.reading-progress>span{display:block;height:100%;background:var(--blue);transform:scaleX(0);transform-origin:left}
-.deck-ready,.deck-ready body{height:100%;overflow:hidden;overscroll-behavior:none}
-.deck-ready .deck-stage{position:relative;width:var(--deck-width);height:var(--deck-height);margin:12px auto 68px;perspective:1600px;isolation:isolate}
-.deck-ready .deck-stage::before,.deck-ready .deck-stage::after{content:'';position:absolute;inset:12px 18px -12px;border:1px solid #d4deeb;border-radius:24px;background:#f5f7fa;z-index:-1;pointer-events:none}
-.deck-ready .deck-stage::after{inset:6px 9px -6px;background:#fafbfd}
-.deck-ready .section-card{position:absolute;inset:0;width:100%;height:100%;min-height:0;margin:0;padding:var(--card-padding);border:1px solid #dce3ed;border-radius:24px;background:#fff;box-shadow:0 14px 30px -24px #17171730;overflow:hidden;display:flex;flex-direction:column;visibility:hidden;transform-origin:center center}
-.deck-ready .section-card:first-child{visibility:visible}.deck-ready .section-card:focus{outline:none}
-.deck-ready .card-content{flex:1 1 0;min-height:0;width:100%;overflow:hidden}
-.deck-ready .card-flow{min-height:100%;display:flex;flex-direction:column;justify-content:flex-start;width:100%;max-width:none;margin:0}
-.card-flow>*{flex-shrink:0;min-width:0}
-.section-card .card-details{position:static;flex:0 0 auto;align-self:flex-start;margin-top:12px;min-height:44px;padding:9px 15px;background:#edf2ff;border:1px solid #c5d2ef;border-radius:7px;color:var(--blue);font-size:.875rem}
-.section-card .card-details[hidden]{display:none}
-.section-card[data-overflow='true'] .card-content{mask-image:linear-gradient(#000 calc(100% - 20px),transparent)}
-.deck-controls{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);width:var(--deck-width);height:44px;display:flex;align-items:center;gap:20px;z-index:30;color:var(--muted)}
-.deck-controls[hidden]{display:none}.deck-position{display:flex;align-items:center;gap:18px;min-width:260px;font-size:.8125rem}
-.chapter-count{font-variant-numeric:tabular-nums;color:var(--ink)}.chapter-current{padding-left:18px;border-left:1px solid #c6d2e3}.chapter-next{display:none}
-.deck-dots{display:flex;margin-inline:auto;gap:0}.deck-dots button{position:relative;display:grid;place-items:center;width:44px;height:44px;border:0;padding:0;background:transparent}
-.deck-dots button>span:first-child{width:6px;height:6px;border-radius:50%;background:#8a9cb5;transition:transform .3s,background .3s}
-.deck-dots button[aria-current]>span:first-child{background:var(--blue);transform:scale(1.6)}
-.deck-dots button:hover>span:first-child{background:var(--blue)}
-.deck-tooltip{position:absolute;left:50%;bottom:48px;transform:translate(-50%,5px);padding:6px 10px;border-radius:5px;background:var(--ink);color:white;font-size:.75rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
-.deck-dots button:hover .deck-tooltip,.deck-dots button:focus-visible .deck-tooltip{opacity:1;transform:translate(-50%,0)}
-.deck-hint{font-size:.75rem}.deck-arrows{display:flex;gap:8px}
-.deck-arrows button{display:grid;place-items:center;width:44px;height:44px;border:1px solid #c9d5e5;border-radius:50%;background:#fff;color:var(--ink);font-size:1.125rem;transition:background .2s,transform .2s}
-.deck-arrows button:not(:disabled):hover{background:#e1e9f8;transform:translateY(-2px)}.deck-arrows button:disabled{opacity:.35;cursor:default}
-/* Introduction: a personal identity above the introduction, paired with a studio 3D scene. */
-.deck-ready #home{background:#fbfcff}
-.deck-ready .story-layout.card-flow{display:grid;width:100%;max-width:none;height:100%;min-height:100%;grid-template-rows:auto minmax(min-content,1fr) auto;align-items:center;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--layout-gap)}
-.deck-ready .story-panels{display:grid}.deck-ready .story-panel{grid-area:1 / 1;visibility:hidden;margin:0}.deck-ready .story-panel:first-child{visibility:visible}
-.deck-ready .story-copy{align-self:center}.deck-ready .story-visual{grid-column:2;grid-row:1 / 3;align-self:stretch}
-.deck-ready .hero-scene{height:auto;flex:1;min-height:280px}
-.deck-ready .story-bottom{grid-row:3;grid-column:1 / -1}
-/* Each chapter gets a composition suited to its content. */
-.deck-ready .about-section .card-flow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--layout-gap);align-content:start;align-items:start}
-/* The reader preserves the complete document on small or zoomed viewports. */
-.content-dialog{width:min(1000px,calc(100% - 32px));max-height:calc(100svh - 40px);padding:0;border:0;border-radius:16px;color:var(--ink);background:#fff;box-shadow:0 28px 90px #17171740;scrollbar-color:#8c9bb2 #f5f7fa}
-.content-dialog::backdrop{background:#14284188;backdrop-filter:blur(6px)}
-.dialog-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 26px;border-bottom:1px solid var(--line);background:#fff}
-.dialog-top h2{font-size:1.25rem}.dialog-close{min-height:44px;padding:8px 12px;background:var(--soft);border:1px solid var(--line);border-radius:6px;font-size:.875rem}.dialog-close span{font-size:1.2rem;margin-left:12px}
-.dialog-content{padding:30px}.dialog-content .card-flow{height:auto;min-height:0;display:block}
-.dialog-content .job-tabs,.dialog-content .story-visual,.dialog-content .story-bottom,.dialog-content .scene-host,.dialog-content .scene-turn,.dialog-content .hero-actions,.dialog-content .skills-visual{display:none}
-.dialog-content .story-layout{display:block;width:100%;height:auto}
-.dialog-content .story-layout>.identity{margin-bottom:30px}
-.dialog-content .story-panels{display:block}.dialog-content .story-panel{visibility:visible!important;opacity:1!important;margin-block:24px;transform:none!important}
-.dialog-content .story-panel h1,.dialog-content .story-panel h2{font-size:2rem}
-.dialog-content .about-values{margin-top:28px}.dialog-content .about-body h2{font-size:2.3rem}
-.dialog-content .experience-list,.dialog-content .skills-layout,.dialog-content .project-grid{display:block}
-.dialog-content .experience-item{display:grid}.dialog-content .project-card+.project-card{margin-top:20px}
-.dialog-content .project-card{min-height:0}.dialog-content .project-card-body{padding-top:24px}.dialog-content .site-footer{margin-top:30px}
-@media(min-width:1401px) and (min-height:901px){
-  .identity img{width:208px;height:267px}
-}
+/* 덱 전용 화면 크기·높이 대응 규칙과 후속 덮어쓰기를 모은다. */
 @media(max-width:1400px){
   :root{--deck-width:calc(100% - 72px);--card-padding:32px}.identity{gap:22px}.job-details{font-size:.875rem}
 }
@@ -121,7 +66,7 @@
 @media(max-width:600px) and (max-height:740px){
   :root{--card-padding:20px;--row-space:14px}.deck-ready .identity img{width:90px;height:115px}.identity strong{font-size:1.6rem}.story-panel h1,.story-panel h2{font-size:1.9rem}.story-panel>p{font-size:.875rem;margin-top:12px}.hero-actions{margin-top:16px;gap:8px}.button{font-size:.8125rem;padding-inline:12px}.about-body>p{font-size:.9375rem;margin-top:14px}.about-values p{font-size:.875rem;line-height:1.65}
 }
-/* The title and full-width records share the same content column as every chapter. */
+/* 경력 제목과 전체 너비 기록은 다른 카드와 같은 본문 정렬축을 공유한다. */
 @media(min-width:851px){
   #experience .experience-item{grid-template-columns:160px minmax(0,1fr);gap:var(--layout-gap);padding-block:var(--row-space)}
   #experience .experience-date{padding-top:2px;font-size:.875rem;white-space:nowrap}

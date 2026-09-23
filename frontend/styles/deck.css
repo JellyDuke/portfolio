@@ -1,0 +1,36 @@
+/* 한 화면 한 카드 구조와 덱 탐색 UI를 담당한다. */
+/* 한 뷰포트에는 현재 카드 하나만 표시한다. */
+:root{--header-height:80px;--deck-width:min(1744px,calc(100% - 96px));--deck-height:calc(100svh - 160px);--card-padding:48px}
+.site-header{height:var(--header-height)}.header-inner{width:var(--deck-width)}
+.reading-progress{position:fixed;inset:0 0 auto;height:2px;z-index:40;pointer-events:none}
+.reading-progress>span{display:block;height:100%;background:var(--blue);transform:scaleX(0);transform-origin:left}
+.deck-ready,.deck-ready body{height:100%;overflow:hidden;overscroll-behavior:none}
+.deck-ready .deck-stage{position:relative;width:var(--deck-width);height:var(--deck-height);margin:12px auto 68px;perspective:1600px;isolation:isolate}
+.deck-ready .deck-stage::before,.deck-ready .deck-stage::after{content:'';position:absolute;inset:12px 18px -12px;border:1px solid #d4deeb;border-radius:24px;background:#f5f7fa;z-index:-1;pointer-events:none}
+.deck-ready .deck-stage::after{inset:6px 9px -6px;background:#fafbfd}
+.deck-ready .section-card{position:absolute;inset:0;width:100%;height:100%;min-height:0;margin:0;padding:var(--card-padding);border:1px solid #dce3ed;border-radius:24px;background:#fff;box-shadow:0 14px 30px -24px #17171730;overflow:hidden;display:flex;flex-direction:column;visibility:hidden;transform-origin:center center}
+.deck-ready .section-card:first-child{visibility:visible}.deck-ready .section-card:focus{outline:none}
+.deck-ready .card-content{flex:1 1 0;min-height:0;width:100%;overflow:hidden}
+.deck-ready .card-flow{min-height:100%;display:flex;flex-direction:column;justify-content:flex-start;width:100%;max-width:none;margin:0}
+.card-flow>*{flex-shrink:0;min-width:0}
+.deck-controls{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);width:var(--deck-width);height:44px;display:flex;align-items:center;gap:20px;z-index:30;color:var(--muted)}
+.deck-controls[hidden]{display:none}.deck-position{display:flex;align-items:center;gap:18px;min-width:260px;font-size:.8125rem}
+.chapter-count{font-variant-numeric:tabular-nums;color:var(--ink)}.chapter-current{padding-left:18px;border-left:1px solid #c6d2e3}.chapter-next{display:none}
+.deck-dots{display:flex;margin-inline:auto;gap:0}.deck-dots button{position:relative;display:grid;place-items:center;width:44px;height:44px;border:0;padding:0;background:transparent}
+.deck-dots button>span:first-child{width:6px;height:6px;border-radius:50%;background:#8a9cb5;transition:transform .3s,background .3s}
+.deck-dots button[aria-current]>span:first-child{background:var(--blue);transform:scale(1.6)}
+.deck-dots button:hover>span:first-child{background:var(--blue)}
+.deck-tooltip{position:absolute;left:50%;bottom:48px;transform:translate(-50%,5px);padding:6px 10px;border-radius:5px;background:var(--ink);color:white;font-size:.75rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.deck-dots button:hover .deck-tooltip,.deck-dots button:focus-visible .deck-tooltip{opacity:1;transform:translate(-50%,0)}
+.deck-hint{font-size:.75rem}.deck-arrows{display:flex;gap:8px}
+.deck-arrows button{display:grid;place-items:center;width:44px;height:44px;border:1px solid #c9d5e5;border-radius:50%;background:#fff;color:var(--ink);font-size:1.125rem;transition:background .2s,transform .2s}
+.deck-arrows button:not(:disabled):hover{background:#e1e9f8;transform:translateY(-2px)}.deck-arrows button:disabled{opacity:.35;cursor:default}
+/* 첫 소개는 인물 정보와 3D 장면을 좌우 한 쌍으로 구성한다. */
+.deck-ready #home{background:#fbfcff}
+.deck-ready .story-layout.card-flow{display:grid;width:100%;max-width:none;height:100%;min-height:100%;grid-template-rows:auto minmax(min-content,1fr) auto;align-items:center;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--layout-gap)}
+.deck-ready .story-panels{display:grid}.deck-ready .story-panel{grid-area:1 / 1;visibility:hidden;margin:0}.deck-ready .story-panel:first-child{visibility:visible}
+.deck-ready .story-copy{align-self:center}.deck-ready .story-visual{grid-column:2;grid-row:1 / 3;align-self:stretch}
+.deck-ready .hero-scene{height:auto;flex:1;min-height:280px}
+.deck-ready .story-bottom{grid-row:3;grid-column:1 / -1}
+/* 두 번째 소개 카드는 PC에서 양쪽 내용을 중앙에 맞춰 시선이 위로 쏠리지 않게 한다. */
+.deck-ready .about-section .card-flow{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(40px,5vw,88px);align-content:center;align-items:center}

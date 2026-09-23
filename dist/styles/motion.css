@@ -1,0 +1,2 @@
+/* CSS 자체에서 동작하는 짧은 안내 모션을 정의한다. */
+@keyframes next-cue{0%,100%{transform:translateY(-2px)}50%{transform:translateY(3px)}}

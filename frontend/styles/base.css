@@ -1,0 +1,18 @@
+/* 브라우저 기본값과 접근성 공통 규칙을 정리한다. */
+*{box-sizing:border-box}
+html{scroll-behavior:auto;scroll-padding-top:88px;scrollbar-color:#8c9bb2 var(--paper)}
+body{margin:0;line-height:1.65;word-break:keep-all;overflow-wrap:break-word}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}button{color:inherit}button,summary{cursor:pointer}
+button,a,summary{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+h1,h2,h3,h4,p,figure{margin:0}ul{margin:0;padding:0}em{font-style:normal}
+h1,h2,h3,h4{text-wrap:balance;letter-spacing:-.035em}
+p{text-wrap:pretty}
+::selection{color:#fff;background:var(--blue)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:5px}
+.icon{width:20px;height:20px;display:inline-block;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
+.icon-definitions{position:absolute;width:0;height:0;overflow:hidden}
+.page-width{width:min(1400px,calc(100% - 80px));margin-inline:auto}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:fixed;top:-100px;left:16px;z-index:100;padding:12px 20px;background:var(--blue);color:#fff;border-radius:8px}
+.skip-link:focus{top:12px}

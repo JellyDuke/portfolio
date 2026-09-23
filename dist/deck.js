@@ -21,7 +21,7 @@
   const names = ['첫 소개', '함께 일하는 방식', '경력', '경험과 활용', '프로젝트', '학력·자격', '연락처'];
   let active = 0, moving = false, transition = null, heroChoice = 0, heroTransition = null;
   let heroProgress = null, entranceComplete = false, wheelTimer = 0, wheelConsumed = false, wheelDirection = 0, touch = null;
-  let lastDialogFocus = null, measuring = 0;
+  let lastDialogFocus = null;
   const heroLayout = document.querySelector('.story-layout');
   hero.replaceChildren(heroLayout);
   main.replaceChildren(...cards);
@@ -39,12 +39,6 @@
     if (i !== 0) flow.append(...card.childNodes);
     content.append(flow);
     card.replaceChildren(content);
-    const detailsButton = document.createElement('button');
-    detailsButton.type = 'button'; detailsButton.className = 'card-details';
-    detailsButton.textContent = `${names[i]} 전체 보기`; detailsButton.hidden = true;
-    detailsButton.setAttribute('aria-haspopup', 'dialog');
-    detailsButton.addEventListener('click', () => openDetails(card));
-    card.append(detailsButton);
     const dot = document.createElement('button');
     dot.type = 'button'; dot.setAttribute('aria-label', `${i + 1}. ${names[i]}`);
     dot.innerHTML = `<span aria-hidden="true"></span><span class="deck-tooltip" aria-hidden="true">${names[i]}</span>`;
@@ -80,7 +74,6 @@
       jobs.forEach((item, j) => item.classList.toggle('job-active', j === i));
       [...jobTabs.children].forEach((item, j) => item.setAttribute('aria-pressed', String(j === i)));
       gsap.fromTo(job, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .4, clearProps: 'opacity,transform' });
-      requestMeasure();
     });
     jobTabs.append(button);
   });
@@ -251,7 +244,7 @@
       moving = false; to.inert = false; root.classList.remove('is-changing-card');
       if (focus) to.focus({ preventScroll: true });
       history.replaceState(null, '', `#${to.id}`);
-      updateNavigation(true); publishMotion(); requestMeasure(); scheduleHero();
+      updateNavigation(true); publishMotion(); scheduleHero();
     };
     transition = gsap.timeline({ onComplete: finish });
     transition.to(from, { yPercent: -direction * 85, scale: .975, rotationX: -direction * 3, opacity: .55, duration: .7, ease: 'power2.out' }, 0);
@@ -342,21 +335,6 @@
   document.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
   dialog.addEventListener('close', () => { lastDialogFocus?.focus({ preventScroll: true }); scheduleHero(); });
   document.querySelector('.training > summary').addEventListener('click', event => { event.preventDefault(); openDetails(document.querySelector('#education')); });
-  function requestMeasure() { if (!measuring) measuring = requestAnimationFrame(measure); }
-  function measure() {
-    measuring = 0;
-    const overflows = cards.map(card => {
-      const content = card.querySelector('.card-content');
-      const details = card.querySelector('.card-details');
-      // A visible reader button has its own row. Compare against the space
-      // available WITHOUT that row so resizing can remove it again.
-      const readerHeight = details.hidden ? 0 : details.offsetHeight + (parseFloat(getComputedStyle(details).marginTop) || 0);
-      return content.scrollHeight > content.clientHeight + readerHeight + 3;
-    });
-    cards.forEach((card,i) => {
-      card.dataset.overflow = String(overflows[i]); card.querySelector('.card-details').hidden = !overflows[i];
-    });
-  }
   document.querySelectorAll('a.depth-card').forEach(card => {
     card.addEventListener('pointermove', event => {
       if (moving || !finePointer.matches || event.pointerType === 'touch') return;
@@ -367,12 +345,10 @@
     });
     card.addEventListener('pointerleave', () => gsap.to(card, { rotationX: 0, rotationY: 0, duration: .4, clearProps: 'transform' }));
   });
-  window.addEventListener('resize', () => { if (window.innerWidth > 850) closeMenu(); requestMeasure(); }, { passive: true });
-  window.addEventListener('pageshow', () => { requestMeasure(); scheduleHero(); publishMotion(); });
+  window.addEventListener('resize', () => { if (window.innerWidth > 850) closeMenu(); }, { passive: true });
+  window.addEventListener('pageshow', () => { scheduleHero(); publishMotion(); });
   window.addEventListener('pagehide', () => { stopHeroTimer(); clearTimeout(wheelTimer); });
   document.addEventListener('visibilitychange', () => { if (document.hidden) stopHeroTimer(); else scheduleHero(); });
-  const resizeObserver = new ResizeObserver(requestMeasure);
-  cards.forEach(card => resizeObserver.observe(card.querySelector('.card-flow')));
 
   root.classList.add('deck-ready');
   controls.hidden = false;
@@ -384,8 +360,7 @@
   cards.forEach((card, i) => { card.inert = i !== active; card.setAttribute('aria-hidden', String(i !== active)); card.dataset.active = String(i === active); });
   gsap.set(cards[active], { autoAlpha: 1, zIndex: 2 });
   publishMotion(); updateNavigation();
-  const entrance = gsap.timeline({ onComplete: () => { entranceComplete = true; requestMeasure(); scheduleHero(); } });
+  const entrance = gsap.timeline({ onComplete: () => { entranceComplete = true; scheduleHero(); } });
   entrance.fromTo(cards[active], { y: 24, scale: .985 }, { y: 0, scale: 1, duration: .7, ease: 'power3.out', clearProps: 'transform' }, 0);
   reveal(cards[active], entrance, .08);
-  requestMeasure(); if (document.fonts) document.fonts.ready.then(requestMeasure);
 })();
