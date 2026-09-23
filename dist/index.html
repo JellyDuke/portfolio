@@ -15,14 +15,22 @@
     <link rel="stylesheet" href="./styles/components.css?v=21" />
     <link rel="stylesheet" href="./styles/motion.css?v=21" />
     <link rel="stylesheet" href="./styles/responsive.css?v=21" />
-    <link rel="stylesheet" href="./styles/deck.css?v=21" />
-    <link rel="stylesheet" href="./styles/dialog.css?v=21" />
+    <link rel="stylesheet" href="./styles/deck.css?v=23" />
+    <link rel="stylesheet" href="./styles/dialog.css?v=24" />
     <link rel="stylesheet" href="./styles/deck-responsive.css?v=21" />
+    <link rel="stylesheet" href="./styles/scenic-sections.css?v=27" />
+    <link rel="stylesheet" href="./styles/editorial-sections.css?v=26" />
     <script src="./vendor/gsap.min.js" defer></script>
-    <script src="./deck.js?v=20" defer></script>
+    <script src="./deck.js?v=28" defer></script>
     <script src="./scene.js?v=14" type="module"></script>
   </head>
   <body>
+    <!-- 시안의 장식 배경만 사용하고, 읽거나 조작하는 내용은 HTML로 유지한다. -->
+    <div class="site-backgrounds" aria-hidden="true">
+      <img class="section-background-image background-home" src="./images/backgrounds/home.png" alt="" width="1672" height="941" fetchpriority="high" />
+      <img class="section-background-image background-about" src="./images/backgrounds/about.png" alt="" width="1672" height="941" decoding="async" />
+      <img class="section-background-image background-contact" src="./images/backgrounds/contact.png" alt="" width="1672" height="941" decoding="async" />
+    </div>
     <a class="skip-link" href="#main">본문으로 건너뛰기</a>
     <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <symbol id="icon-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></symbol>
@@ -34,6 +42,10 @@
       <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.72 12.8 12.8 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.8 12.8 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"/></symbol>
       <symbol id="icon-turn" viewBox="0 0 24 24"><path d="M3 11a9 9 0 1 1 3 8M3 4v7h7"/></symbol>
       <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+      <symbol id="icon-close" viewBox="0 0 24 24"><path d="M5 5 19 19M19 5 5 19"/></symbol>
+      <symbol id="icon-window" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M2 7h20M6 5h.01M9 5h.01"/></symbol>
+      <symbol id="icon-chip" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 2v3m6-3v3M9 19v3m6-3v3M2 9h3m-3 6h3m14-6h3m-3 6h3"/></symbol>
+      <symbol id="icon-camera" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="11" rx="3"/><path d="M7 15v3h10v-3m-5 3v3m-3 0h6M7 8h.01M17 8h.01"/></symbol>
     </svg>
 
     <header class="site-header">
@@ -53,7 +65,7 @@
     </header>
 
     <main id="main">
-      <section class="intro-story" id="home" aria-labelledby="hero-title" data-chapter="소개">
+      <section class="intro-story scenic-section" id="home" aria-labelledby="hero-title" data-chapter="소개">
         <div class="story-stage">
           <div class="story-layout page-width">
             <div class="identity">
@@ -75,17 +87,13 @@
                   <p>CCTV와 기초 네트워크, 장비 기술지원까지.<br />동료의 이야기를 듣고, 현장의 문제를 함께 풀어갑니다.</p>
                 </div>
               </div>
-              <div class="hero-actions"><a class="button button-primary" href="#projects">포트폴리오 보기</a><a class="button button-quiet" href="#experience">경력 살펴보기 <svg class="icon" aria-hidden="true"><use href="#icon-chevron"/></svg></a></div>
-            </div>
-            <div class="story-visual">
-              <div class="scene-host hero-scene" data-scene="intro" aria-hidden="true"><div class="scene-fallback"><span>WEB / 화면을 만들고</span><span>AI / 아이디어를 구현하고</span><span>NETWORK / 현장을 연결합니다</span></div></div>
-              <div class="scene-legend" aria-hidden="true"><span data-scene-label="0">사용하기 편한 웹 화면</span><span data-scene-label="1">AI를 활용한 개발</span><span data-scene-label="2">CCTV·네트워크 기술지원</span></div>
+              <div class="hero-actions"><a class="button button-primary" href="#projects">포트폴리오 보기 <span aria-hidden="true">→</span></a><a class="button button-quiet" href="#experience">경력 살펴보기 <span aria-hidden="true">→</span></a></div>
             </div>
             <div class="story-bottom">
               <div class="story-select" role="group" aria-label="소개 장면 선택" hidden>
-                <button type="button" data-story-go="0" aria-pressed="true"><span class="story-choice-copy"><strong>웹 개발</strong><small>웹 화면 · 사내 프로그램</small></span></button>
-                <button type="button" data-story-go="1" aria-pressed="false"><span class="story-choice-copy"><strong>AI 활용</strong><small>AI 코딩 · 챗봇 개발</small></span></button>
-                <button type="button" data-story-go="2" aria-pressed="false"><span class="story-choice-copy"><strong>CCTV·네트워크</strong><small>장비 기술지원 · 기초 네트워크</small></span></button>
+                <button type="button" data-story-go="0" aria-pressed="true"><span class="story-choice-icon" aria-hidden="true"><svg class="icon"><use href="#icon-window"/></svg></span><span class="story-choice-copy"><strong>웹 개발</strong><small>웹 화면 · 사내 프로그램</small></span></button>
+                <button type="button" data-story-go="1" aria-pressed="false"><span class="story-choice-icon" aria-hidden="true"><svg class="icon"><use href="#icon-chip"/></svg></span><span class="story-choice-copy"><strong>AI 활용</strong><small>AI 코딩 · 챗봇 개발</small></span></button>
+                <button type="button" data-story-go="2" aria-pressed="false"><span class="story-choice-icon" aria-hidden="true"><svg class="icon"><use href="#icon-camera"/></svg></span><span class="story-choice-copy"><strong>CCTV·네트워크</strong><small>장비 기술지원 · 기초 네트워크</small></span></button>
               </div>
               <a class="story-skip" href="#about">소개 더 보기 <span aria-hidden="true">↓</span></a>
             </div>
@@ -94,7 +102,7 @@
         <div class="story-stops" aria-hidden="true"><div class="story-stop" id="intro-web"></div><div class="story-stop" id="intro-ai"></div><div class="story-stop" id="intro-network"></div></div>
       </section>
 
-      <section id="about" class="section chapter page-width about-section" aria-labelledby="about-title" data-chapter="소개">
+      <section id="about" class="section chapter page-width about-section scenic-section" aria-labelledby="about-title" data-chapter="소개">
         <div class="about-intro">
           <div class="about-body">
             <h2 id="about-title">먼저 듣고,<br />함께 해결합니다.</h2>
@@ -105,21 +113,22 @@
         <ul class="about-values" aria-label="업무 태도">
           <li>
             <svg class="icon about-value-icon" aria-hidden="true"><use href="#icon-people"/></svg>
-            <div><h3>듣고, 정리합니다.</h3><p>동료의 이야기를 먼저 듣고, 필요한 내용을 명확하게 공유합니다.</p></div>
+            <div><h3>듣고, 정리합니다.</h3><p>동료의 이야기를 먼저 듣고,<br class="reference-break" /> 필요한 내용을 명확하게 공유합니다.</p></div>
           </li>
           <li>
             <svg class="icon about-value-icon" aria-hidden="true"><use href="#icon-server"/></svg>
-            <div><h3>만들고, 확인합니다.</h3><p>웹 화면과 기능을 점검하고, CCTV·네트워크 기술지원에서 만나는 문제를 살핍니다.</p></div>
+            <div><h3>만들고, 확인합니다.</h3><p>웹 화면과 기능을 점검하고,<br class="reference-break" /> 현장에서 만나는 문제를 살핍니다.</p></div>
           </li>
           <li>
             <svg class="icon about-value-icon" aria-hidden="true"><use href="#icon-code"/></svg>
-            <div><h3>써 보고, 익힙니다.</h3><p>AI로 코드를 구현하고 검토하며, 필요한 기술을 직접 써 보고 배웁니다.</p></div>
+            <div><h3>써 보고, 익힙니다.</h3><p>AI로 코드를 구현하고 검토하며,<br class="reference-break" /> 필요한 기술을 직접 써 보고 배웁니다.</p></div>
           </li>
         </ul>
       </section>
 
       <div class="section-background">
         <section id="experience" class="section chapter page-width" aria-labelledby="experience-title" data-chapter="경력">
+          <div class="section-meta"><span>경력</span><span>03 / 07</span></div>
           <div class="section-heading"><div><h2 id="experience-title">경력과 실무 경험</h2></div><p>Webflow로 만든 웹 화면부터 프로그램 개발과 장비 기술지원까지.</p></div>
           <div class="experience-list">
             <article class="experience-item current-job">
@@ -139,6 +148,7 @@
       </div>
 
       <section id="skills" class="section chapter page-width" aria-labelledby="skills-title" data-chapter="경험">
+        <div class="section-meta"><span>기술·활용</span><span>04 / 07</span></div>
         <div class="section-heading"><div><h2 id="skills-title">경험과 활용 방식</h2></div><p>실무와 교육에서 다뤄 본 기술과 현재의 개발 방식입니다.</p></div>
         <div class="skills-layout">
         <aside class="skills-visual" aria-label="개발과 기술지원의 연결"><div class="scene-host skill-scene" data-scene="skills" aria-hidden="true"><div class="scene-fallback"><span>웹 개발</span><span>데이터</span><span>기술지원</span></div></div><p>웹 개발부터 데이터와 네트워크까지,<br />업무에 맞게 경험을 넓혀갑니다.</p></aside>
@@ -153,6 +163,7 @@
       </section>
 
       <section id="projects" class="section chapter projects-section page-width" aria-labelledby="projects-title" data-chapter="프로젝트">
+        <div class="section-meta"><span>프로젝트</span><span>05 / 07</span></div>
         <div class="section-heading"><div><h2 id="projects-title">프로젝트 기록</h2></div><p>만들고 있는 것과, 이전에 정리한 자료.</p></div>
         <div class="project-grid">
           <a class="project-card project-current depth-card" data-depth href="#home" aria-labelledby="project-site-title project-site-link">
@@ -166,13 +177,14 @@
             <div class="project-card-body"><h3>포트폴리오 아카이브</h3><p>이전에 작업한 내용을 정리한 자료입니다. Canva에서 당시의 구성과 작업 내용을 살펴볼 수 있습니다.</p></div>
             <div class="project-card-footer"><span>자료 열기 <span class="project-link-note">새 탭</span></span><svg class="icon" aria-hidden="true"><use href="#icon-external"/></svg></div>
           </a>
-          <!-- Add future projects as project-card entries, with their own status, summary and working link. -->
+          <!-- 새 프로젝트는 상태·설명·실제 링크를 갖춘 project-card로 추가한다. -->
         </div>
         <p class="project-update-note">다음 프로젝트도 역할과 구현 과정을 정리해 차례로 추가하겠습니다.</p>
       </section>
 
       <div class="section-background">
         <section id="education" class="section chapter page-width" aria-labelledby="education-title" data-chapter="학력·자격">
+          <div class="section-meta"><span>학력·자격</span><span>06 / 07</span></div>
           <div class="section-heading"><div><h2 id="education-title">배움의 기록</h2></div></div>
           <div class="education-grid">
             <div class="education-column"><h3 class="column-heading">학력</h3><article class="education-item"><time>2020.03 — 2024.02</time><h4>인하공업전문대학</h4><p>정보통신공학과 졸업</p><span class="education-meta">학점 3.69 / 4.5</span></article><article class="education-item"><time>2020</time><h4>계산공업고등학교</h4><p>졸업</p></article></div>
@@ -182,13 +194,15 @@
         </section>
       </div>
 
-      <section id="contact" class="section chapter page-width contact-section" aria-labelledby="contact-title" data-chapter="연락처">
+      <section id="contact" class="section chapter page-width contact-section scenic-section" aria-labelledby="contact-title" data-chapter="연락처">
         <div class="contact-composition">
           <div class="contact-intro section-heading">
-            <h2 id="contact-title">함께할 일을 이야기해 주세요.</h2>
+            <span class="contact-eyebrow">07 / 07 <span>연락처</span></span>
+            <h2 id="contact-title">함께할 일을<br />이야기해 주세요.</h2>
             <p>웹 개발과 기술지원 분야에서 함께할 기회를 찾고 있습니다.</p>
           </div>
           <div class="contact-grid">
+            <p class="contact-note">좋은 이야기를 나눌 수 있기를 기대합니다.</p>
             <div class="contact-links">
               <a class="contact-row contact-email" href="mailto:wnghqkr30520@naver.com">
                 <span class="contact-row-copy"><span class="contact-meta-label">이메일</span><strong>wnghqkr30520<wbr />@naver.com</strong></span>
@@ -216,7 +230,7 @@
     </div>
     <p class="sr-only deck-announcement" aria-live="polite" aria-atomic="true"></p>
     <dialog class="content-dialog" aria-labelledby="dialog-title">
-      <div class="dialog-top"><h2 id="dialog-title">상세 내용</h2><button type="button" class="dialog-close" aria-label="상세 내용 닫기">닫기 <span aria-hidden="true">×</span></button></div>
+      <div class="dialog-top"><h2 id="dialog-title">상세 내용</h2><button type="button" class="dialog-close" aria-label="상세 내용 닫기">닫기 <svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg></button></div>
       <div class="dialog-content"></div>
     </dialog>
   </body>

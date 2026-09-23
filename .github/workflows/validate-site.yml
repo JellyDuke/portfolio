@@ -37,7 +37,7 @@ jobs:
       - name: Prepare production assets
         run: npm run build
 
-      - name: Check JavaScript syntax
+      - name: Check CSS rules and JavaScript syntax
         run: npm run check
 
       - name: Run tests

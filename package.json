@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "node scripts/prepare-assets.mjs && vite",
     "build": "node scripts/build-site.mjs",
-    "check": "node --check dist/deck.js && node --check dist/scene.js && node --check dist/assembly.js",
+    "check": "npm run lint:css && node --check dist/deck.js && node --check dist/scene.js && node --check dist/assembly.js",
+    "lint:css": "stylelint \"frontend/**/*.css\" --max-warnings 0",
+    "lint:css:fix": "npm run lint:css -- --fix",
     "test": "node scripts/check-deck.mjs && node scripts/check-scene.mjs"
   },
   "dependencies": {
@@ -16,6 +18,8 @@
   "devDependencies": {
     "@sinonjs/fake-timers": "13.0.5",
     "jsdom": "26.1.0",
+    "stylelint": "17.15.0",
+    "stylelint-config-recommended": "18.0.0",
     "vite": "7.1.7"
   }
 }

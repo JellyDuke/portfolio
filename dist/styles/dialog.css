@@ -2,7 +2,14 @@
 .content-dialog{width:min(1000px,calc(100% - 32px));max-height:calc(100svh - 40px);padding:0;border:0;border-radius:16px;color:var(--ink);background:#fff;box-shadow:0 28px 90px #17171740;scrollbar-color:#8c9bb2 #f5f7fa}
 .content-dialog::backdrop{background:#14284188;backdrop-filter:blur(6px)}
 .dialog-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 26px;border-bottom:1px solid var(--line);background:#fff}
-.dialog-top h2{font-size:1.25rem}.dialog-close{min-height:44px;padding:8px 12px;background:var(--soft);border:1px solid var(--line);border-radius:6px;font-size:.875rem}.dialog-close span{font-size:1.2rem;margin-left:12px}
+.dialog-top h2{font-size:1.25rem}
+/* 닫기 버튼의 보이는 면은 낮추고 실제 누를 수 있는 영역은 44px로 유지한다. */
+.dialog-close{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 12px;background:transparent;border:0;font-size:.875rem}
+.dialog-close::before{content:'';position:absolute;inset:4px 0;z-index:-1;background:var(--soft);border:1px solid var(--line);border-radius:6px}
+.dialog-close:focus-visible{outline:none}
+.dialog-close:focus-visible::before{box-shadow:0 0 0 2px var(--blue)}
+/* 글꼴의 × 기준선 대신 정중앙에 그린 SVG를 사용해 텍스트와 높이를 맞춘다. */
+.dialog-close .icon{display:block;width:16px;height:16px;stroke-width:2.2}
 .dialog-content{padding:30px}.dialog-content .card-flow{height:auto;min-height:0;display:block}
 .dialog-content .job-tabs,.dialog-content .story-visual,.dialog-content .story-bottom,.dialog-content .scene-host,.dialog-content .scene-turn,.dialog-content .hero-actions,.dialog-content .skills-visual{display:none}
 .dialog-content .story-layout{display:block;width:100%;height:auto}

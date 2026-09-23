@@ -1,0 +1,143 @@
+/* 3~6번 시안의 공통 머리말과 기록형 카드 배치를 담당한다. */
+.section-meta{display:flex;justify-content:space-between;gap:24px;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:28px;color:var(--blue);font-size:.875rem;font-weight:600}
+.section-meta>span:last-child{color:var(--muted);font-weight:450;font-variant-numeric:tabular-nums}
+.skills-visual .scene-turn{margin:18px auto 0;flex-shrink:0}
+
+/* 양쪽 기록이 하나의 그리드 행을 공유해 구분선 높이가 언제나 일치한다. */
+.deck-ready #education .card-content{overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.deck-ready #education .card-flow{height:auto;min-height:100%}
+.deck-ready #education .education-grid{display:grid;flex:1 0 auto;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto repeat(2,minmax(max-content,1fr));column-gap:var(--layout-gap);row-gap:0;align-items:stretch}
+.deck-ready #education .education-column{display:contents}
+.deck-ready #education .education-column:first-child>.column-heading{grid-column:1;grid-row:1}
+.deck-ready #education .education-column:last-child>.column-heading{grid-column:2;grid-row:1}
+.deck-ready #education .education-column:first-child>.education-item:first-of-type{grid-column:1;grid-row:2}
+.deck-ready #education .education-column:last-child>.education-item:first-of-type{grid-column:2;grid-row:2}
+.deck-ready #education .education-column:first-child>.education-item:last-of-type{grid-column:1;grid-row:3}
+.deck-ready #education .education-column:last-child>.education-item:last-of-type{grid-column:2;grid-row:3}
+.deck-ready #education .education-item{padding-block:clamp(10px,1.3svh,14px)}
+.deck-ready #education .training{flex:0 0 auto}
+
+/* 4번 카드의 남은 높이를 목록과 3D가 공유해 마지막 행이 overflow:hidden에 잘리지 않게 한다. */
+@media(min-width:851px){
+  .deck-ready #skills .card-flow{height:100%}
+  .deck-ready #skills .skills-layout{flex:1 1 0;min-height:0;grid-template-rows:minmax(0,1fr)}
+  .deck-ready #skills .skills-table{display:flex;flex-direction:column;min-height:0}
+  .deck-ready #skills .skill-row{flex:1 0 auto;align-content:center;padding-block:clamp(8px,1.7svh,20px)}
+  .deck-ready #skills .skills-visual{min-height:0}
+  .deck-ready #skills .skill-scene{flex:1 1 0;height:auto;min-height:100px}
+  .deck-ready #skills .skills-visual>p{flex-shrink:0;margin:12px auto 0}
+}
+
+@media(min-width:851px) and (min-height:901px){
+  .deck-ready #experience .section-heading{display:flex;align-items:end;justify-content:space-between;gap:var(--layout-gap)}
+  .deck-ready #experience .section-heading>p{margin:0}
+  .deck-ready #experience .experience-list{display:flex;flex-direction:column;flex:1}
+  .deck-ready #experience .experience-item{flex:1;align-items:center;min-height:180px}
+  .deck-ready #experience .experience-date{font-size:1rem}
+  .deck-ready #projects .project-grid{flex:1;min-height:0}
+  .deck-ready #projects .project-card{min-height:0;padding:40px}
+}
+
+@media(min-width:851px) and (max-height:900px){
+  .section-meta{padding-bottom:12px;margin-bottom:18px;font-size:.8125rem}
+  .deck-ready #skills .skills-visual{padding:8px 16px 16px}
+  .deck-ready #skills .skills-visual>p{font-size:.8125rem}
+  .deck-ready #skills .scene-turn{margin-top:12px}
+  .deck-ready #projects .project-card{min-height:320px}
+  .deck-ready #projects .project-card-body{padding-top:24px}
+  .deck-ready #projects .project-card-body h3{font-size:2rem}
+  .deck-ready #projects .project-card-body p{font-size:.9375rem;margin-top:16px}
+  .deck-ready #education .training{margin-top:20px}
+}
+
+@media(min-width:851px) and (max-height:800px){
+  .deck-ready #skills .section-meta{margin-bottom:14px;padding-bottom:10px}
+  .deck-ready #skills .section-heading{margin-bottom:18px}
+  .deck-ready #skills .section-heading>p{margin-top:8px}
+  .deck-ready #skills .skill-row{padding-block:8px;gap:16px;grid-template-columns:164px minmax(0,1fr)}
+  .deck-ready #skills .skill-tags{gap:3px 16px}
+  .deck-ready #skills .skill-tags li{font-size:.875rem;line-height:1.6}
+  .deck-ready #education .section-meta{margin-bottom:14px;padding-bottom:10px}
+  .deck-ready #education .section-heading{margin-bottom:18px}
+  .deck-ready #education .column-heading{padding-bottom:12px}
+  .deck-ready #education .education-item{padding-block:12px}
+  .deck-ready #education .education-item time{font-size:.8125rem;line-height:1.5;margin-bottom:6px}
+  .deck-ready #education .education-item h4{font-size:1.25rem;line-height:1.35}
+  .deck-ready #education .education-item p{font-size:.875rem;line-height:1.5;margin-top:4px}
+  .deck-ready #education .education-meta{font-size:.8125rem;line-height:1.5;margin-top:6px}
+  .deck-ready #education .training summary{min-height:80px;padding-block:14px}
+}
+
+@media(min-width:851px) and (max-height:700px){
+  .deck-ready #education .section-meta{margin-bottom:12px;padding-bottom:8px}
+  .deck-ready #education .section-heading{margin-bottom:16px}
+  .deck-ready #education .column-heading{padding-bottom:8px}
+  .deck-ready #education .education-item{padding-block:8px}
+  .deck-ready #education .education-item h4{font-size:1.125rem}
+  .deck-ready #education .education-item time{margin-bottom:4px}
+  .deck-ready #education .education-item p,.deck-ready #education .education-meta{font-size:.8125rem;margin-top:3px}
+  .deck-ready #education .training{margin-top:16px}
+  .deck-ready #education .training summary{min-height:72px;padding-block:10px}
+}
+
+@media(min-width:851px) and (max-width:1100px) and (max-height:800px){
+  .deck-ready #skills .skills-layout{grid-template-columns:minmax(0,1fr)}
+  .deck-ready #skills .skills-visual{display:none}
+  .deck-ready #skills .skill-row{grid-template-columns:138px minmax(0,1fr);gap:12px}
+  .deck-ready #skills .skill-tags{gap:2px 14px}
+}
+
+@media(max-width:850px){
+  .section-meta{padding-bottom:10px;margin-bottom:18px;font-size:.8125rem}
+}
+
+@media(max-width:600px){
+  .section-meta{margin-bottom:16px;font-size:.75rem}
+  .deck-ready #skills .skills-visual{top:72px}
+  .deck-ready #skills .section-heading{min-height:104px}
+  .deck-ready #skills .skill-row{padding-block:5px;gap:4px}
+  .deck-ready #projects .project-grid{gap:14px}
+  .deck-ready #projects .project-card{padding:18px}
+  .deck-ready #projects .project-card-body{padding-top:16px}
+  .deck-ready #projects .project-card-body p{margin-top:8px}
+  .deck-ready #projects .project-card-footer{padding-top:10px;margin-top:14px}
+  .deck-ready #projects .project-tools{margin-top:10px}
+  .deck-ready #projects .project-update-note{margin-top:14px}
+}
+
+@media(max-width:600px) and (max-height:740px){
+  /* 짧은 화면은 보조 설명보다 실제 프로젝트 링크와 기술 항목을 우선한다. */
+  .section-meta{margin-bottom:12px;padding-bottom:8px}
+  .deck-ready #skills .section-heading{min-height:0;margin-bottom:10px;padding-right:0}
+  .deck-ready #skills .section-heading>p{display:none}
+  .deck-ready #skills .skills-visual{display:none}
+  .deck-ready #skills .skill-row{padding-block:4px;gap:2px}
+  .deck-ready #skills .skill-row h3{font-size:.875rem;line-height:1.5}
+  .deck-ready #skills .skill-tags{gap:2px 14px}
+  .deck-ready #skills .skill-tags li{font-size:.75rem;line-height:1.5}
+  .deck-ready #skills .skill-tags li:not(:last-child)::after{top:8px;right:-8px}
+  .deck-ready #projects .section-heading>p,.deck-ready #projects .project-update-note{display:none}
+  .deck-ready #projects .section-heading{margin-bottom:14px}
+  .deck-ready #projects .project-card{padding:14px}
+  .deck-ready #projects .project-card-body{padding-top:10px}
+  .deck-ready #projects .project-card-body h3{font-size:1.25rem}
+  .deck-ready #projects .project-card-body p{font-size:.8125rem;line-height:1.5}
+  .deck-ready #projects .project-tools{display:none}
+  .deck-ready #projects .project-card-footer{margin-top:10px;padding-top:8px}
+  .deck-ready #education .section-heading{margin-bottom:12px}
+  .deck-ready #education .education-item{padding-block:8px}
+  .deck-ready #education .training{margin-top:14px}
+  .deck-ready #education .training summary{padding:10px 14px;min-height:0}
+  .deck-ready #education .training-summary{gap:3px}
+  .deck-ready #education .training-summary strong{line-height:1.35}
+  .deck-ready #education .training-meta{line-height:1.35}
+}
+
+@media(max-width:360px) and (max-height:740px){
+  .deck-ready #projects .project-card-body p{display:none}
+  .deck-ready #education .education-item{padding-block:6px}
+  .deck-ready #education .education-item time{line-height:1.5;margin-bottom:4px}
+  .deck-ready #education .education-item h4{font-size:.875rem;line-height:1.35}
+  .deck-ready #education .education-item p{font-size:.75rem;line-height:1.5;margin-top:4px}
+  .deck-ready #education .education-meta{line-height:1.5;margin-top:6px}
+}

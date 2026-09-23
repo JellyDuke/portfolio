@@ -101,10 +101,17 @@ try {
   assert.equal(app.active, 'home');
   assert.equal(q('#motion-toggle'), null);
   assert.equal(q('.scene-heading'), null, 'Remove duplicated decorative labels above the 3D model');
-  assert.equal(app.window.getComputedStyle(q('.identity img')).width, '160px', 'The 1920×1080 portrait must stay at its fixed desktop size');
-  assert.equal(app.window.getComputedStyle(q('.identity img')).height, '205px');
-  assert.equal(app.window.getComputedStyle(q('#about .card-flow')).alignContent, 'center', 'The desktop introduction must be vertically centered');
-  assert.equal(app.window.getComputedStyle(q('#about .card-flow')).alignItems, 'center');
+  assert.equal(app.window.getComputedStyle(q('.identity img')).width, 'min(160px,calc(128 * var(--reference-unit)))', 'The reference proportion must not exceed the previous portrait width cap');
+  assert.equal(app.window.getComputedStyle(q('.identity img')).height, 'min(205px,calc(164 * var(--reference-unit)))');
+  // 배경은 장식 이미지로만 사용하고 시안의 설명·연락처는 실제 DOM으로 유지한다.
+  assert.equal(app.document.querySelectorAll('.site-backgrounds img[alt=""]').length, 3);
+  assert.equal(q('.site-backgrounds').getAttribute('aria-hidden'), 'true');
+  assert.equal(q('#home [data-scene]'), null, 'The home background replaces the old boxed 3D scene');
+  assert.equal(q('.scene-turn').closest('section').id, 'skills', 'Interactive 3D remains in the skills section');
+  assert.equal(q('.dialog-close .icon use')?.getAttribute('href'), '#icon-close', 'The dialog close mark uses centered vector geometry');
+  assert.equal(app.window.getComputedStyle(q('.background-home')).opacity, '1');
+  assert.equal(app.document.querySelectorAll('.section-meta').length, 4);
+  assert.equal(app.window.getComputedStyle(q('#about .about-values')).position, 'absolute');
   assert.equal(app.window.getComputedStyle(q('#home')).display, 'flex');
   assert.equal(app.window.getComputedStyle(q('#home')).flexDirection, 'column');
   assert.equal(app.window.getComputedStyle(q('#home .card-content')).minHeight, '0');
@@ -113,6 +120,8 @@ try {
   const wheel = app.wheel(1);
   assert.ok(wheel.defaultPrevented);
   assert.equal(app.active, 'about', 'The first one-unit notch must select the next SECTION immediately');
+  assert.equal(app.window.getComputedStyle(q('.background-home')).opacity, '0');
+  assert.equal(app.window.getComputedStyle(q('.background-about')).opacity, '1');
   app.tick(120);
   const entering = q('#about');
   const during = Number(app.window.gsap.getProperty(entering, 'yPercent'));
@@ -124,6 +133,8 @@ try {
   assert.equal(entering.style.visibility, 'inherit');
   assert.equal(q('#home').style.visibility, 'hidden');
   assert.equal(q('#home').inert, true); assert.equal(entering.inert, false);
+  assert.equal(q('#home').hidden, true, 'A completed transition removes the previous surface from rendering');
+  assert.equal(app.document.querySelectorAll('.section-card:not([hidden])').length, 1);
   assert.equal(Number(app.window.gsap.getProperty(q('#about .about-body'), 'opacity')), 1);
   assert.equal(q('#about .about-intro').style.clipPath, '', 'The statement must not remain clipped after its reveal');
   for (const value of app.document.querySelectorAll('#about .about-values > li')) {
@@ -154,6 +165,7 @@ try {
   app.fire('body', 'keydown', { key: 'ArrowDown' }); app.tick(); assert.equal(app.active, 'about');
   app.fire('body', 'keydown', { key: 'ArrowDown', repeat: true }); app.tick(); assert.equal(app.active, 'about');
   app.fire('body', 'keydown', { key: 'End' }); app.tick(); assert.equal(app.active, 'contact');
+  assert.equal(app.window.getComputedStyle(q('.background-contact')).opacity, '1');
   assert.equal(q('.next-chapter').disabled, true);
   assert.equal(q('#contact .contact-email').style.clipPath, '', 'The email link must be completely revealed');
   assert.equal(q('#contact .contact-email').getAttribute('href'), 'mailto:wnghqkr30520@naver.com');
@@ -235,7 +247,40 @@ try {
   mobile.wheel(1); assert.equal(mobile.active, 'skills'); mobile.tick();
   assert.ok(!mobile.document.documentElement.classList.contains('motion-reduced'), 'Short viewports do not disable animation');
 
-  for (const [width, height] of [[1920,1080],[1366,768],[1200,900],[1024,768],[851,900],[850,900],[768,1024],[390,844],[320,667]]) {
+  // 교육 이수 패널의 수직 이동은 진입 중에만 생기는 스크롤바의 원인이므로 사용하지 않는다.
+  const educationEntrance = setup({ width: 1366, height: 768 });
+  educationEntrance.document.querySelector('#site-nav a[href="#education"]').click();
+  educationEntrance.tick(400);
+  assert.equal(Number(educationEntrance.window.gsap.getProperty(educationEntrance.document.querySelector('#education .training'), 'y')), 0);
+
+  // 짧은 화면에서 학력·자격을 끝까지 읽기 전에는 다음 카드로 넘기지 않는다.
+  const compactEducation = setup({ width: 320, height: 667 });
+  compactEducation.click('#site-nav a[href="#education"]');
+  const educationContentElement = compactEducation.document.querySelector('#education .card-content');
+  compactEducation.overflow.add(educationContentElement);
+  compactEducation.wheel(120, { target: educationContentElement });
+  assert.equal(compactEducation.active, 'education');
+  assert.equal(educationContentElement.scrollTop, 120);
+  compactEducation.tick(220);
+  compactEducation.wheel(300, { target: educationContentElement });
+  assert.equal(educationContentElement.scrollTop, 300);
+  compactEducation.tick(220);
+  compactEducation.wheel(120, { target: educationContentElement });
+  assert.equal(compactEducation.active, 'contact', 'The next wheel gesture advances after the education content ends');
+  compactEducation.tick();
+  compactEducation.click('#site-nav a[href="#education"]');
+  assert.equal(educationContentElement.scrollTop, 0, 'Re-entering education starts at the beginning');
+  compactEducation.fire('body', 'keydown', { key: 'PageDown' });
+  assert.equal(compactEducation.active, 'education');
+  assert.ok(educationContentElement.scrollTop > 0, 'Keyboard paging reads the clipped remainder');
+  educationContentElement.scrollTop = 100;
+  compactEducation.fire('body', 'touchstart', { touches: [{ clientX: 100, clientY: 350 }] });
+  const previousScrollTop = educationContentElement.scrollTop;
+  compactEducation.fire('body', 'touchmove', { touches: [{ clientX: 100, clientY: 320 }] });
+  assert.equal(educationContentElement.scrollTop, previousScrollTop + 30, 'One touch step scrolls the record only once');
+  compactEducation.fire('body', 'touchend');
+
+  for (const [width, height] of [[1920,1080],[1920,947],[1672,941],[1366,768],[1366,650],[1200,900],[1024,768],[851,900],[850,900],[768,1024],[390,844],[320,667]]) {
     const layout = setup({ width, height });
     const select = selector => layout.document.querySelector(selector);
     const computed = selector => layout.window.getComputedStyle(select(selector));
@@ -255,9 +300,64 @@ try {
     assert.equal(computed('.contact-email strong').fontSize, computed('.contact-phone strong').fontSize, `${label}: email and phone have equal emphasis`);
     assert.equal(computed('.contact-email').backgroundColor, computed('.contact-phone').backgroundColor);
     assert.equal(select('.contact-email-arrow'), null, 'No oversized email-only action remains');
+    assert.equal(computed('#about .about-values').position, width > 1100 ? 'absolute' : 'static', `${label}: artwork alignment becomes normal reading order on narrow screens`);
+    if (width > 1100) {
+      assert.equal(computed('#about .about-signature').position, 'relative', `${label}: the underline follows the introduction text`);
+      assert.equal(computed('#about .about-signature').marginTop, 'calc(12 * var(--reference-unit))', `${label}: the paragraph-to-rule gap stays compact`);
+      assert.equal(computed('#about .about-signature').paddingTop, 'calc(12 * var(--reference-unit))', `${label}: the rule-to-name gap stays compact`);
+    }
+    assert.equal(computed('#contact .contact-composition').display, width > 850 ? 'grid' : 'flex', `${label}: contact information stacks on mobile`);
+    if (width > 1100) assert.equal(computed('#contact .contact-composition').gridTemplateColumns, 'minmax(0,1fr) minmax(0,max(340px,24vw))', `${label}: contact details stay in a narrow right-hand block`);
+    else if (width > 850) assert.equal(computed('#contact .contact-composition').gridTemplateColumns, 'minmax(0,1fr) minmax(0,max(310px,32vw))', `${label}: contact details remain narrow on tablets`);
+    assert.equal(computed('.story-layout').gridTemplateColumns, width <= 850 ? 'minmax(0,1fr)' : width <= 1100 ? 'minmax(0,.58fr) minmax(0,.42fr)' : 'minmax(0,.44fr) minmax(0,.56fr)');
+    // 렌더링 픽셀 대신 배경과 설명을 같은 원본 좌표에 연결하는 CSS 계약을 검증한다.
+    assert.equal(computed('.background-home').objectFit, 'cover');
+    if (width > 1100) {
+      assert.equal(computed('#home .story-copy').left, 'calc(82 * var(--reference-unit))');
+      assert.equal(computed('#home .story-copy').top, 'calc(344 * var(--reference-unit))');
+      assert.equal(computed('#home .story-bottom').top, 'calc(739 * var(--reference-unit))');
+      assert.equal(computed('#about .about-values').width, 'var(--art-width)');
+      assert.equal(computed('#about .about-values').top, 'calc((var(--reference-height) - var(--art-height)) / 2)');
+      for (const [index, x, y] of [[1,209,618],[2,718,485],[3,1285,418]]) {
+        assert.equal(computed(`#about .about-values>li:nth-child(${index})`).left, `calc(${x} * var(--art-unit))`);
+        assert.equal(computed(`#about .about-values>li:nth-child(${index})`).top, `calc(${y} * var(--art-unit))`);
+      }
+    }
+    assert.equal(computed('#education .card-content').overflowY, 'auto', `${label}: small viewports keep the full record readable`);
+    assert.equal(computed('#education .card-flow').height, 'auto');
+    assert.equal(computed('#education .education-grid').gridTemplateRows, 'auto repeat(2,minmax(max-content,1fr))', `${label}: both education columns share record rows without clipping`);
+    assert.equal(computed('#education .education-grid').rowGap, '0', `${label}: aligned rows must not gain extra vertical gutters`);
+    assert.equal(computed('#education .education-column').display, 'contents', `${label}: both education columns participate in the same grid`);
+    assert.equal(computed('.dialog-close').minHeight, '44px', `${label}: the smaller close visual retains a touch-sized hit area`);
+    assert.equal(computed('.dialog-close').paddingTop, '0px', `${label}: the close control has no extra vertical padding`);
+    if (width > 850) {
+      assert.equal(computed('#skills .card-flow').height, '100%');
+      assert.equal(computed('#skills .skills-layout').minHeight, '0');
+      assert.equal(computed('#skills .skill-scene').flexGrow, '1');
+      assert.equal(computed('#skills .skill-scene').height, 'auto');
+      if (height <= 800) assert.equal(computed('#skills .skill-row').getPropertyValue('padding-block'), '8px');
+    }
   }
 
+  // 역방향·강제 전환·처음/끝 반복에서도 활성 카드 외의 표면은 표시하지 않는다.
+  const settled = setup();
+  for (const destination of ['#contact','#home','#education','#skills','#about','#home']) {
+    settled.click(`a[href="${destination}"]`);
+    for (const card of settled.document.querySelectorAll('.section-card')) {
+      const isActive = card.id === settled.active;
+      assert.equal(card.hidden, !isActive);
+      assert.equal(settled.window.getComputedStyle(card).display, isActive ? 'flex' : 'none');
+      if (!isActive) assert.equal(Number(settled.window.gsap.getProperty(card, 'opacity')), 0);
+    }
+  }
+  settled.document.querySelector('a[href="#education"]').click(); settled.tick(100);
+  settled.document.querySelector('a[href="#contact"]').click(); settled.tick();
+  assert.equal(settled.document.querySelectorAll('.section-card:not([hidden])').length, 1);
+  assert.equal(settled.active, 'contact');
+
   const graphics = setup(); graphics.runScene();
+  assert.equal(graphics.renders.length, 0, 'The image-led opening does not render hidden 3D');
+  graphics.click('#site-nav a[href="#skills"]');
   assert.ok(graphics.renders.length > 1);
   graphics.click('.scene-turn');
   assert.ok(graphics.renders.some(frame => frame.spin > .1 && frame.spin < 6));
@@ -272,7 +372,7 @@ try {
   graphics.click('#site-nav a[href="#skills"]');
   assert.equal(graphics.document.querySelector('[data-scene="skills"]').dataset.rendered, 'true');
   const fallback = setup({ webgl: false }); fallback.runScene();
-  assert.equal(fallback.document.querySelectorAll('[data-rendered="false"]').length, 2);
+  assert.equal(fallback.document.querySelectorAll('[data-rendered="false"]').length, 1);
 
   assert.equal(fs.readFileSync(path.join(dist,'fonts/PretendardVariable.woff2')).subarray(0,4).toString(),'wOF2');
   assert.ok(fs.existsSync(path.join(dist,'fonts/OFL.txt')));
@@ -282,8 +382,23 @@ try {
     const url = element.getAttribute('src') || element.getAttribute('href');
     if (url.startsWith('./')) assert.ok(fs.existsSync(path.join(dist, url.split('?')[0])), url);
   }
+  // CSS 이동 뒤에도 글꼴·이미지 URL이 해당 CSS 파일을 기준으로 실제 배포 자산을 가리켜야 한다.
+  for (const link of app.document.querySelectorAll('link[rel="stylesheet"]')) {
+    const stylesheetUrl = new URL(link.href);
+    const stylesheetPath = decodeURIComponent(stylesheetUrl.pathname).slice(1);
+    const cssText = read(stylesheetPath).replace(/\/\*[\s\S]*?\*\//g, '');
+    const assetReferences = cssText.matchAll(/url\(\s*(?:"([^"]*)"|'([^']*)'|([^\s)]+))\s*\)/gi);
+    for (const [, doubleQuoted, singleQuoted, unquoted] of assetReferences) {
+      const assetReference = doubleQuoted ?? singleQuoted ?? unquoted;
+      if (assetReference.startsWith('#')) continue;
+      const assetUrl = new URL(assetReference, stylesheetUrl);
+      if (assetUrl.origin !== stylesheetUrl.origin) continue;
+      const assetPath = path.join(dist, decodeURIComponent(assetUrl.pathname).slice(1));
+      assert.ok(fs.existsSync(assetPath), `${stylesheetPath}: missing CSS asset ${assetReference}`);
+    }
+  }
   for (const value of ['PostgreSQL', 'Supabase', 'CCTV·영상보안 시스템', '010-4335-4586', 'wnghqkr30520@naver.com']) assert.ok(html.includes(value));
   applications.forEach(application => assert.equal(application.errors.length, 0, application.errors.map(error => error.message).join('\n')));
-  console.log('PASS: no full-view buttons, fixed desktop portrait sizing, centered desktop introduction, packaged GSAP runtime, first-notch next-section routing, whole-card tween, staggered content reveal, gesture lock, reverse, keyboard, swipe, hero tabs, always-on motion including old/OS preferences, mobile routing, Three.js geometry/materials/mixer/pause/fallback, modified links, training dialog backdrop, pinch zoom, packaged font, assets and retained content.');
+  console.log('PASS: reference-coordinate CSS contracts, fullscreen aspect-preserving backgrounds, bounded portrait sizing, constrained skills/education layouts, equal education rows, hidden inactive cards including interrupted transitions, responsive reading order, retained skills 3D, no full-view buttons, packaged GSAP runtime, first-notch routing, whole-card tween, content reveal, gesture lock, reverse, keyboard, swipe, hero tabs, mobile routing, Three.js geometry/materials/mixer/pause/fallback, modified links, training dialog, pinch zoom, packaged font, assets and retained content.');
   console.log('UNVERIFIED: browser layout at 1920×1080 and actual GPU pixels. JSDOM dimensions are fixtures; this test is not visual QA.');
 } finally { applications.forEach(application => application.destroy()); }

@@ -41,7 +41,7 @@
   .deck-ready .story-visual{display:none}.deck-ready .story-copy{align-self:center}.deck-ready .identity img{width:104px;height:133px}
   .deck-ready .about-section .card-flow{grid-template-columns:minmax(0,1fr)}
   .job-tabs{margin-bottom:var(--section-gap)}
-  .deck-ready #experience .experience-item{padding-top:20px;padding:var(--row-space) 0 0;gap:16px}
+  .deck-ready #experience .experience-item{padding:var(--row-space) 0 0;gap:16px}
   #experience .job-heading h3{font-size:1.375rem}
   #experience .job-details{margin-top:18px}
   #experience .job-tags{margin-top:18px}

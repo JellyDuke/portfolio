@@ -38,6 +38,11 @@ npm test
 
 CSS는 `frontend/styles/`에서 역할별로 관리합니다. 파일 로드 순서는
 `frontend/index.html`에 선언된 순서가 곧 스타일 우선순위이므로 유지합니다.
+역할별 수정 위치와 자산 경로 기준은 [프론트엔드 문서](docs/frontend/README.md)를 참고합니다.
+
+`npm run check`에는 Stylelint CSS 검사도 포함됩니다. CSS만 검사하려면
+`npm run lint:css`, 자동 수정 가능한 규칙을 적용하려면 `npm run lint:css:fix`를 사용합니다.
+자동 수정 후에는 변경 내용을 확인하고 다시 빌드합니다.
 
 Git 커밋·병합·GitHub 푸시는 프로젝트 소유자가 수행합니다. Codex는
 GitHub의 `origin/main`에 새 커밋이 확인된 경우에만 ChatGPT Sites 배포를

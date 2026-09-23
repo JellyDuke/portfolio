@@ -1,5 +1,5 @@
 /* 글꼴과 사이트 전역 디자인 토큰을 정의한다. */
-@font-face{font-family:'Pretendard Variable';font-style:normal;font-weight:100 900;font-display:swap;src:url('./fonts/PretendardVariable.woff2') format('woff2')}
+@font-face{font-family:'Pretendard Variable';font-style:normal;font-weight:100 900;font-display:swap;src:url('../fonts/PretendardVariable.woff2') format('woff2')}
 :root{
   --ink:#142841;--muted:#53657c;--blue:#244dc5;--blue-deep:#193a9a;
   --line:#d7e0ea;--paper:#edf1f6;--white:#fff;--soft:#f5f7fa;

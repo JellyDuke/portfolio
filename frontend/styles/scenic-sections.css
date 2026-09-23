@@ -1,0 +1,272 @@
+/* 제공된 배경을 쓰는 1·2·7번 섹션의 배치와 반응형 가독성을 담당한다. */
+.site-backgrounds{display:none}
+.reference-break{display:none}
+.deck-ready .site-backgrounds{display:block;position:fixed;inset:0;pointer-events:none;z-index:-1;background:var(--paper)}
+.section-background-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease}
+[data-active-section='home'] .background-home,
+[data-active-section='about'] .background-about,
+[data-active-section='contact'] .background-contact{opacity:1}
+.deck-ready body{isolation:isolate;background:transparent}
+.deck-ready .site-header{background:transparent}
+.deck-ready #site-nav>.nav-contact{background:var(--blue);border-color:var(--blue);color:#fff}
+.deck-ready .scenic-section{background:transparent;border-color:transparent;box-shadow:none}
+.deck-ready #home{background:transparent;padding:36px 0 24px}
+.deck-ready #about,.deck-ready #contact{padding:32px}
+[data-active-section='home'] .deck-stage::before,
+[data-active-section='home'] .deck-stage::after,
+[data-active-section='about'] .deck-stage::before,
+[data-active-section='about'] .deck-stage::after,
+[data-active-section='contact'] .deck-stage::before,
+[data-active-section='contact'] .deck-stage::after{opacity:0}
+
+/* 첫 소개: 인물·문구는 왼쪽, 제공된 리본 배경은 오른쪽, 선택기는 하단에 둔다. */
+.deck-ready .story-layout.card-flow{grid-template-columns:minmax(0,.44fr) minmax(0,.56fr)}
+.identity .identity-name-en{color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:.035em}
+.story-panel h1,.story-panel h2{font-weight:750}
+.deck-ready .story-bottom{padding:12px 28px;border:1px solid #fff;border-radius:16px;background:#ffffffa8;backdrop-filter:blur(12px);gap:24px}
+.story-choice-icon{display:grid;place-items:center;flex:0 0 60px;height:60px;border-radius:14px;background:#e4edfa;color:var(--blue);font-size:1.125rem;font-weight:700}
+.story-choice-icon .icon{width:28px;height:28px}
+.deck-ready .story-select{gap:0}
+.deck-ready .story-select button{gap:24px;padding:14px 28px;min-height:92px}
+.deck-ready .story-select button+button::before{content:'';position:absolute;left:0;top:22%;bottom:22%;width:1px;background:#cbd9ed}
+.deck-ready .story-select button::after{left:28px;right:28px;bottom:4px}
+.deck-ready .story-choice-copy strong{font-size:1.125rem}
+.deck-ready .story-skip{display:none}
+.deck-ready .hero-actions .button-quiet{border-color:#afc2e6;background:#ffffff70;color:var(--blue)}
+
+/* 기본 읽기 스타일. PC의 배경·텍스트 좌표는 아래 원본 시안 좌표계에서 함께 지정한다. */
+.deck-ready #about .card-flow{position:relative;display:block;height:100%}
+.deck-ready #about .about-intro{width:48%}
+.deck-ready #about .about-body h2,
+.deck-ready #contact .contact-intro h2{font-size:clamp(2.5rem,3.6vw,4.5rem);font-weight:750;line-height:1.2;letter-spacing:-.04em}
+.deck-ready #about .about-body>p{font-size:clamp(1rem,1.25vw,1.375rem);margin-top:24px;line-height:1.75}
+.deck-ready #about .about-signature{border:0;margin-top:16px;padding-top:12px;position:relative}
+.deck-ready #about .about-signature::before{content:'';position:absolute;top:0;left:0;width:36px;height:2px;background:var(--blue)}
+.deck-ready #about .about-values{position:absolute;inset:0;border:0;pointer-events:none}
+.deck-ready #about .about-values>li{position:absolute;display:block;width:28%;border:0;border-left:1px solid #9cb5e0;padding:24px 0 12px 24px;pointer-events:auto}
+.deck-ready #about .about-values>li::before{content:'';position:absolute;left:-4px;top:0;width:7px;height:7px;border-radius:50%;background:var(--blue)}
+.deck-ready #about .about-value-icon{display:none}
+.deck-ready #about .about-values h3{font-size:clamp(1.25rem,1.75vw,2rem);font-weight:700}
+.deck-ready #about .about-values p{font-size:clamp(.9375rem,1.12vw,1.25rem);line-height:1.75;margin-top:14px;word-break:keep-all}
+
+/* 연락처: 왼쪽의 큰 인사말과 오른쪽의 동등한 정보 행으로 마무리한다. */
+/* 오른쪽 연락처 열은 시안의 밝은 영역에만 놓고 리본이 있는 왼쪽 영역은 비운다. */
+.deck-ready #contact .contact-composition{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,max(340px,24vw));gap:0;flex:1;min-height:0}
+.deck-ready #contact .contact-intro{margin:0;align-self:start}
+.contact-eyebrow{display:flex;align-items:center;gap:24px;margin-bottom:24px;color:var(--muted);font-size:.875rem;font-weight:600}
+.contact-eyebrow::after{content:'';width:64px;height:1px;background:#afc2e6}
+.deck-ready #contact .contact-intro>p{font-size:clamp(1rem,1.3vw,1.375rem);line-height:1.75;max-width:25em;margin-top:24px;word-break:keep-all}
+.deck-ready #contact .contact-grid{display:flex;flex-direction:column;gap:0;padding-top:48px}
+.contact-note{color:var(--muted);font-size:1rem;padding-bottom:28px}
+.deck-ready #contact .contact-links,.deck-ready #contact .contact-meta{display:block}
+.deck-ready #contact .contact-meta{border-top:0}
+.deck-ready #contact .contact-row{min-height:120px;align-items:center;padding-block:24px}
+.deck-ready #contact .contact-interests{border-bottom:0}
+.deck-ready #contact .contact-link-icon{color:var(--blue);flex-shrink:0}
+.deck-ready #contact .contact-row strong{font-weight:650}
+.deck-ready #contact .site-footer{border-color:#cbd9ed}
+
+@media(min-width:851px) and (max-height:900px){
+  .deck-ready #home{padding:24px 0 12px}
+  .deck-ready #about,.deck-ready #contact{padding:16px 24px}
+  .deck-ready .story-bottom{padding:4px 12px}
+  .deck-ready .story-select button{min-height:72px;padding:10px 20px;gap:16px}
+  .story-choice-icon{flex-basis:46px;height:46px;border-radius:10px}
+  .deck-ready .story-choice-copy strong{font-size:1rem}
+  .deck-ready #about .about-signature{margin-top:16px;padding-top:12px}
+  .deck-ready #about .about-values>li{padding:18px 0 8px 18px}
+  .deck-ready #about .about-values p{margin-top:8px}
+  .deck-ready #contact .contact-grid{padding-top:16px}
+  .deck-ready #contact .contact-row{min-height:92px;padding-block:16px}
+  .contact-note{padding-bottom:18px;font-size:.875rem}
+  .contact-eyebrow{margin-bottom:18px}
+}
+
+/*
+ * PC 시안은 1672×941의 한 좌표계를 공유한다.
+ * 원본 비율을 유지한 cover 배경으로 화면을 채운다. 아이콘 설명의 좌표도 cover 배율을 따른다.
+ * 제목·버튼은 화면 안에 들어오는 시안 배율을 사용한다. 16:9에서는 두 배율이 일치한다.
+ * 아래 좌표는 카드 안쪽 퍼센트가 아닌 원본 시안의 px 단위다.
+ */
+@media(min-width:1101px){
+  :root{
+    --reference-unit:min(calc(100vw / 1672),calc(100svh / 941));
+    --reference-width:calc(1672 * var(--reference-unit));
+    --reference-height:calc(941 * var(--reference-unit));
+    --reference-left:calc((100vw - var(--reference-width)) / 2);
+    --reference-top:calc((100svh - var(--reference-height)) / 2);
+    --art-unit:max(calc(100vw / 1672),calc(100svh / 941));
+    --art-width:calc(1672 * var(--art-unit));
+    --art-height:calc(941 * var(--art-unit));
+  }
+
+  .deck-ready .background-home,.deck-ready .background-about{
+    inset:0;width:100%;height:100%;object-fit:cover;object-position:center;
+  }
+  .deck-ready #home,.deck-ready #about{
+    left:calc((100% - var(--reference-width)) / 2);
+    top:calc(var(--reference-top) - var(--header-height) - 12px);
+    width:var(--reference-width);height:var(--reference-height);
+    padding:0;border:0;border-radius:0;
+    --ink:#091c3e;--muted:#50688c;
+  }
+  .deck-ready #home .card-content,.deck-ready #about .card-content{height:100%}
+  /* 다른 화면 비율에서 cover 좌표로 이동한 설명을 내부 시안 프레임이 자르지 않게 한다. */
+  .deck-ready #about,.deck-ready #about .card-content{overflow:visible}
+  .deck-ready #home .card-flow,.deck-ready #about .card-flow{display:block;position:relative;height:100%}
+
+  /* 첫 소개: 사진 84/135, 제목 82/344, 버튼 84/638, 선택기 78/739. */
+  .deck-ready #home .identity{
+    position:absolute;left:calc(84 * var(--reference-unit));top:calc(135 * var(--reference-unit));
+    width:calc(440 * var(--reference-unit));height:calc(162 * var(--reference-unit));display:block;
+  }
+  .deck-ready #home .identity img{
+    width:min(160px,calc(128 * var(--reference-unit)));
+    height:min(205px,calc(164 * var(--reference-unit)));
+    border-radius:calc(7 * var(--reference-unit));
+  }
+  .deck-ready #home .identity>div{position:absolute;left:calc(164 * var(--reference-unit));top:calc(14 * var(--reference-unit))}
+  .deck-ready #home .identity .identity-name-en{font-size:calc(16 * var(--reference-unit));line-height:1.25;letter-spacing:0}
+  .deck-ready #home .identity strong{font-size:calc(40 * var(--reference-unit));line-height:1.25;font-weight:750;margin:calc(8 * var(--reference-unit)) 0 calc(10 * var(--reference-unit))}
+  .deck-ready #home .identity span{font-size:calc(20 * var(--reference-unit));line-height:1.5}
+  .deck-ready #home .identity .identity-location{font-size:calc(18 * var(--reference-unit));margin-top:calc(2 * var(--reference-unit))}
+  .deck-ready #home .story-copy{position:absolute;left:calc(82 * var(--reference-unit));top:calc(344 * var(--reference-unit));width:calc(560 * var(--reference-unit));height:calc(354 * var(--reference-unit))}
+  .deck-ready #home .story-panel h1,.deck-ready #home .story-panel h2{font-size:calc(64 * var(--reference-unit));line-height:1.28;font-weight:800;letter-spacing:-.04em}
+  .deck-ready #home .story-panel:not(:first-child) h2{font-size:calc(56 * var(--reference-unit));line-height:calc(82 * var(--reference-unit))}
+  .deck-ready #home .story-panel>p{font-size:calc(22 * var(--reference-unit));line-height:calc(36 * var(--reference-unit));margin-top:calc(20 * var(--reference-unit));text-wrap:initial}
+  .deck-ready #home .hero-actions{position:absolute;left:calc(2 * var(--reference-unit));top:calc(294 * var(--reference-unit));gap:calc(22 * var(--reference-unit));margin:0;flex-wrap:nowrap}
+  .deck-ready #home .hero-actions .button{height:calc(60 * var(--reference-unit));min-height:44px;padding:0;gap:calc(18 * var(--reference-unit));border-radius:calc(10 * var(--reference-unit));font-size:calc(20 * var(--reference-unit));font-weight:700}
+  .deck-ready #home .hero-actions .button-primary{width:calc(239 * var(--reference-unit))}
+  .deck-ready #home .hero-actions .button-quiet{width:calc(208 * var(--reference-unit));border:1px solid #afc2e6;background:#ffffff40}
+  .deck-ready #home .story-bottom{position:absolute;left:calc(78 * var(--reference-unit));top:calc(739 * var(--reference-unit));width:calc(1517 * var(--reference-unit));height:calc(118 * var(--reference-unit));padding:0;border-radius:calc(16 * var(--reference-unit));background:#ffffff70;backdrop-filter:blur(8px)}
+  .deck-ready #home .story-select{height:100%}
+  .deck-ready #home .story-select button{height:100%;min-height:44px;padding:0 calc(50 * var(--reference-unit));gap:calc(38 * var(--reference-unit));color:var(--ink)}
+  /* 첫 아이콘은 위쪽 사진의 x=84 선에 맞추고, 문구는 시안의 x=234 선에 둔다. */
+  .deck-ready #home .story-select button:first-child{padding-left:calc(6 * var(--reference-unit));gap:calc(80 * var(--reference-unit))}
+  .deck-ready #home .story-select button:first-child::after{left:calc(6 * var(--reference-unit))}
+  .deck-ready #home .story-choice-icon{flex-basis:calc(70 * var(--reference-unit));height:calc(70 * var(--reference-unit));border-radius:calc(17 * var(--reference-unit))}
+  .deck-ready #home .story-choice-icon .icon{width:calc(32 * var(--reference-unit));height:calc(32 * var(--reference-unit))}
+  .deck-ready #home .story-choice-copy strong{font-size:calc(20 * var(--reference-unit));font-weight:750;line-height:1.5;white-space:nowrap}
+  .deck-ready #home .story-choice-copy small{font-size:calc(17 * var(--reference-unit));line-height:1.5;margin-top:calc(3 * var(--reference-unit));white-space:nowrap}
+  .deck-ready #home .story-select button::after{left:calc(50 * var(--reference-unit));right:calc(50 * var(--reference-unit));bottom:calc(10 * var(--reference-unit))}
+
+  /* 두 번째 시안의 원점은 뷰포트가 아닌 동일한 배경 캔버스다. */
+  .deck-ready #about .about-intro{position:absolute;left:calc(109 * var(--reference-unit));top:calc(105 * var(--reference-unit));width:calc(550 * var(--reference-unit));height:auto;justify-content:flex-start}
+  .deck-ready #about .about-body h2{font-size:calc(64 * var(--reference-unit));line-height:1.28;font-weight:800;letter-spacing:-.04em}
+  .deck-ready #about .about-body>p{font-size:calc(20 * var(--reference-unit));line-height:calc(33 * var(--reference-unit));margin-top:calc(10 * var(--reference-unit));text-wrap:initial}
+  /* 서명 위의 선은 문단 뒤를 따라가면서도 문단·선·이름 사이 여백을 짧게 유지한다. */
+  .deck-ready #about .about-signature{position:relative;top:auto;left:auto;margin-top:calc(12 * var(--reference-unit));padding-top:calc(12 * var(--reference-unit));gap:calc(28 * var(--reference-unit));font-size:calc(16 * var(--reference-unit));line-height:1.5}
+  .deck-ready #about .about-signature strong{font-size:calc(18 * var(--reference-unit));font-weight:700}
+  .deck-ready #about .about-signature>span{padding-left:calc(28 * var(--reference-unit));border-left:1px solid #9fb2d0}
+  .deck-ready #about .about-signature::before{width:calc(35 * var(--reference-unit))}
+  .deck-ready #about .about-values{
+    position:absolute;inset:auto;display:block;
+    left:calc((var(--reference-width) - var(--art-width)) / 2);
+    top:calc((var(--reference-height) - var(--art-height)) / 2);
+    width:var(--art-width);height:var(--art-height);
+  }
+  .deck-ready #about .about-values>li{width:calc(355 * var(--reference-unit));padding:calc(10 * var(--reference-unit)) 0 calc(18 * var(--reference-unit)) calc(26 * var(--reference-unit));border-left:1px solid #b5c7e4}
+  .deck-ready #about .about-values>li:nth-child(1){left:calc(209 * var(--art-unit));top:calc(618 * var(--art-unit));padding-top:calc(28 * var(--reference-unit))}
+  .deck-ready #about .about-values>li:nth-child(2){left:calc(718 * var(--art-unit));top:calc(485 * var(--art-unit))}
+  .deck-ready #about .about-values>li:nth-child(3){left:calc(1285 * var(--art-unit));top:calc(418 * var(--art-unit));padding-top:calc(4 * var(--reference-unit));width:calc(337 * var(--reference-unit))}
+  .deck-ready #about .about-values h3{font-size:calc(32 * var(--reference-unit));line-height:1.25;font-weight:750;white-space:nowrap;letter-spacing:-.035em}
+  .deck-ready #about .about-values p{font-size:calc(20 * var(--reference-unit));line-height:calc(32 * var(--reference-unit));margin-top:calc(12 * var(--reference-unit));max-width:none;text-wrap:initial;letter-spacing:-.025em}
+  .deck-ready #about .about-values>li::before{width:calc(7 * var(--reference-unit));height:calc(7 * var(--reference-unit));left:calc(-3.5 * var(--reference-unit))}
+  .deck-ready #about .reference-break{display:initial}
+
+  /* 헤더·하단 탐색도 같은 캔버스에 맞추되 다른 섹션의 레이아웃은 바꾸지 않는다. */
+  [data-active-section='home']{--reference-header-top:24;--reference-header-height:46;--reference-brand-size:46;--reference-brand-font:24;--reference-nav-font:16}
+  [data-active-section='about']{--reference-header-top:18;--reference-header-height:40;--reference-brand-size:32;--reference-brand-font:18;--reference-nav-font:14}
+  .deck-ready:is([data-active-section='home'],[data-active-section='about']) .header-inner{
+    position:absolute;left:calc(var(--reference-left) + 78 * var(--reference-unit));
+    top:calc(var(--reference-top) + var(--reference-header-top) * var(--reference-unit));
+    width:calc(1517 * var(--reference-unit));height:calc(var(--reference-header-height) * var(--reference-unit));margin:0;
+  }
+  .deck-ready:is([data-active-section='home'],[data-active-section='about']) .brand{font-size:calc(var(--reference-brand-font) * var(--reference-unit));gap:calc(18 * var(--reference-unit))}
+  .deck-ready[data-active-section='home'] .brand{transform:translateX(calc(6 * var(--reference-unit)))}
+  .deck-ready:is([data-active-section='home'],[data-active-section='about']) .brand-mark{width:calc(var(--reference-brand-size) * var(--reference-unit));height:calc(var(--reference-brand-size) * var(--reference-unit));font-size:calc(var(--reference-brand-size) * .7 * var(--reference-unit));border-radius:calc(10 * var(--reference-unit))}
+  .deck-ready:is([data-active-section='home'],[data-active-section='about']) .brand-note{font-size:calc(var(--reference-nav-font) * var(--reference-unit));margin-left:calc(26 * var(--reference-unit))}
+  .deck-ready:is([data-active-section='home'],[data-active-section='about']) #site-nav{gap:calc(44 * var(--reference-unit))}
+  .deck-ready:is([data-active-section='home'],[data-active-section='about']) #site-nav>a{font-size:max(14px,calc(var(--reference-nav-font) * var(--reference-unit)))}
+  .deck-ready:is([data-active-section='home'],[data-active-section='about']) #site-nav>.nav-contact{width:calc(125 * var(--reference-unit));height:calc(var(--reference-header-height) * var(--reference-unit));justify-content:center;padding:0}
+  .deck-ready:is([data-active-section='home'],[data-active-section='about']) .nav-contact .icon{display:none}
+  .deck-ready:is([data-active-section='home'],[data-active-section='about']) .deck-controls{left:calc(var(--reference-left) + 78 * var(--reference-unit));top:calc(var(--reference-top) + 881 * var(--reference-unit));bottom:auto;transform:none;width:calc(1517 * var(--reference-unit));height:44px}
+}
+
+@media(max-width:1100px){
+  .deck-ready .story-layout.card-flow{grid-template-columns:minmax(0,.58fr) minmax(0,.42fr)}
+  /* 축소 화면에서도 첫 아이콘이 사진과 같은 시작선에 오도록 유지한다. */
+  .deck-ready #home .story-bottom{padding-left:0}
+  .deck-ready #home .story-select button:first-child{padding-left:4px}
+  .deck-ready .story-select button{padding-inline:14px;gap:12px}
+  .story-choice-icon{flex-basis:42px;height:42px;border-radius:10px}
+  .story-choice-icon .icon{width:24px;height:24px}
+  /* 배경 도형과 본문이 겹치지 않도록 태블릿에서는 독립된 목록으로 되돌린다. */
+  [data-active-section='about'] .background-about{opacity:.2}
+  .deck-ready #about .card-flow{display:flex;justify-content:space-between;gap:var(--section-gap)}
+  .deck-ready #about .about-intro{width:100%}
+  .deck-ready #about .about-values{position:static;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--layout-gap)}
+  .deck-ready #about .about-values>li:nth-child(n){position:relative;inset:auto;width:auto;padding:20px 0 0;border:0;border-top:1px solid #afc2e6}
+  .deck-ready #about .about-values>li::before{display:none}
+  .deck-ready #about .about-value-icon{display:block;margin:0 0 14px}
+  .deck-ready #about .about-values p{font-size:1rem}
+  .deck-ready #contact .contact-composition{gap:0;grid-template-columns:minmax(0,1fr) minmax(0,max(310px,32vw))}
+}
+
+@media(max-width:850px){
+  /* 세로 화면은 배경을 옅게 처리해 축소된 이미지 위에서도 본문 대비를 확보한다. */
+  [data-active-section='home'] .background-home{opacity:.24;object-position:65% center}
+  [data-active-section='contact'] .background-contact{opacity:.16;object-position:35% center}
+  .deck-ready #home,.deck-ready #about,.deck-ready #contact{padding:20px}
+  .deck-ready .story-layout.card-flow{grid-template-columns:minmax(0,1fr)}
+  .deck-ready .story-bottom{padding:6px 8px}
+  .deck-ready .story-select button{flex-direction:column;align-items:flex-start;gap:10px;padding:10px 12px;min-height:90px}
+  .deck-ready .story-select button::after{left:12px;right:12px}
+  .deck-ready .story-choice-copy strong{font-size:.875rem}
+  .story-choice-icon{flex-basis:auto;width:36px;height:36px;font-size:.875rem;border-radius:8px}
+  .story-choice-icon .icon{width:22px;height:22px}
+  .deck-ready #about .about-body h2,.deck-ready #contact .contact-intro h2{font-size:clamp(2rem,4.8vw,3rem)}
+  .deck-ready #about .about-values{display:block}
+  .deck-ready #about .about-values>li:nth-child(n){display:grid;grid-template-columns:28px minmax(0,1fr);gap:16px;padding-block:16px}
+  .deck-ready #about .about-value-icon{margin:4px 0 0}
+  .deck-ready #about .about-values h3{font-size:1.25rem}
+  .deck-ready #about .about-values p{margin-top:6px;line-height:1.65}
+  .deck-ready #contact .contact-composition{display:flex;flex-direction:column;gap:var(--section-gap)}
+  .deck-ready #contact .contact-grid{padding-top:0}
+  .deck-ready #contact .contact-row{min-height:0;padding-block:16px}
+  .deck-ready #contact .contact-intro>p{margin-top:16px}
+  .contact-note,.contact-eyebrow{display:none}
+}
+
+@media(max-width:600px){
+  .deck-ready #home,.deck-ready #about,.deck-ready #contact{padding:12px 8px}
+  .deck-ready .story-select button{align-items:center;padding:8px 4px;gap:8px;min-height:78px}
+  .deck-ready .story-choice-copy strong{font-size:.8125rem}
+  .deck-ready .story-select button::after{left:4px;right:4px}
+  .deck-ready #about .card-flow{justify-content:flex-start;gap:24px}
+  .deck-ready #about .about-body>p{font-size:.9375rem;margin-top:16px}
+  .deck-ready #about .about-values>li:nth-child(n){padding-block:14px;gap:12px}
+  .deck-ready #about .about-values h3{font-size:1.1875rem}
+  .deck-ready #about .about-values p{font-size:.9375rem}
+  .deck-ready #contact .contact-row{padding-block:12px}
+  .deck-ready #contact .contact-intro>p{font-size:.9375rem}
+  .deck-ready #contact .contact-meta-label{margin-bottom:4px;font-size:.8125rem}
+  .deck-ready #contact .contact-interests ul{font-size:.875rem}
+  .deck-ready #contact .site-footer{padding-top:8px}
+  .deck-ready #skills .scene-turn{display:none}
+}
+
+@media(max-width:600px) and (max-height:740px){
+  .deck-ready #home,.deck-ready #about,.deck-ready #contact{padding-block:4px}
+  .deck-ready .story-layout.card-flow{gap:14px}
+  .deck-ready .story-select button{min-height:48px;flex-direction:row;justify-content:center}
+  .story-choice-icon{display:none}
+  .deck-ready #about .card-flow{gap:16px}
+  .deck-ready #about .about-body h2,.deck-ready #contact .contact-intro h2{font-size:1.875rem}
+  .deck-ready #about .about-values>li:nth-child(n){padding-block:10px}
+  .deck-ready #about .about-values p{font-size:.875rem;margin-top:4px;line-height:1.6}
+  .deck-ready #contact .card-flow,.deck-ready #contact .contact-composition{gap:12px}
+  .deck-ready #contact .contact-intro>p{margin-top:10px;font-size:.875rem}
+  .deck-ready #contact .contact-row{padding-block:8px}
+  .deck-ready #contact .contact-residence{font-size:.75rem}
+}
