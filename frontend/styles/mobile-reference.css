@@ -1,0 +1,139 @@
+/* docs/frontend/mockups/전체_미리보기.png의 390 × 844 카드·여백·정보 위계를 재현한다. */
+.mobile-section-meta,.story-bottom-heading{display:none}
+
+@media(max-width:600px){
+  :root{--header-height:64px;--deck-width:calc(100% - 24px);--deck-height:calc(100svh - 160px);--card-padding:20px;--section-gap:18px;--section-title-size:1.75rem}
+  .deck-ready,.deck-ready body{background:#eaf2fc}
+  .deck-ready .site-header{background:#fff}
+  .deck-ready .site-backgrounds{display:none}
+  .deck-ready .deck-stage{margin-top:12px;margin-bottom:76px}
+  .deck-ready .section-card{padding:20px;border-radius:17px;background:#fff}
+  .deck-ready .deck-stage::before,.deck-ready .deck-stage::after{border-radius:17px}
+  .deck-ready #home,.deck-ready #about,.deck-ready #contact{padding:20px;border-color:#dce3ed;background:#fff;box-shadow:0 14px 30px -24px #17171730}
+  .deck-ready .card-content{scrollbar-width:none}
+  .deck-ready .card-content::-webkit-scrollbar{display:none}
+  .mobile-section-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:30px;padding-bottom:10px;border-bottom:1px solid #dce6f3;color:var(--blue);font-size:.6875rem;font-weight:650;line-height:1.3}
+  .mobile-section-meta>span:last-child{color:#60728c;font-weight:450;font-variant-numeric:tabular-nums}
+  .section-meta{min-height:30px;margin-bottom:18px;padding-bottom:10px;font-size:.6875rem}
+  .deck-ready .section-card .section-heading h2{font-size:1.75rem;line-height:1.2;font-weight:750;letter-spacing:-.035em}
+  .deck-ready .section-card .section-heading>p{display:block;margin-top:10px;font-size:.8125rem;line-height:1.55}
+  .deck-controls{bottom:11px;width:calc(100% - 40px);height:44px}
+  .deck-position{font-size:.75rem}
+  .deck-arrows{gap:8px}
+  .deck-arrows button{width:36px;height:36px;font-size:1rem}
+
+  /* 첫 소개: 사진·소개 문구·하는 일을 시안과 같은 세로 순서로 둔다. */
+  .deck-ready #home .story-layout.card-flow{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;height:100%;min-height:100%}
+  .deck-ready #home .identity{margin-top:28px;gap:16px}
+  .deck-ready #home .identity img{width:104px;height:133px;object-fit:cover}
+  .deck-ready #home .identity .identity-name-en{font-size:.75rem;color:var(--blue);font-weight:700;text-transform:uppercase}
+  .deck-ready #home .identity strong{font-size:1.5rem;margin:4px 0 7px}
+  .deck-ready #home .identity span{font-size:.75rem;line-height:1.5}
+  .deck-ready #home .identity .identity-location{font-size:.6875rem;margin-top:2px}
+  .deck-ready #home .story-copy{margin-top:22px;align-self:stretch}
+  .deck-ready #home .story-panel h1,.deck-ready #home .story-panel h2{font-size:clamp(1.8rem,8vw,2rem);line-height:1.19;font-weight:800}
+  .deck-ready #home .story-panel>p{margin-top:14px;font-size:.8125rem;line-height:1.6}
+  .deck-ready #home .story-panel>p br{display:initial}
+  .deck-ready #home .hero-actions{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;margin-top:19px}
+  .deck-ready #home .hero-actions .button{min-height:46px;padding:8px 12px;font-size:.75rem;white-space:nowrap}
+  .deck-ready #home .hero-actions .button-primary{flex:1}
+  .deck-ready #home .hero-actions .button-quiet{border:0;background:transparent;flex:1}
+  .deck-ready #home .story-bottom{display:block;margin-top:auto;padding:14px 0 0;border:0;border-top:1px solid #dce6f3;border-radius:0;background:transparent;backdrop-filter:none}
+  .story-bottom-heading{display:block;margin-bottom:10px;font-size:.6875rem;color:#60728c}
+  .deck-ready #home .story-select{gap:7px}
+  .deck-ready #home .story-select button{display:block;min-width:0;min-height:72px;padding:10px 7px;text-align:left;border:1px solid #dce6f3;border-radius:7px;background:#f6f9ff;color:var(--ink)}
+  .deck-ready #home .story-select button+button::before{display:none}
+  .deck-ready #home .story-select button::after{left:7px;right:7px;bottom:0}
+  .deck-ready #home .story-choice-icon{display:none}
+  .deck-ready #home .story-choice-copy{display:block;padding-left:7px;border-left:2px solid var(--blue)}
+  .deck-ready #home .story-choice-copy strong{font-size:.75rem;line-height:1.3}
+  .deck-ready #home .story-choice-copy small{display:block;margin-top:5px;font-size:.625rem;line-height:1.35;white-space:normal}
+
+  /* 두 번째 소개는 배경 장식을 걷어 내고 진술·서명·세 가지 태도를 한 카드에 담는다. */
+  .deck-ready #about .card-flow{display:flex;flex-direction:column;gap:0;height:100%}
+  .deck-ready #about .about-intro{margin-top:25px}
+  .deck-ready #about .about-body h2{font-size:1.9rem;line-height:1.2}
+  .deck-ready #about .about-body>p{font-size:.8125rem;line-height:1.65;margin-top:16px}
+  .deck-ready #about .about-signature{display:flex;align-items:center;gap:14px;border:0;margin-top:22px;padding:12px 0 0;font-size:.6875rem}
+  .deck-ready #about .about-signature::before{width:100%;height:1px;background:#dce6f3}
+  .deck-ready #about .about-signature strong{font-size:.75rem}
+  .deck-ready #about .about-values{display:block;margin-top:22px;border:0}
+  .deck-ready #about .about-values>li:nth-child(n){display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding:14px 0;border:0;border-top:1px solid #dce6f3}
+  .deck-ready #about .about-value-icon{display:block;width:24px;height:24px;margin:2px 0 0;padding:5px;border-radius:6px;background:#eef3ff;color:var(--blue)}
+  .deck-ready #about .about-values h3{font-size:.9375rem;line-height:1.4}
+  .deck-ready #about .about-values p{font-size:.75rem;line-height:1.55;margin-top:5px}
+
+  /* 경력과 기술은 넓은 표 대신 단일 열의 읽기 순서로 정리한다. */
+  .deck-ready #experience .section-heading{margin-bottom:17px}
+  .deck-ready #experience .section-heading>p{display:block}
+  .deck-ready #experience .job-tabs{margin-bottom:14px}
+  .deck-ready #experience .job-tabs button{min-height:42px;font-size:.75rem}
+  .deck-ready #experience .experience-item{padding-top:14px}
+  .deck-ready #experience .experience-date,.deck-ready #experience .experience-date .status,.deck-ready #experience .experience-date .period{font-size:.75rem}
+  .deck-ready #experience .experience-date .status{padding:4px 8px;border-radius:20px;background:#eaf1ff}
+  .deck-ready #experience .experience-date .status::before{display:none}
+  .deck-ready #experience .job-heading h3{font-size:1.25rem}
+  .deck-ready #experience .job-details{gap:5px;margin-top:18px;font-size:.8125rem}
+  .deck-ready #experience .job-details li::before{background:var(--blue)}
+  .deck-ready #experience .job-tags{margin-top:16px;padding-top:13px;border-top:1px solid #dce6f3;font-size:.75rem}
+  .deck-ready #skills .section-heading{min-height:0;padding-right:0;margin-bottom:20px}
+  .deck-ready #skills .skills-visual{display:none}
+  .deck-ready #skills .skills-layout{display:block}
+  .deck-ready #skills .skill-row{display:block;padding:10px 0}
+  .deck-ready #skills .skill-row h3{font-size:.8125rem;line-height:1.35}
+  .deck-ready #skills .skill-symbol{display:none}
+  .deck-ready #skills .skill-tags{gap:1px 13px;margin-top:4px}
+  .deck-ready #skills .skill-tags li{font-size:.6875rem;line-height:1.55}
+  .deck-ready #skills .skill-tags li:not(:last-child)::after{top:8px;right:-7px}
+
+  /* 프로젝트는 두 카드, 학력은 학력과 자격증을 위아래로 읽는 구성이다. */
+  .deck-ready #projects .section-heading{margin-bottom:18px}
+  .deck-ready #projects .project-grid{display:grid;grid-template-columns:1fr;gap:12px}
+  .deck-ready #projects .project-card{min-height:0;padding:16px;border-radius:10px}
+  .deck-ready #projects .project-card-body{flex:none;padding-top:18px}
+  .deck-ready #projects .project-card-body h3{font-size:1.25rem}
+  .deck-ready #projects .project-card-body p{font-size:.75rem;line-height:1.5;margin-top:7px}
+  .deck-ready #projects .project-tools{display:flex;margin-top:10px;font-size:.625rem}
+  .deck-ready #projects .project-card-footer{margin-top:10px;padding-top:9px;font-size:.75rem}
+  .deck-ready #projects .project-update-note{display:none}
+  .deck-ready #education .card-content{scrollbar-gutter:auto}
+  .deck-ready #education .section-heading{margin-bottom:18px}
+  .deck-ready #education .education-grid{display:block;flex:none}
+  .deck-ready #education .education-column{display:block}
+  .deck-ready #education .education-column+.education-column{margin-top:22px}
+  .deck-ready #education .column-heading{padding-bottom:8px;font-size:.8125rem;color:var(--blue)}
+  .deck-ready #education .education-item{padding:14px 0}
+  .deck-ready #education .education-item time{font-size:.6875rem;margin-bottom:4px}
+  .deck-ready #education .education-item h4{font-size:.9375rem;line-height:1.35}
+  .deck-ready #education .education-item p,.deck-ready #education .education-meta{font-size:.6875rem;line-height:1.4;margin-top:3px}
+  .deck-ready #education .training{margin-top:12px}
+  .deck-ready #education .training summary{min-height:42px;padding:8px 12px}
+  .deck-ready #education .training-summary{display:flex;align-items:center;gap:6px}
+  .deck-ready #education .training-summary strong{font-size:.6875rem}
+  .deck-ready #education .training-meta{display:none}
+
+  /* 연락 방법은 시안처럼 독립된 클릭 카드로 보이고 보조 정보는 하단에 둔다. */
+  .deck-ready #contact .card-flow{height:100%;gap:0}
+  .deck-ready #contact .contact-composition{display:block;margin-top:25px}
+  .deck-ready #contact .contact-intro h2{font-size:1.9rem;line-height:1.2}
+  .deck-ready #contact .contact-intro>p{font-size:.8125rem;line-height:1.6;margin-top:15px}
+  .deck-ready #contact .contact-grid{display:block;margin-top:28px;padding:0}
+  .deck-ready #contact .contact-links{display:grid;gap:10px;border:0}
+  .deck-ready #contact .contact-links .contact-row{min-height:72px;padding:11px 13px;border:1px solid #dce6f3;border-radius:8px;background:#f6f9ff}
+  .deck-ready #contact .contact-meta{display:block;margin-top:20px;border-top:1px solid #dce6f3}
+  .deck-ready #contact .contact-meta .contact-row{padding:10px 0;border:0}
+  .deck-ready #contact .contact-meta-label{font-size:.6875rem;margin-bottom:3px}
+  .deck-ready #contact .contact-row strong,.deck-ready #contact .contact-region p{font-size:.9375rem}
+  .deck-ready #contact .contact-interests ul,.deck-ready #contact .contact-residence{font-size:.75rem;line-height:1.5}
+  .deck-ready #contact .contact-links .contact-row::after{content:'↗';color:var(--blue);font-size:1rem}
+  .deck-ready #contact .contact-link-icon{display:none}
+  .deck-ready #contact .site-footer{display:none}
+}
+
+@media(max-width:600px) and (max-height:760px){
+  /* 낮은 모바일 화면은 카드 내부에서 내용을 읽되 탐색 버튼은 화면 하단에 고정한다. */
+  .deck-ready .card-content{overflow-y:auto;overscroll-behavior:contain}
+  .deck-ready #home .story-layout.card-flow{height:auto;min-height:100%}
+  .deck-ready #home .story-bottom{margin-top:18px}
+  .deck-ready #about .card-flow,.deck-ready #contact .card-flow{height:auto;min-height:100%}
+}

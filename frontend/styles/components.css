@@ -56,6 +56,7 @@ h2{line-height:1.25;font-weight:650;font-size:var(--section-title-size)}
 .about-values h3{font-size:1.6rem;font-weight:650;line-height:1.35}
 .about-values p{font-size:1.0625rem;line-height:1.85;color:var(--muted);margin-top:12px;max-width:31em}
 .experience-list{border-top:1px solid var(--ink)}
+.experience-body{--job-detail-indent:11px}
 .experience-item{display:grid;grid-template-columns:150px minmax(0,1fr);border-bottom:1px solid var(--line);padding-block:var(--row-space);gap:var(--layout-gap)}
 .experience-date{display:flex;flex-direction:column;align-items:flex-start;gap:12px;font-size:.875rem;font-variant-numeric:tabular-nums;color:var(--muted);padding-top:4px}
 .status{display:inline-flex;align-items:center;gap:7px;font-size:.8125rem;color:var(--blue);font-weight:600}
@@ -66,9 +67,10 @@ h2{line-height:1.25;font-weight:650;font-size:var(--section-title-size)}
 .job-heading>span,.job-position{color:var(--muted);font-size:.875rem}
 .job-position{margin-top:5px}
 .job-details{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:4px 24px;margin-top:16px;color:#40546e;font-size:.9375rem}
-.job-details li{position:relative;padding-left:11px;line-height:1.75}
+.job-details li{position:relative;padding-left:var(--job-detail-indent);line-height:1.75}
 .job-details li::before{content:'';width:3px;height:3px;position:absolute;left:0;top:12px;background:#718298;border-radius:50%}
-.job-tags{display:flex;flex-wrap:wrap;gap:8px 15px;margin-top:12px;font-size:.8125rem;color:var(--blue)}
+/* 목록의 점 공간을 키워드에도 적용해 첫 글자의 시작선을 일치시킨다. */
+.job-tags{display:flex;flex-wrap:wrap;gap:8px 15px;margin-top:12px;padding-left:var(--job-detail-indent);font-size:.8125rem;color:var(--blue)}
 .job-tabs{display:none}
 .skills-layout{display:grid;grid-template-columns:minmax(240px,.75fr) minmax(0,1.5fr);gap:var(--layout-gap);align-items:stretch}
 .skills-visual{min-width:0;border-radius:var(--radius);background:#eef3fb;padding:12px 20px 28px;display:flex;flex-direction:column;justify-content:center}

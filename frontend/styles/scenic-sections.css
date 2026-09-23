@@ -174,16 +174,14 @@
   .deck-ready #about .about-values>li::before{width:calc(7 * var(--reference-unit));height:calc(7 * var(--reference-unit));left:calc(-3.5 * var(--reference-unit))}
   .deck-ready #about .reference-break{display:initial}
 
-  /* 헤더·하단 탐색도 같은 캔버스에 맞추되 다른 섹션의 레이아웃은 바꾸지 않는다. */
-  [data-active-section='home']{--reference-header-top:24;--reference-header-height:46;--reference-brand-size:46;--reference-brand-font:24;--reference-nav-font:16}
-  [data-active-section='about']{--reference-header-top:18;--reference-header-height:40;--reference-brand-size:32;--reference-brand-font:18;--reference-nav-font:14}
+  /* 1·2번은 같은 헤더 좌표와 글자 크기를 써 섹션 전환 중 위치가 바뀌지 않는다. */
+  [data-active-section='home'],[data-active-section='about']{--reference-header-top:24;--reference-header-height:46;--reference-brand-size:46;--reference-brand-font:24;--reference-nav-font:16}
   .deck-ready:is([data-active-section='home'],[data-active-section='about']) .header-inner{
     position:absolute;left:calc(var(--reference-left) + 78 * var(--reference-unit));
     top:calc(var(--reference-top) + var(--reference-header-top) * var(--reference-unit));
     width:calc(1517 * var(--reference-unit));height:calc(var(--reference-header-height) * var(--reference-unit));margin:0;
   }
-  .deck-ready:is([data-active-section='home'],[data-active-section='about']) .brand{font-size:calc(var(--reference-brand-font) * var(--reference-unit));gap:calc(18 * var(--reference-unit))}
-  .deck-ready[data-active-section='home'] .brand{transform:translateX(calc(6 * var(--reference-unit)))}
+  .deck-ready:is([data-active-section='home'],[data-active-section='about']) .brand{font-size:calc(var(--reference-brand-font) * var(--reference-unit));gap:calc(18 * var(--reference-unit));transform:translateX(calc(6 * var(--reference-unit)))}
   .deck-ready:is([data-active-section='home'],[data-active-section='about']) .brand-mark{width:calc(var(--reference-brand-size) * var(--reference-unit));height:calc(var(--reference-brand-size) * var(--reference-unit));font-size:calc(var(--reference-brand-size) * .7 * var(--reference-unit));border-radius:calc(10 * var(--reference-unit))}
   .deck-ready:is([data-active-section='home'],[data-active-section='about']) .brand-note{font-size:calc(var(--reference-nav-font) * var(--reference-unit));margin-left:calc(26 * var(--reference-unit))}
   .deck-ready:is([data-active-section='home'],[data-active-section='about']) #site-nav{gap:calc(44 * var(--reference-unit))}

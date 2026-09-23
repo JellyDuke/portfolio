@@ -12,14 +12,15 @@
     <link rel="stylesheet" href="./styles/tokens.css?v=21" />
     <link rel="stylesheet" href="./styles/base.css?v=21" />
     <link rel="stylesheet" href="./styles/navigation.css?v=21" />
-    <link rel="stylesheet" href="./styles/components.css?v=21" />
+    <link rel="stylesheet" href="./styles/components.css?v=22" />
     <link rel="stylesheet" href="./styles/motion.css?v=21" />
     <link rel="stylesheet" href="./styles/responsive.css?v=21" />
     <link rel="stylesheet" href="./styles/deck.css?v=23" />
     <link rel="stylesheet" href="./styles/dialog.css?v=24" />
-    <link rel="stylesheet" href="./styles/deck-responsive.css?v=21" />
-    <link rel="stylesheet" href="./styles/scenic-sections.css?v=27" />
+    <link rel="stylesheet" href="./styles/deck-responsive.css?v=22" />
+    <link rel="stylesheet" href="./styles/scenic-sections.css?v=28" />
     <link rel="stylesheet" href="./styles/editorial-sections.css?v=26" />
+    <link rel="stylesheet" href="./styles/mobile-reference.css?v=2" />
     <script src="./vendor/gsap.min.js" defer></script>
     <script src="./deck.js?v=28" defer></script>
     <script src="./scene.js?v=14" type="module"></script>
@@ -68,6 +69,7 @@
       <section class="intro-story scenic-section" id="home" aria-labelledby="hero-title" data-chapter="소개">
         <div class="story-stage">
           <div class="story-layout page-width">
+            <div class="mobile-section-meta"><span>첫 소개</span><span>01 / 07</span></div>
             <div class="identity">
               <img src="./images/profile.png" width="312" height="400" alt="박주호의 증명사진" fetchpriority="high" />
               <div><span class="identity-name-en" lang="en">Park Juho</span><strong>박주호</strong><span>웹 개발 / 기술지원</span><span class="identity-location">인천 · 한국기술통신</span></div>
@@ -90,6 +92,7 @@
               <div class="hero-actions"><a class="button button-primary" href="#projects">포트폴리오 보기 <span aria-hidden="true">→</span></a><a class="button button-quiet" href="#experience">경력 살펴보기 <span aria-hidden="true">→</span></a></div>
             </div>
             <div class="story-bottom">
+              <span class="story-bottom-heading">하는 일</span>
               <div class="story-select" role="group" aria-label="소개 장면 선택" hidden>
                 <button type="button" data-story-go="0" aria-pressed="true"><span class="story-choice-icon" aria-hidden="true"><svg class="icon"><use href="#icon-window"/></svg></span><span class="story-choice-copy"><strong>웹 개발</strong><small>웹 화면 · 사내 프로그램</small></span></button>
                 <button type="button" data-story-go="1" aria-pressed="false"><span class="story-choice-icon" aria-hidden="true"><svg class="icon"><use href="#icon-chip"/></svg></span><span class="story-choice-copy"><strong>AI 활용</strong><small>AI 코딩 · 챗봇 개발</small></span></button>
@@ -103,6 +106,7 @@
       </section>
 
       <section id="about" class="section chapter page-width about-section scenic-section" aria-labelledby="about-title" data-chapter="소개">
+        <div class="mobile-section-meta"><span>소개</span><span>02 / 07</span></div>
         <div class="about-intro">
           <div class="about-body">
             <h2 id="about-title">먼저 듣고,<br />함께 해결합니다.</h2>
@@ -195,6 +199,7 @@
       </div>
 
       <section id="contact" class="section chapter page-width contact-section scenic-section" aria-labelledby="contact-title" data-chapter="연락처">
+        <div class="mobile-section-meta"><span>연락처</span><span>07 / 07</span></div>
         <div class="contact-composition">
           <div class="contact-intro section-heading">
             <span class="contact-eyebrow">07 / 07 <span>연락처</span></span>

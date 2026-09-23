@@ -21,13 +21,13 @@
   #experience .experience-date{flex-direction:row;align-items:center;justify-content:space-between;gap:12px;padding:0;font-size:.875rem;line-height:1.5}
   #experience .experience-date>span{white-space:nowrap}
   #experience .experience-date .status,#experience .experience-date .period{font-size:.875rem}
-  #experience .experience-body{min-width:0}
+  #experience .experience-body{min-width:0;--job-detail-indent:12px}
   #experience .job-heading{display:contents}
   #experience .job-heading h3{font-size:1.5rem;line-height:1.35;margin-bottom:8px}
   #experience .job-heading>span{color:#40546e;font-size:.875rem;line-height:1.6}
   #experience .job-position{display:inline-block;max-width:100%;margin:0 0 0 10px;padding-left:10px;border-left:1px solid var(--line);font-size:.875rem;line-height:1.4}
   #experience .job-details{grid-template-columns:minmax(0,1fr);gap:8px;margin-top:22px;font-size:1rem}
-  #experience .job-details li{padding-left:12px;line-height:1.65}
+  #experience .job-details li{line-height:1.65}
   #experience .job-details li::before{top:12px}
   #experience .job-tags{gap:6px 14px;margin-top:20px;font-size:.875rem;line-height:1.6}
 }

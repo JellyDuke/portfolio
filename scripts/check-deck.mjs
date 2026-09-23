@@ -116,10 +116,16 @@ try {
   assert.equal(app.window.getComputedStyle(q('#home')).flexDirection, 'column');
   assert.equal(app.window.getComputedStyle(q('#home .card-content')).minHeight, '0');
   assert.equal(app.document.querySelectorAll('.card-details').length, 0, 'Full-view buttons must not be rendered');
+  const headerTokens = ['--reference-header-top', '--reference-header-height', '--reference-brand-size', '--reference-brand-font', '--reference-nav-font'];
+  const homeHeaderValues = headerTokens.map(token => app.window.getComputedStyle(app.document.documentElement).getPropertyValue(token));
+  assert.deepEqual(homeHeaderValues, ['24', '46', '46', '24', '16'], 'The first scenic header defines the shared geometry');
+  const homeBrandTransform = app.window.getComputedStyle(q('.brand')).transform;
 
   const wheel = app.wheel(1);
   assert.ok(wheel.defaultPrevented);
   assert.equal(app.active, 'about', 'The first one-unit notch must select the next SECTION immediately');
+  assert.deepEqual(headerTokens.map(token => app.window.getComputedStyle(app.document.documentElement).getPropertyValue(token)), homeHeaderValues, 'The second scenic header keeps the same position and font sizes');
+  assert.equal(app.window.getComputedStyle(q('.brand')).transform, homeBrandTransform, 'The scenic brand uses one horizontal alignment');
   assert.equal(app.window.getComputedStyle(q('.background-home')).opacity, '0');
   assert.equal(app.window.getComputedStyle(q('.background-about')).opacity, '1');
   app.tick(120);
@@ -293,6 +299,8 @@ try {
       assert.equal(css.marginRight, '0px', `${label}: every content column ends on the same edge`);
     }
     assert.equal(computed('#experience .card-flow').display, 'flex', `${label}: career title precedes the full-width list`);
+    assert.equal(computed('#experience .experience-body').getPropertyValue('--job-detail-indent').trim(), width <= 850 ? '12px' : '11px', `${label}: job text indentation follows the viewport`);
+    assert.equal(computed('#experience .job-details li').paddingLeft, computed('#experience .job-tags').paddingLeft, `${label}: keyword text aligns with the bullet-list text`);
     const displayedJobs = [...layout.document.querySelectorAll('.experience-item')]
       .filter(job => layout.window.getComputedStyle(job).display !== 'none');
     assert.equal(displayedJobs.length, width > 850 ? 3 : 1, `${label}: desktop and mobile employer modes stay separate`);
@@ -306,7 +314,7 @@ try {
       assert.equal(computed('#about .about-signature').marginTop, 'calc(12 * var(--reference-unit))', `${label}: the paragraph-to-rule gap stays compact`);
       assert.equal(computed('#about .about-signature').paddingTop, 'calc(12 * var(--reference-unit))', `${label}: the rule-to-name gap stays compact`);
     }
-    assert.equal(computed('#contact .contact-composition').display, width > 850 ? 'grid' : 'flex', `${label}: contact information stacks on mobile`);
+    assert.equal(computed('#contact .contact-composition').display, width > 850 ? 'grid' : width > 600 ? 'flex' : 'block', `${label}: contact information stacks on mobile`);
     if (width > 1100) assert.equal(computed('#contact .contact-composition').gridTemplateColumns, 'minmax(0,1fr) minmax(0,max(340px,24vw))', `${label}: contact details stay in a narrow right-hand block`);
     else if (width > 850) assert.equal(computed('#contact .contact-composition').gridTemplateColumns, 'minmax(0,1fr) minmax(0,max(310px,32vw))', `${label}: contact details remain narrow on tablets`);
     assert.equal(computed('.story-layout').gridTemplateColumns, width <= 850 ? 'minmax(0,1fr)' : width <= 1100 ? 'minmax(0,.58fr) minmax(0,.42fr)' : 'minmax(0,.44fr) minmax(0,.56fr)');
@@ -325,9 +333,19 @@ try {
     }
     assert.equal(computed('#education .card-content').overflowY, 'auto', `${label}: small viewports keep the full record readable`);
     assert.equal(computed('#education .card-flow').height, 'auto');
-    assert.equal(computed('#education .education-grid').gridTemplateRows, 'auto repeat(2,minmax(max-content,1fr))', `${label}: both education columns share record rows without clipping`);
-    assert.equal(computed('#education .education-grid').rowGap, '0', `${label}: aligned rows must not gain extra vertical gutters`);
-    assert.equal(computed('#education .education-column').display, 'contents', `${label}: both education columns participate in the same grid`);
+    if (width > 600) {
+      assert.equal(computed('#education .education-grid').gridTemplateRows, 'auto repeat(2,minmax(max-content,1fr))', `${label}: both education columns share record rows without clipping`);
+      assert.equal(computed('#education .education-grid').rowGap, '0', `${label}: aligned rows must not gain extra vertical gutters`);
+      assert.equal(computed('#education .education-column').display, 'contents', `${label}: both education columns participate in the same grid`);
+    } else {
+      // 모바일 시안은 학력 다음에 자격증을 한 열로 쌓고, 모든 카드에 같은 머리말을 둔다.
+      assert.equal(computed('#education .education-grid').display, 'block', `${label}: mobile education follows one reading column`);
+      assert.equal(computed('#education .education-column').display, 'block', `${label}: education groups remain visible`);
+      assert.equal(computed('#home .mobile-section-meta').display, 'flex', `${label}: first card has the mockup's section heading`);
+      assert.equal(computed('#about .mobile-section-meta').display, 'flex', `${label}: second card has the mockup's section heading`);
+      assert.equal(computed('#contact .mobile-section-meta').display, 'flex', `${label}: contact card has the mockup's section heading`);
+      assert.equal(computed('#skills .skills-visual').display, 'none', `${label}: mobile skills prioritize the text table`);
+    }
     assert.equal(computed('.dialog-close').minHeight, '44px', `${label}: the smaller close visual retains a touch-sized hit area`);
     assert.equal(computed('.dialog-close').paddingTop, '0px', `${label}: the close control has no extra vertical padding`);
     if (width > 850) {
@@ -376,6 +394,8 @@ try {
 
   assert.equal(fs.readFileSync(path.join(dist,'fonts/PretendardVariable.woff2')).subarray(0,4).toString(),'wOF2');
   assert.ok(fs.existsSync(path.join(dist,'fonts/OFL.txt')));
+  // 원본·ChatGPT 생성 이미지는 보관만 하고 Sites 배포 파일에는 포함하지 않는다.
+  assert.equal(fs.existsSync(path.join(dist, 'source')), false, 'Source assets must not be deployed');
   const ids = [...app.document.querySelectorAll('[id]')].map(element => element.id);
   assert.equal(ids.length, new Set(ids).size);
   for (const element of app.document.querySelectorAll('script[src], link[rel="stylesheet"], img[src]')) {
