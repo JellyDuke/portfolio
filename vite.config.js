@@ -12,9 +12,9 @@ export default defineConfig({
     name: 'shared-vendor-assets',
     enforce: 'pre',
     resolveId(source) {
-      if (source.startsWith('./vendor/')) {
-        return path.join(vendorRoot, source.slice('./vendor/'.length));
-      }
+      // 루트 덱과 하위 작업 폴더 페이지가 같은 패키지 라이브러리를 사용한다.
+      const vendorPrefix = ['./vendor/', '../vendor/'].find(prefix => source.startsWith(prefix));
+      if (vendorPrefix) return path.join(vendorRoot, source.slice(vendorPrefix.length));
       return null;
     },
   }],

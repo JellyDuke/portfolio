@@ -7,7 +7,8 @@ ChatGPT Sites에 배포되는 정적 포트폴리오 프로젝트입니다.
 ```text
 portfolio/
 ├─ frontend/          # HTML과 브라우저 JavaScript
-│  └─ styles/         # 토큰·기본·컴포넌트·덱·반응형 CSS
+│  ├─ styles/         # 토큰·기본·컴포넌트·덱·반응형 CSS
+│  └─ portfolio/      # 캐릭터·폴더 연출과 번호 종이를 담은 개인 포트폴리오 페이지
 ├─ backend/           # 향후 서버 코드 위치 (현재 백엔드 없음)
 ├─ assets/            # 배포 이미지·폰트·라이브러리와 비배포 원본(source/)
 ├─ docs/              # 로컬 전용 문서(Git 추적 제외)
@@ -45,6 +46,10 @@ CSS는 `frontend/styles/`에서 역할별로 관리합니다. 파일 로드 순�
 `npm run check`에는 Stylelint CSS 검사도 포함됩니다. CSS만 검사하려면
 `npm run lint:css`, 자동 수정 가능한 규칙을 적용하려면 `npm run lint:css:fix`를 사용합니다.
 자동 수정 후에는 변경 내용을 확인하고 다시 빌드합니다.
+
+프로젝트 기록의 기존 개인 포트폴리오 카드가 `/portfolio/`를 새 탭에서 엽니다.
+종이 1~4의 작품명과 링크·다운로드 연결은 `frontend/portfolio/projects.js`에서 관리합니다.
+상세 구성은 로컬 문서 `docs/frontend/PORTFOLIO.md`에 정리합니다.
 
 Git 커밋·병합·GitHub 푸시는 프로젝트 소유자가 수행합니다. Codex는
 GitHub의 `origin/main`에 새 커밋이 확인된 경우에만 ChatGPT Sites 배포를
