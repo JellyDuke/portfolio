@@ -8,6 +8,16 @@
 - Codex must not commit, merge, or push to the user's GitHub repository. The user
   performs all Git operations that publish branch changes to GitHub.
 
+## Project layout
+
+- Edit browser code in `frontend/`.
+- Keep server-side work in `backend/`; the project currently has no backend runtime.
+- Keep images, fonts, and browser vendor files in `assets/`.
+- Keep role-specific documentation under `docs/frontend/`, `docs/backend/`, and
+  `docs/assets/`.
+- Treat `dist/` as generated Sites output. Run `npm run build` instead of editing
+  it directly.
+
 ## Semi-automatic Sites deployment
 
 The repository owner authorizes Codex to deploy only after a new commit is already

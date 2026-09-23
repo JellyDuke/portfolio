@@ -24,7 +24,7 @@ web
 
 ## Evidence
 
-사용자가 제공한 이력서, dist/profile.png, 현재 포트폴리오 구현, 사용자가 공유한 Canva 자료 링크. 검증된 성과 수치나 개별 고객 프로젝트 이미지는 없다.
+사용자가 제공한 이력서, assets/images/profile.png, 현재 포트폴리오 구현, 사용자가 공유한 Canva 자료 링크. 검증된 성과 수치나 개별 고객 프로젝트 이미지는 없다.
 
 ## Implementation
 

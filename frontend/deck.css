@@ -1,0 +1,150 @@
+/* One viewport, one card. Content and the optional reader always occupy separate rows. */
+:root{--header-height:80px;--deck-width:min(1744px,calc(100% - 96px));--deck-height:calc(100svh - 160px);--card-padding:48px}
+.site-header{height:var(--header-height)}.header-inner{width:var(--deck-width)}
+.reading-progress{position:fixed;inset:0 0 auto;height:2px;z-index:40;pointer-events:none}
+.reading-progress>span{display:block;height:100%;background:var(--blue);transform:scaleX(0);transform-origin:left}
+.deck-ready,.deck-ready body{height:100%;overflow:hidden;overscroll-behavior:none}
+.deck-ready .deck-stage{position:relative;width:var(--deck-width);height:var(--deck-height);margin:12px auto 68px;perspective:1600px;isolation:isolate}
+.deck-ready .deck-stage::before,.deck-ready .deck-stage::after{content:'';position:absolute;inset:12px 18px -12px;border:1px solid #d4deeb;border-radius:24px;background:#f5f7fa;z-index:-1;pointer-events:none}
+.deck-ready .deck-stage::after{inset:6px 9px -6px;background:#fafbfd}
+.deck-ready .section-card{position:absolute;inset:0;width:100%;height:100%;min-height:0;margin:0;padding:var(--card-padding);border:1px solid #dce3ed;border-radius:24px;background:#fff;box-shadow:0 14px 30px -24px #17171730;overflow:hidden;display:flex;flex-direction:column;visibility:hidden;transform-origin:center center}
+.deck-ready .section-card:first-child{visibility:visible}.deck-ready .section-card:focus{outline:none}
+.deck-ready .card-content{flex:1 1 0;min-height:0;width:100%;overflow:hidden}
+.deck-ready .card-flow{min-height:100%;display:flex;flex-direction:column;justify-content:flex-start;width:100%;max-width:none;margin:0}
+.card-flow>*{flex-shrink:0;min-width:0}
+.section-card .card-details{position:static;flex:0 0 auto;align-self:flex-start;margin-top:12px;min-height:44px;padding:9px 15px;background:#edf2ff;border:1px solid #c5d2ef;border-radius:7px;color:var(--blue);font-size:.875rem}
+.section-card .card-details[hidden]{display:none}
+.section-card[data-overflow='true'] .card-content{mask-image:linear-gradient(#000 calc(100% - 20px),transparent)}
+.deck-controls{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);width:var(--deck-width);height:44px;display:flex;align-items:center;gap:20px;z-index:30;color:var(--muted)}
+.deck-controls[hidden]{display:none}.deck-position{display:flex;align-items:center;gap:18px;min-width:260px;font-size:.8125rem}
+.chapter-count{font-variant-numeric:tabular-nums;color:var(--ink)}.chapter-current{padding-left:18px;border-left:1px solid #c6d2e3}.chapter-next{display:none}
+.deck-dots{display:flex;margin-inline:auto;gap:0}.deck-dots button{position:relative;display:grid;place-items:center;width:44px;height:44px;border:0;padding:0;background:transparent}
+.deck-dots button>span:first-child{width:6px;height:6px;border-radius:50%;background:#8a9cb5;transition:transform .3s,background .3s}
+.deck-dots button[aria-current]>span:first-child{background:var(--blue);transform:scale(1.6)}
+.deck-dots button:hover>span:first-child{background:var(--blue)}
+.deck-tooltip{position:absolute;left:50%;bottom:48px;transform:translate(-50%,5px);padding:6px 10px;border-radius:5px;background:var(--ink);color:white;font-size:.75rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.deck-dots button:hover .deck-tooltip,.deck-dots button:focus-visible .deck-tooltip{opacity:1;transform:translate(-50%,0)}
+.deck-hint{font-size:.75rem}.deck-arrows{display:flex;gap:8px}
+.deck-arrows button{display:grid;place-items:center;width:44px;height:44px;border:1px solid #c9d5e5;border-radius:50%;background:#fff;color:var(--ink);font-size:1.125rem;transition:background .2s,transform .2s}
+.deck-arrows button:not(:disabled):hover{background:#e1e9f8;transform:translateY(-2px)}.deck-arrows button:disabled{opacity:.35;cursor:default}
+/* Introduction: a personal identity above the introduction, paired with a studio 3D scene. */
+.deck-ready #home{background:#fbfcff}
+.deck-ready .story-layout.card-flow{display:grid;width:100%;max-width:none;height:100%;min-height:100%;grid-template-rows:auto minmax(min-content,1fr) auto;align-items:center;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--layout-gap)}
+.deck-ready .story-panels{display:grid}.deck-ready .story-panel{grid-area:1 / 1;visibility:hidden;margin:0}.deck-ready .story-panel:first-child{visibility:visible}
+.deck-ready .story-copy{align-self:center}.deck-ready .story-visual{grid-column:2;grid-row:1 / 3;align-self:stretch}
+.deck-ready .hero-scene{height:auto;flex:1;min-height:280px}
+.deck-ready .story-bottom{grid-row:3;grid-column:1 / -1}
+/* Each chapter gets a composition suited to its content. */
+.deck-ready .about-section .card-flow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--layout-gap);align-content:start;align-items:start}
+/* The reader preserves the complete document on small or zoomed viewports. */
+.content-dialog{width:min(1000px,calc(100% - 32px));max-height:calc(100svh - 40px);padding:0;border:0;border-radius:16px;color:var(--ink);background:#fff;box-shadow:0 28px 90px #17171740;scrollbar-color:#8c9bb2 #f5f7fa}
+.content-dialog::backdrop{background:#14284188;backdrop-filter:blur(6px)}
+.dialog-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 26px;border-bottom:1px solid var(--line);background:#fff}
+.dialog-top h2{font-size:1.25rem}.dialog-close{min-height:44px;padding:8px 12px;background:var(--soft);border:1px solid var(--line);border-radius:6px;font-size:.875rem}.dialog-close span{font-size:1.2rem;margin-left:12px}
+.dialog-content{padding:30px}.dialog-content .card-flow{height:auto;min-height:0;display:block}
+.dialog-content .job-tabs,.dialog-content .story-visual,.dialog-content .story-bottom,.dialog-content .scene-host,.dialog-content .scene-turn,.dialog-content .hero-actions,.dialog-content .skills-visual{display:none}
+.dialog-content .story-layout{display:block;width:100%;height:auto}
+.dialog-content .story-layout>.identity{margin-bottom:30px}
+.dialog-content .story-panels{display:block}.dialog-content .story-panel{visibility:visible!important;opacity:1!important;margin-block:24px;transform:none!important}
+.dialog-content .story-panel h1,.dialog-content .story-panel h2{font-size:2rem}
+.dialog-content .about-values{margin-top:28px}.dialog-content .about-body h2{font-size:2.3rem}
+.dialog-content .experience-list,.dialog-content .skills-layout,.dialog-content .project-grid{display:block}
+.dialog-content .experience-item{display:grid}.dialog-content .project-card+.project-card{margin-top:20px}
+.dialog-content .project-card{min-height:0}.dialog-content .project-card-body{padding-top:24px}.dialog-content .site-footer{margin-top:30px}
+@media(min-width:1401px) and (min-height:901px){
+  .identity img{width:208px;height:267px}
+}
+@media(max-width:1400px){
+  :root{--deck-width:calc(100% - 72px);--card-padding:32px}.identity{gap:22px}.job-details{font-size:.875rem}
+}
+@media(max-width:1100px){
+  :root{--deck-width:calc(100% - 48px);--card-padding:24px;--layout-gap:24px;--section-gap:24px;--row-space:20px;--panel-padding:24px;--section-title-size:2.125rem}.identity img{width:144px;height:184px}.experience-date{font-size:.8125rem}.job-details{margin-top:10px}
+  .story-bottom{gap:22px}.story-select{gap:16px}.story-choice-copy small{font-size:.75rem}
+}
+@media(max-width:850px){
+  :root{--header-height:68px;--deck-width:calc(100% - 32px);--deck-height:calc(100svh - 144px);--card-padding:24px;--section-title-size:1.875rem}
+  .deck-ready .deck-stage{margin-top:8px}.deck-ready .section-card{border-radius:18px}
+  .deck-ready .deck-stage::before,.deck-ready .deck-stage::after{border-radius:18px}
+  .deck-controls{gap:12px}.deck-position{min-width:0;gap:12px}.chapter-current{padding-left:12px}.deck-hint{display:none}
+  .deck-dots{gap:0}.deck-dots button{width:34px}.deck-arrows{margin-left:auto}.deck-ready .hero-scene{min-height:230px}
+  .job-tabs{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,.9fr);gap:4px;padding:4px;margin:0 0 22px;border:1px solid var(--line);border-radius:10px;background:var(--soft);margin-bottom:var(--section-gap)}
+  .job-tabs button{min-width:0;min-height:46px;padding:10px 6px;border:1px solid transparent;border-radius:6px;background:transparent;color:var(--muted);font-size:.875rem;font-weight:550;white-space:nowrap;transition:background .2s,color .2s,border-color .2s}
+  .job-tabs button[aria-pressed='true']{color:var(--blue);background:#fff;border-color:#cad6ed}
+  .job-tabs button:focus-visible{outline-offset:1px}
+  .deck-ready #experience .experience-item{display:none;grid-template-columns:minmax(0,1fr);border-bottom:0;padding:var(--row-space) 0 0;gap:16px}
+  .deck-ready #experience .experience-item.job-active{display:grid}
+  #experience .experience-date{flex-direction:row;align-items:center;justify-content:space-between;gap:12px;padding:0;font-size:.875rem;line-height:1.5}
+  #experience .experience-date>span{white-space:nowrap}
+  #experience .experience-date .status,#experience .experience-date .period{font-size:.875rem}
+  #experience .experience-body{min-width:0}
+  #experience .job-heading{display:contents}
+  #experience .job-heading h3{font-size:1.5rem;line-height:1.35;margin-bottom:8px}
+  #experience .job-heading>span{color:#40546e;font-size:.875rem;line-height:1.6}
+  #experience .job-position{display:inline-block;max-width:100%;margin:0 0 0 10px;padding-left:10px;border-left:1px solid var(--line);font-size:.875rem;line-height:1.4}
+  #experience .job-details{grid-template-columns:minmax(0,1fr);gap:8px;margin-top:22px;font-size:1rem}
+  #experience .job-details li{padding-left:12px;line-height:1.65}
+  #experience .job-details li::before{top:12px}
+  #experience .job-tags{gap:6px 14px;margin-top:20px;font-size:.875rem;line-height:1.6}
+}
+@media(max-width:600px){
+  :root{--header-height:64px;--deck-width:calc(100% - 24px);--deck-height:calc(100svh - 140px);--card-padding:20px;--layout-gap:20px;--section-gap:20px;--row-space:16px;--panel-padding:20px;--section-title-size:1.75rem;--contact-value-size:1rem}
+  .deck-ready .section-card{border-radius:16px}.deck-ready .deck-stage::before,.deck-ready .deck-stage::after{border-radius:16px}
+  .deck-ready .deck-stage::before{inset:10px 12px -10px}.deck-ready .deck-stage::after{inset:5px 6px -5px}
+  .header-inner{width:calc(100% - 40px)}#site-nav{top:63px}
+  .deck-position{font-size:.75rem}.deck-dots{display:none}.deck-controls{bottom:10px;width:calc(100% - 40px)}.deck-arrows button{width:44px;height:44px}
+  .deck-ready .story-layout.card-flow{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(min-content,1fr) auto}
+  .deck-ready .story-visual{display:none}.deck-ready .story-copy{align-self:center}.deck-ready .identity img{width:104px;height:133px}
+  .deck-ready .about-section .card-flow{grid-template-columns:minmax(0,1fr)}
+  .job-tabs{margin-bottom:var(--section-gap)}
+  .deck-ready #experience .experience-item{padding-top:20px;padding:var(--row-space) 0 0;gap:16px}
+  #experience .job-heading h3{font-size:1.375rem}
+  #experience .job-details{margin-top:18px}
+  #experience .job-tags{margin-top:18px}
+  .deck-ready #skills .section-heading{padding-right:110px;min-height:124px;margin-bottom:var(--section-gap)}.deck-ready #skills .section-heading>p{font-size:.8125rem;line-height:1.65}
+  .deck-ready #skills .skills-visual{display:block;position:absolute;right:var(--card-padding);top:var(--card-padding);width:112px;padding:0;background:transparent;border:0;pointer-events:none}
+  .deck-ready #skills .skill-scene{height:138px}.deck-ready #skills .skills-visual>p{display:none}
+  .deck-ready #skills .scene-fallback{inset:5%;gap:6px}.deck-ready #skills .scene-fallback span{font-size:.75rem;line-height:1.3;padding:8px 0}
+  .dialog-top{padding:14px 18px}.dialog-content{padding:22px}.dialog-content .education-grid{grid-template-columns:1fr}.dialog-content .experience-item{grid-template-columns:1fr}
+}
+@media(min-width:851px) and (max-height:900px){
+  :root{--card-padding:32px;--layout-gap:24px;--section-gap:24px;--row-space:20px;--panel-padding:24px;--section-title-size:2.125rem}.identity img{width:144px;height:184px}.identity strong{font-size:2rem}
+  .story-panel h1,.story-panel h2{font-size:clamp(2.25rem,3vw,3rem)}.story-panel>p{margin-top:16px;line-height:1.7;font-size:1rem}.hero-actions{margin-top:20px}
+  .story-bottom{padding-top:14px}.story-select button{min-height:64px}.deck-ready .hero-scene{min-height:240px}.about-values p{font-size:1rem}.about-signature{margin-top:28px}.job-details{gap:2px 18px;margin-top:10px}.job-tags{margin-top:8px}.skill-scene{height:300px}
+  .project-card{min-height:360px}.project-card-body{padding-top:32px}.project-card-body h3{font-size:2.4rem}.project-card-body p{margin-top:18px}.project-tools{margin-top:20px}.project-card-footer{margin-top:22px}.training summary{min-height:90px;padding-block:18px}
+}
+@media(min-width:851px) and (max-height:760px){
+  :root{--card-padding:24px;--layout-gap:24px;--section-gap:20px;--row-space:16px;--panel-padding:24px;--section-title-size:2rem}.identity img{width:120px;height:154px}.identity strong{font-size:1.8rem;margin-bottom:10px}
+  .story-panel h1,.story-panel h2{font-size:2.4rem}.story-panel>p{font-size:.9375rem;margin-top:14px}.hero-actions{margin-top:16px}.button{min-height:46px;padding-block:10px}
+  .story-bottom{padding-top:10px}.story-select button{min-height:58px}.story-choice-copy small{font-size:.75rem}.section-heading>p{margin-top:10px;font-size:.9375rem}.about-body>p{font-size:1rem;margin-top:22px}.about-values h3{font-size:1.35rem}.about-values p{font-size:.9375rem;margin-top:8px}.job-heading h3{font-size:1.25rem}.job-details{font-size:.8125rem}.job-tags{font-size:.75rem}.skill-tags li{font-size:.8125rem}.skill-scene{height:270px}
+  .project-card{min-height:320px}.project-card-body{padding-top:24px}.project-card-body h3{font-size:2rem}.project-card-body p{font-size:.9375rem;margin-top:14px}.project-tools{margin-top:14px}.project-card-footer{margin-top:18px;padding-top:16px}.education-item h4{font-size:1.25rem}.education-item p{font-size:.875rem}.education-meta{margin-top:8px}.training summary{min-height:80px;padding-block:14px}
+}
+@media(max-width:600px) and (max-height:740px){
+  :root{--card-padding:20px;--row-space:14px}.deck-ready .identity img{width:90px;height:115px}.identity strong{font-size:1.6rem}.story-panel h1,.story-panel h2{font-size:1.9rem}.story-panel>p{font-size:.875rem;margin-top:12px}.hero-actions{margin-top:16px;gap:8px}.button{font-size:.8125rem;padding-inline:12px}.about-body>p{font-size:.9375rem;margin-top:14px}.about-values p{font-size:.875rem;line-height:1.65}
+}
+/* The title and full-width records share the same content column as every chapter. */
+@media(min-width:851px){
+  #experience .experience-item{grid-template-columns:160px minmax(0,1fr);gap:var(--layout-gap);padding-block:var(--row-space)}
+  #experience .experience-date{padding-top:2px;font-size:.875rem;white-space:nowrap}
+  #experience .job-heading h3{font-size:1.5rem}
+  #experience .job-details{font-size:1rem;column-gap:var(--layout-gap)}
+  #experience .job-tags{font-size:.875rem}
+}
+@media(min-width:1201px){
+  #experience .experience-body{display:grid;grid-template-columns:minmax(220px,.85fr) minmax(0,1.6fr);gap:4px var(--layout-gap);align-content:start}
+  #experience .job-heading{display:block;grid-column:1;grid-row:1}
+  #experience .job-heading>span{display:block;margin-top:6px}
+  #experience .job-position{grid-column:1;grid-row:2;margin:0}
+  #experience .job-details{grid-column:2;grid-row:1;margin:0;align-content:start}
+  #experience .job-tags{grid-column:2;grid-row:2;margin-top:8px}
+}
+@media(min-width:851px) and (max-width:1200px){
+  #experience .experience-item{grid-template-columns:144px minmax(0,1fr)}
+  #experience .job-details{margin-top:12px}
+}
+@media(max-width:850px){#experience .section-heading>p{display:none}}
+.deck-ready #contact .card-flow{height:100%;gap:var(--section-gap)}
+#contact .site-footer{width:100%;margin:auto 0 0;flex:0 0 auto;padding:16px 0 0}
+.dialog-content .contact-grid{grid-template-columns:1fr}
+.dialog-content .contact-links,.dialog-content .contact-meta{grid-template-rows:none}
+.dialog-content .contact-meta{border-top:0}
+.dialog-content .site-footer{margin-top:var(--section-gap)}

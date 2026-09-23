@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "node scripts/copy-three.mjs",
+    "dev": "node scripts/prepare-assets.mjs && vite",
+    "build": "node scripts/build-site.mjs",
     "check": "node --check dist/deck.js && node --check dist/scene.js && node --check dist/assembly.js",
     "test": "node scripts/check-deck.mjs && node scripts/check-scene.mjs"
   },
