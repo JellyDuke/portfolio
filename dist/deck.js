@@ -53,7 +53,7 @@
   document.querySelector('.story-select').hidden = false;
   const spinButton = document.createElement('button');
   spinButton.type = 'button'; spinButton.className = 'scene-turn'; spinButton.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#icon-turn"/></svg> 360° 둘러보기';
-  spinButton.setAttribute('aria-label', '웹·AI·CCTV 3D 오브젝트 한 바퀴 돌려보기');
+  spinButton.setAttribute('aria-label', '소프트웨어·AI·CCTV 3D 오브젝트 한 바퀴 돌려보기');
   spinButton.addEventListener('click', () => document.dispatchEvent(new CustomEvent('portfolio:spin')));
   // 첫 소개는 제공된 배경을 사용하므로 실제 3D 조작은 기술 섹션에 둔다.
   document.querySelector('.skills-visual').append(spinButton);

@@ -149,7 +149,7 @@ function makeScene(host) {
     raycaster.setFromCamera(pointer,camera);
     const hit = raycaster.intersectObjects(faces,false)[0];
     renderer.domElement.style.cursor = hit ? 'pointer' : 'default';
-    renderer.domElement.title = hit ? ['웹 개발 소개 보기','AI 활용 소개 보기','CCTV·네트워크 소개 보기'][hit.object.userData.sceneIndex] : '';
+    renderer.domElement.title = hit ? ['소프트웨어 개발 소개 보기','AI 활용 소개 보기','CCTV·네트워크 소개 보기'][hit.object.userData.sceneIndex] : '';
   }
   function clearHover() { renderer.domElement.style.cursor = 'default'; renderer.domElement.title = ''; }
   renderer.domElement.addEventListener('click', pickLayer);
