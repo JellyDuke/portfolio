@@ -1,0 +1,4 @@
+node_modules/
+.sites-runtime/
+.vite/
+npm-debug.log*

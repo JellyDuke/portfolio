@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#edf2f8" />
+    <meta name="description" content="개발자 박주호의 포트폴리오. 웹 개발부터 IT 인프라와 시스템 운영까지, 경력과 기술 경험을 소개합니다." />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>박주호 | 개발자 포트폴리오</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232451d1'/%3E%3Cpath d='M18 7v12c0 5-8 6-10 1M24 7v18M18 15h6' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <link rel="preload" href="./fonts/PretendardVariable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="./styles.css?v=20" />
+    <link rel="stylesheet" href="./deck.css?v=20" />
+    <script src="./vendor/gsap.min.js" defer></script>
+    <script src="./deck.js?v=20" defer></script>
+    <script src="./scene.js?v=14" type="module"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+    <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <symbol id="icon-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></symbol>
+      <symbol id="icon-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+      <symbol id="icon-code" viewBox="0 0 24 24"><path d="m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16"/></symbol>
+      <symbol id="icon-server" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01M11 6.5h6M11 17.5h6"/></symbol>
+      <symbol id="icon-people" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m20 0v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/><circle cx="9" cy="7" r="4"/></symbol>
+      <symbol id="icon-external" viewBox="0 0 24 24"><path d="M15 3h6v6m0-6L10 14m-1-9H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol>
+      <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.72 12.8 12.8 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.8 12.8 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"/></symbol>
+      <symbol id="icon-turn" viewBox="0 0 24 24"><path d="M3 11a9 9 0 1 1 3 8M3 4v7h7"/></symbol>
+      <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    </svg>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#home" aria-label="박주호 포트폴리오 처음으로"><span class="brand-mark" aria-hidden="true">jh</span><span>박주호<span class="brand-note">포트폴리오</span></span></a>
+        <button class="menu-button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+        <nav id="site-nav" aria-label="주요 메뉴">
+          <a href="#about">소개</a>
+          <a href="#experience">경력</a>
+          <a href="#skills">기술·활용</a>
+          <a href="#projects">프로젝트</a>
+          <a href="#education">학력·자격</a>
+          <a class="nav-contact" href="#contact">연락하기 <svg class="icon" aria-hidden="true"><use href="#icon-mail"/></svg></a>
+        </nav>
+      </div>
+      <div class="reading-progress" aria-hidden="true"><span></span></div>
+    </header>
+
+    <main id="main">
+      <section class="intro-story" id="home" aria-labelledby="hero-title" data-chapter="소개">
+        <div class="story-stage">
+          <div class="story-layout page-width">
+            <div class="identity">
+              <img src="./profile.png" width="312" height="400" alt="박주호의 증명사진" fetchpriority="high" />
+              <div><span class="identity-name-en" lang="en">Park Juho</span><strong>박주호</strong><span>웹 개발 / 기술지원</span><span class="identity-location">인천 · 한국기술통신</span></div>
+            </div>
+            <div class="story-copy">
+              <div class="story-panels">
+                <div class="story-panel" data-story-panel="0">
+                  <h1 id="hero-title">웹을 만들고,<br />현장까지 살핍니다.</h1>
+                  <p>웹과 사내 프로그램을 만들고,<br />CCTV·네트워크 기술지원을 함께 맡고 있습니다.</p>
+                </div>
+                <div class="story-panel" data-story-panel="1">
+                  <h2>필요한 기능을,<br />AI와 함께 만듭니다.</h2>
+                  <p>코딩에 AI를 활용하며 필요한 기술을 배웁니다.<br />웹 화면부터 챗봇, 사내 프로그램까지 경험을 넓혀갑니다.</p>
+                </div>
+                <div class="story-panel" data-story-panel="2">
+                  <h2>화면 너머의 연결도,<br />꼼꼼하게 살핍니다.</h2>
+                  <p>CCTV와 기초 네트워크, 장비 기술지원까지.<br />동료의 이야기를 듣고, 현장의 문제를 함께 풀어갑니다.</p>
+                </div>
+              </div>
+              <div class="hero-actions"><a class="button button-primary" href="#projects">포트폴리오 보기</a><a class="button button-quiet" href="#experience">경력 살펴보기 <svg class="icon" aria-hidden="true"><use href="#icon-chevron"/></svg></a></div>
+            </div>
+            <div class="story-visual">
+              <div class="scene-host hero-scene" data-scene="intro" aria-hidden="true"><div class="scene-fallback"><span>WEB / 화면을 만들고</span><span>AI / 아이디어를 구현하고</span><span>NETWORK / 현장을 연결합니다</span></div></div>
+              <div class="scene-legend" aria-hidden="true"><span data-scene-label="0">사용하기 편한 웹 화면</span><span data-scene-label="1">AI를 활용한 개발</span><span data-scene-label="2">CCTV·네트워크 기술지원</span></div>
+            </div>
+            <div class="story-bottom">
+              <div class="story-select" role="group" aria-label="소개 장면 선택" hidden>
+                <button type="button" data-story-go="0" aria-pressed="true"><span class="story-choice-copy"><strong>웹 개발</strong><small>웹 화면 · 사내 프로그램</small></span></button>
+                <button type="button" data-story-go="1" aria-pressed="false"><span class="story-choice-copy"><strong>AI 활용</strong><small>AI 코딩 · 챗봇 개발</small></span></button>
+                <button type="button" data-story-go="2" aria-pressed="false"><span class="story-choice-copy"><strong>CCTV·네트워크</strong><small>장비 기술지원 · 기초 네트워크</small></span></button>
+              </div>
+              <a class="story-skip" href="#about">소개 더 보기 <span aria-hidden="true">↓</span></a>
+            </div>
+          </div>
+        </div>
+        <div class="story-stops" aria-hidden="true"><div class="story-stop" id="intro-web"></div><div class="story-stop" id="intro-ai"></div><div class="story-stop" id="intro-network"></div></div>
+      </section>
+
+      <section id="about" class="section chapter page-width about-section" aria-labelledby="about-title" data-chapter="소개">
+        <div class="about-intro">
+          <div class="about-body">
+            <h2 id="about-title">먼저 듣고,<br />함께 해결합니다.</h2>
+            <p>사용하기 편한 화면과 안정적인 운영을 위해,<br class="desktop-break" />동료와 소통하며 문제를 풀어갑니다.</p>
+            <div class="about-signature"><strong>박주호</strong><span>웹 개발 · 기술지원</span></div>
+          </div>
+        </div>
+        <ul class="about-values" aria-label="업무 태도">
+          <li>
+            <svg class="icon about-value-icon" aria-hidden="true"><use href="#icon-people"/></svg>
+            <div><h3>듣고, 정리합니다.</h3><p>동료의 이야기를 먼저 듣고, 필요한 내용을 명확하게 공유합니다.</p></div>
+          </li>
+          <li>
+            <svg class="icon about-value-icon" aria-hidden="true"><use href="#icon-server"/></svg>
+            <div><h3>만들고, 확인합니다.</h3><p>웹 화면과 기능을 점검하고, CCTV·네트워크 기술지원에서 만나는 문제를 살핍니다.</p></div>
+          </li>
+          <li>
+            <svg class="icon about-value-icon" aria-hidden="true"><use href="#icon-code"/></svg>
+            <div><h3>써 보고, 익힙니다.</h3><p>AI로 코드를 구현하고 검토하며, 필요한 기술을 직접 써 보고 배웁니다.</p></div>
+          </li>
+        </ul>
+      </section>
+
+      <div class="section-background">
+        <section id="experience" class="section chapter page-width" aria-labelledby="experience-title" data-chapter="경력">
+          <div class="section-heading"><div><h2 id="experience-title">경력과 실무 경험</h2></div><p>Webflow로 만든 웹 화면부터 프로그램 개발과 장비 기술지원까지.</p></div>
+          <div class="experience-list">
+            <article class="experience-item current-job">
+              <div class="experience-date"><span>2026.03 — 현재</span><span class="status">재직 중</span></div>
+              <div class="experience-body"><div class="job-heading"><h3>(주)한국기술통신</h3><span>기술지원</span></div><p class="job-position">Dahua / 사원</p><ul class="job-details"><li>웹 디자인 및 풀스택 개발</li><li>AI 유지보수 및 챗봇 개발</li><li>IT 인프라·네트워크 CS 지원</li><li>사내 프로그램 개발</li></ul><div class="job-tags"><span>웹 개발</span><span>AI 챗봇</span><span>IT 인프라</span></div></div>
+            </article>
+            <article class="experience-item">
+              <div class="experience-date"><span>2025.12 — 2026.02</span><span class="period">3개월</span></div>
+              <div class="experience-body"><div class="job-heading"><h3>파인이텍</h3><span>업무 지원</span></div><p class="job-position">아르바이트</p><ul class="job-details"><li>전산시스템 개발 및 운영 관련 지원</li><li>문서 작업과 개발 업무 보조</li></ul></div>
+            </article>
+            <article class="experience-item">
+              <div class="experience-date"><span>2024.03 — 2025.06</span><span class="period">1년 4개월</span></div>
+              <div class="experience-body"><div class="job-heading"><h3>블렌딩</h3><span>프론트엔드 / 퍼블리싱</span></div><p class="job-position">개발팀 / 사원</p><ul class="job-details"><li>Webflow 웹사이트 제작·퍼블리싱</li><li>전자정부프레임워크 사용 경험</li><li>반응형 UI·UX 구현, 웹 표준·접근성 고려</li></ul><div class="job-tags"><span>Webflow</span><span>전자정부프레임워크</span><span>UI·UX</span></div></div>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <section id="skills" class="section chapter page-width" aria-labelledby="skills-title" data-chapter="경험">
+        <div class="section-heading"><div><h2 id="skills-title">경험과 활용 방식</h2></div><p>실무와 교육에서 다뤄 본 기술과 현재의 개발 방식입니다.</p></div>
+        <div class="skills-layout">
+        <aside class="skills-visual" aria-label="개발과 기술지원의 연결"><div class="scene-host skill-scene" data-scene="skills" aria-hidden="true"><div class="scene-fallback"><span>웹 개발</span><span>데이터</span><span>기술지원</span></div></div><p>웹 개발부터 데이터와 네트워크까지,<br />업무에 맞게 경험을 넓혀갑니다.</p></aside>
+        <div class="skills-table">
+          <div class="skill-row"><h3><span class="skill-symbol" aria-hidden="true">&lt;/&gt;</span>웹 화면</h3><ul class="skill-tags"><li>Webflow</li><li>HTML5</li><li>CSS3</li><li>JavaScript</li><li>TypeScript</li><li>jQuery</li><li>Bootstrap</li></ul></div>
+          <div class="skill-row"><h3><span class="skill-symbol" aria-hidden="true">{ }</span>서버 / 데이터</h3><ul class="skill-tags"><li>전자정부프레임워크</li><li>Java</li><li>JSP</li><li>Spring Framework</li><li>Spring Boot</li><li>MyBatis</li><li>PostgreSQL</li><li>MySQL</li><li>Supabase</li><li>Firebase</li></ul></div>
+          <div class="skill-row"><h3><svg class="icon skill-symbol" aria-hidden="true"><use href="#icon-server"/></svg>인프라 / 네트워크</h3><ul class="skill-tags"><li>기초 네트워크</li><li>CCTV 기술지원</li><li>장비 기술지원</li><li>시스템 운영</li></ul></div>
+          <div class="skill-row"><h3><span class="skill-symbol" aria-hidden="true">AI</span>AI 활용 개발</h3><ul class="skill-tags"><li>AI 기반 코딩</li><li>코드 검토와 수정</li><li>오류 분석</li><li>개발 문서 작성</li></ul></div>
+          <div class="skill-row"><h3><span class="skill-symbol" aria-hidden="true">＋</span>협업 / 도구</h3><ul class="skill-tags"><li>Git</li><li>GitHub</li><li>VS Code</li><li>IntelliJ IDEA</li><li>Eclipse</li></ul></div>
+        </div>
+        </div>
+      </section>
+
+      <section id="projects" class="section chapter projects-section page-width" aria-labelledby="projects-title" data-chapter="프로젝트">
+        <div class="section-heading"><div><h2 id="projects-title">프로젝트 기록</h2></div><p>만들고 있는 것과, 이전에 정리한 자료.</p></div>
+        <div class="project-grid">
+          <a class="project-card project-current depth-card" data-depth href="#home" aria-labelledby="project-site-title project-site-link">
+            <div class="project-card-top"><span class="project-status">개선 중</span><span>현재 보고 있는 사이트</span></div>
+            <div class="project-card-body"><h3 id="project-site-title">개인 포트폴리오</h3><p>경험과 관심 분야를 담은 웹사이트입니다. 3D와 섹션 전환을 적용하며 화면을 다듬고 있습니다.</p></div>
+            <ul class="project-tools" aria-label="구현에 사용한 기술"><li>HTML / CSS / JavaScript</li><li>Three.js / GSAP</li></ul>
+            <div class="project-card-footer"><span id="project-site-link">첫 화면 보기</span><svg class="icon" aria-hidden="true"><use href="#icon-chevron"/></svg></div>
+          </a>
+          <a class="project-card project-archive depth-card" data-depth href="https://www.canva.com/design/DAF1tlYavww/eQb_XllkW_amJOyRoy-H0g/view" target="_blank" rel="noopener noreferrer" aria-label="이전 포트폴리오 자료, Canva에서 새 탭으로 열기">
+            <div class="project-card-top"><span class="project-status">이전 자료</span><span>Canva</span></div>
+            <div class="project-card-body"><h3>포트폴리오 아카이브</h3><p>이전에 작업한 내용을 정리한 자료입니다. Canva에서 당시의 구성과 작업 내용을 살펴볼 수 있습니다.</p></div>
+            <div class="project-card-footer"><span>자료 열기 <span class="project-link-note">새 탭</span></span><svg class="icon" aria-hidden="true"><use href="#icon-external"/></svg></div>
+          </a>
+          <!-- Add future projects as project-card entries, with their own status, summary and working link. -->
+        </div>
+        <p class="project-update-note">다음 프로젝트도 역할과 구현 과정을 정리해 차례로 추가하겠습니다.</p>
+      </section>
+
+      <div class="section-background">
+        <section id="education" class="section chapter page-width" aria-labelledby="education-title" data-chapter="학력·자격">
+          <div class="section-heading"><div><h2 id="education-title">배움의 기록</h2></div></div>
+          <div class="education-grid">
+            <div class="education-column"><h3 class="column-heading">학력</h3><article class="education-item"><time>2020.03 — 2024.02</time><h4>인하공업전문대학</h4><p>정보통신공학과 졸업</p><span class="education-meta">학점 3.69 / 4.5</span></article><article class="education-item"><time>2020</time><h4>계산공업고등학교</h4><p>졸업</p></article></div>
+            <div class="education-column"><h3 class="column-heading">자격증</h3><article class="education-item"><time>2019.07</time><h4>전자기능사</h4><p>한국산업인력공단</p></article><article class="education-item"><time>2017.08</time><h4>GTQ 그래픽기술자격 2급</h4><p>한국생산성본부</p></article></div>
+          </div>
+          <details class="training"><summary><span class="training-summary"><span class="training-label">교육 이수</span><strong>빅데이터 구축, 분석 및 시각화 개발자 양성과정</strong><span class="training-meta">인천일보아카데미 / 2023.04 — 2023.11</span></span><span class="details-toggle" aria-hidden="true">＋</span></summary><div class="training-content"><p>Java와 Spring 기반 웹 개발, MySQL 데이터베이스, 프론트엔드 구현부터 개발 문서 작성과 버전 관리까지 학습했습니다.</p><div class="training-topics"><div><h4>웹 애플리케이션</h4><p>Java, JDBC, JSP, Servlet, MVC, Spring Boot, WebSocket, MyBatis, Spring Security</p></div><div><h4>데이터와 화면</h4><p>MySQL, 데이터 모델링, HTML, CSS, JavaScript, jQuery, Bootstrap</p></div><div><h4>설계와 협업</h4><p>요구사항 정의서, UI·DB 설계서, 테스트 내역서, 개발 일정표, GitHub</p></div></div></div></details>
+        </section>
+      </div>
+
+      <section id="contact" class="section chapter page-width contact-section" aria-labelledby="contact-title" data-chapter="연락처">
+        <div class="contact-composition">
+          <div class="contact-intro section-heading">
+            <h2 id="contact-title">함께할 일을 이야기해 주세요.</h2>
+            <p>웹 개발과 기술지원 분야에서 함께할 기회를 찾고 있습니다.</p>
+          </div>
+          <div class="contact-grid">
+            <div class="contact-links">
+              <a class="contact-row contact-email" href="mailto:wnghqkr30520@naver.com">
+                <span class="contact-row-copy"><span class="contact-meta-label">이메일</span><strong>wnghqkr30520<wbr />@naver.com</strong></span>
+                <svg class="icon contact-link-icon" aria-hidden="true"><use href="#icon-mail"/></svg>
+              </a>
+              <a class="contact-row contact-phone" href="tel:+821043354586">
+                <span class="contact-row-copy"><span class="contact-meta-label">휴대폰</span><strong>010-4335-4586</strong></span>
+                <svg class="icon contact-link-icon" aria-hidden="true"><use href="#icon-phone"/></svg>
+              </a>
+            </div>
+            <div class="contact-meta">
+              <div class="contact-row contact-region"><div class="contact-row-copy"><span class="contact-meta-label">근무 희망 지역</span><p>서울·경기·인천</p><span class="contact-residence">인천 거주</span></div></div>
+              <div class="contact-row contact-interests"><div class="contact-row-copy"><span class="contact-meta-label">관심 분야</span><ul><li>프론트엔드·백엔드·웹 퍼블리싱</li><li>네트워크 엔지니어·CCTV·영상보안 시스템</li></ul></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer page-width"><p>© 2026 박주호</p><a href="#home">처음으로 돌아가기 <span aria-hidden="true">↑</span></a></footer>
+    <div class="deck-controls" hidden>
+      <div class="deck-position"><span class="chapter-count">01 / 07</span><span class="chapter-current">첫 소개</span><span class="chapter-next" aria-hidden="true"></span></div>
+      <nav class="deck-dots" aria-label="섹션 바로가기"></nav>
+      <span class="deck-hint">휠 또는 ↑ ↓ 키로 섹션 이동</span>
+      <div class="deck-arrows"><button type="button" class="previous-chapter" aria-label="이전 섹션">↑</button><button type="button" class="next-chapter" aria-label="다음 섹션">↓</button></div>
+    </div>
+    <p class="sr-only deck-announcement" aria-live="polite" aria-atomic="true"></p>
+    <dialog class="content-dialog" aria-labelledby="dialog-title">
+      <div class="dialog-top"><h2 id="dialog-title">상세 내용</h2><button type="button" class="dialog-close" aria-label="상세 내용 닫기">닫기 <span aria-hidden="true">×</span></button></div>
+      <div class="dialog-content"></div>
+    </dialog>
+  </body>
+</html>
