@@ -5,29 +5,39 @@
 - Use `dev` for normal implementation work.
 - Treat `origin/main` as the only production source for ChatGPT Sites.
 - Never deploy a local-only commit, an uncommitted working tree, `dev`, or another feature branch.
+- Codex must not commit, merge, or push to the user's GitHub repository. The user
+  performs all Git operations that publish branch changes to GitHub.
 
 ## Semi-automatic Sites deployment
 
-The repository owner authorizes Codex to check for and deploy verified `origin/main`
-updates while Codex is actively working in this repository.
+The repository owner authorizes Codex to deploy only after a new commit is already
+present on GitHub's `origin/main` branch.
 
-When a conversation edits this portfolio, asks for release/deployment status, or
-finishes work intended for production:
+Local edits, changes on `dev`, a conversation starting, and a conversation ending
+are not deployment triggers. When Codex is active in this repository, it may fetch
+`origin/main` and check whether GitHub main has advanced since the current successful
+Sites production version.
 
 1. Fetch `origin/main` and resolve its full commit SHA.
 2. Read `.openai/hosting.json`, use the Sites skills, and identify the current
    successful production version and its source commit.
-3. If production already uses the `origin/main` SHA, do nothing and report that
-   production is current.
-4. If production is behind `origin/main`, validate the exact `origin/main` tree
+3. Resolve the GitHub main commit represented by production. It may be the source
+   commit itself, or the first parent of a release merge commit whose tree exactly
+   matches that first parent and whose second parent preserves the previous Sites
+   source history.
+4. If production already represents the `origin/main` SHA, do not deploy.
+5. Only when `origin/main` contains a newer user-pushed commit, validate that exact
+   tree
    in an isolated clean checkout with `npm ci`, `npm run build`, `npm run check`,
    and `npm test`.
-5. Deploy that exact `origin/main` commit only after all validations pass. Preserve
-   the Site's existing audience and report the final production URL.
+6. Deploy that exact `origin/main` tree only after all validations pass. Preserve
+   the Site's existing audience and report the final production URL. Use a release
+   merge commit only when needed to preserve the separate GitHub and Sites histories.
 
 Do not deploy when validation fails. Do not overwrite a production version whose
 source commit is not known to this GitHub repository; report the divergence and
 ask the user whether GitHub `main` or the Sites version should win.
 
-This policy is active only while Codex is handling a conversation in this
-repository. It is not a background service or a GitHub push webhook.
+This policy is checked only while Codex is handling a conversation in this
+repository. It is not a background service or a GitHub push webhook. Codex never
+pushes GitHub branches as part of this policy.
