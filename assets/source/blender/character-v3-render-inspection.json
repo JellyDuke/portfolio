@@ -1,0 +1,22 @@
+[
+  {
+    "seconds": 2.1,
+    "lowestShoeMeters": -0.06472416967153549,
+    "floorClearanceMeters": 0.0002758303284645103
+  },
+  {
+    "seconds": 6.5,
+    "lowestShoeMeters": -0.06450383365154266,
+    "floorClearanceMeters": 0.0004961663484573386
+  },
+  {
+    "seconds": 8.6,
+    "lowestShoeMeters": -0.06460866332054138,
+    "floorClearanceMeters": 0.0003913366794586204
+  },
+  {
+    "seconds": 9.85,
+    "lowestShoeMeters": -0.06450391560792923,
+    "floorClearanceMeters": 0.0004960843920707725
+  }
+]

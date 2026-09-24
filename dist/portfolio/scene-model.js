@@ -1,8 +1,25 @@
-// 외부 모델 파일 없이 관절이 있는 로우폴리 인물과 열리는 3D 폴더를 만든다.
+// Blender GLB 관절을 기존 시간표에 연결한다. 파일 로드 실패 시 같은 구조의 간단한 모델을 사용한다.
 import * as THREE from '../vendor/three.module.js';
+import { getPortfolioFootPlacement, getPortfolioPaperPose } from './animation.js';
 
-/** 캐릭터 관절과 폴더 회전축을 반환한다. 생성한 지오메트리·재질은 dispose에서 한 번씩 해제한다. */
-export function createPortfolioModel() {
+/** 모델 로딩 실패와 페이지 종료에서 공유 지오메트리·재질·텍스처를 한 번씩 해제한다. */
+export function disposePortfolioResources(root) {
+  const geometries = new Set(), materials = new Set(), textures = new Set();
+  root.traverse(object => {
+    if (!object.isMesh) return;
+    geometries.add(object.geometry);
+    for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+      materials.add(material);
+      for (const value of Object.values(material)) if (value?.isTexture) textures.add(value);
+    }
+  });
+  geometries.forEach(geometry => geometry.dispose());
+  textures.forEach(texture => texture.dispose());
+  materials.forEach(material => material.dispose());
+}
+
+/** GLB를 읽지 못했을 때도 포트폴리오 링크를 열 수 있는 기본 관절과 형상을 만든다. */
+function createProceduralPortfolioRig() {
   const root = new THREE.Group(); root.name = 'Portfolio room';
   const materials = {
     jacket: new THREE.MeshStandardMaterial({ color: 0x345edf, roughness: 0.72, flatShading: true }),
@@ -53,7 +70,7 @@ export function createPortfolioModel() {
 
   /** 어깨와 팔꿈치를 분리해 달리기와 폴더 들어 올리기를 표현한다. */
   function createArm(direction) {
-    const shoulder = new THREE.Group(); shoulder.position.set(direction * 0.38, 0.73, 0); torso.add(shoulder);
+    const shoulder = new THREE.Group(); shoulder.position.set(direction * 0.38, 0.71, 0); torso.add(shoulder);
     addMesh(shoulder, new THREE.CylinderGeometry(0.125, 0.105, 0.42, 6), materials.jacket, 0, -0.21);
     const elbow = new THREE.Group(); elbow.position.y = -0.42; shoulder.add(elbow);
     addMesh(elbow, new THREE.CylinderGeometry(0.105, 0.08, 0.36, 6), materials.jacket, 0, -0.18);
@@ -76,7 +93,7 @@ export function createPortfolioModel() {
   const leftLeg = createLeg(-1), rightLeg = createLeg(1);
 
   const folder = new THREE.Group(); folder.name = 'Portfolio folder'; root.add(folder);
-  const folderBody = new THREE.Group(); folderBody.rotation.y = -0.12; folderBody.position.x = 1.44; folder.add(folderBody);
+  const folderBody = new THREE.Group(); folderBody.position.x = 1.44; folder.add(folderBody);
 
   /** 탭이 있는 실제 폴더 윤곽을 두께가 있는 메시로 만든다. */
   function createFolderPanel(hasTab) {
@@ -95,12 +112,12 @@ export function createPortfolioModel() {
   const papers = [];
   for (let index = 0; index < 4; index += 1) {
     const paper = new THREE.Group(); paper.name = `Portfolio paper ${index + 1}`; folderBody.add(paper);
-    // 두꺼운 상자 대신 얇고 살짝 휘어진 표면을 사용한다. 확대 선택 화면은 별도 HTML 링크가 이어받는다.
-    const geometry = new THREE.PlaneGeometry(0.92, 1.75, 10, 16);
+      // 두꺼운 상자 대신 얇고 살짝 휘어진 표면을 사용한다. 홀로그램 목록은 별도 HTML 링크가 이어받는다.
+    const geometry = new THREE.PlaneGeometry(1.24, 1.75, 10, 16);
     const positions = geometry.attributes.position;
     for (let vertexIndex = 0; vertexIndex < positions.count; vertexIndex += 1) {
       const x = positions.getX(vertexIndex), y = positions.getY(vertexIndex);
-      positions.setZ(vertexIndex, 0.055 * (y / 0.875) ** 2 + 0.025 * Math.cos(x * Math.PI / 0.92));
+      positions.setZ(vertexIndex, 0.012 * (y / 0.875) ** 2 + 0.004 * Math.cos(x * Math.PI / 1.24));
     }
     geometry.computeVertexNormals();
     addMesh(paper, geometry, materials.paper);
@@ -109,35 +126,77 @@ export function createPortfolioModel() {
   const folderFront = new THREE.Group(); folderFront.position.set(0, 0.025, 0.2); folderBody.add(folderFront);
   addMesh(folderFront, createFolderPanel(false), materials.folder);
 
+  return { root, character, hips, torso, head, eyeGroups, pupils, leftArm, rightArm, leftLeg, rightLeg, folder, folderFront, papers };
+}
+
+/** Blender에서 내보낸 이름 있는 피벗을 검사해 기존 연출의 관절 계약에 매핑한다. */
+function bindBlenderPortfolioRig(root) {
+  function requireJoint(name) {
+    const target = root.getObjectByName(name);
+    if (!target) throw new Error(`Blender 포트폴리오 관절 누락: ${name}`);
+    return target;
+  }
+  root.traverse(object => { if (object.isMesh) { object.castShadow = true; object.receiveShadow = true; } });
+  const arm = side => ({ shoulder: requireJoint(`shoulder_${side}`), elbow: requireJoint(`elbow_${side}`), hand: requireJoint(`hand_${side}`) });
+  const leg = side => ({ thigh: requireJoint(`thigh_${side}`), knee: requireJoint(`knee_${side}`), ankle: requireJoint(`ankle_${side}`) });
+  return {
+    root, character: requireJoint('character'), hips: requireJoint('hips'), torso: requireJoint('torso'), head: requireJoint('head'),
+    eyeGroups: [requireJoint('eye_left'), requireJoint('eye_right')],
+    pupils: [requireJoint('pupil_left'), requireJoint('pupil_right')],
+    leftArm: arm('left'), rightArm: arm('right'), leftLeg: leg('left'), rightLeg: leg('right'),
+    folder: requireJoint('folder'), folderFront: requireJoint('folder_front'),
+    papers: Array.from({ length: 4 }, (_, index) => requireJoint(`paper_${index}`)),
+  };
+}
+
+/** 웹과 Blender가 공유하는 피벗에 기존 동작을 적용하고 GPU 자원을 한 번씩 해제한다. */
+export function createPortfolioModel(blenderRoot = null) {
+  const {
+    root, character, hips, torso, head, eyeGroups, pupils, leftArm, rightArm, leftLeg, rightLeg, folder, folderFront, papers,
+  } = blenderRoot ? bindBlenderPortfolioRig(blenderRoot) : createProceduralPortfolioRig();
+
   const gripTargets = [new THREE.Vector3(), new THREE.Vector3()];
   const armDirection = new THREE.Vector3(), elbowPosition = new THREE.Vector3(), bendDirection = new THREE.Vector3();
   const downDirection = new THREE.Vector3(0, -1, 0), localTarget = new THREE.Vector3();
   const shoulderRotation = new THREE.Quaternion(), elbowRotation = new THREE.Quaternion(), inverseRotation = new THREE.Quaternion();
+  const worldRotation = new THREE.Quaternion(), gripRotation = new THREE.Quaternion(), contactPosition = new THREE.Vector3();
+  const wristEuler = new THREE.Euler(), folderBody = folderFront.parent;
+  const feet = [leftLeg, rightLeg];
+  const fingerGroups = ['left', 'right'].map(side => root.getObjectByName(`fingers_${side}`));
+  const paperSurfaces = papers.map(paper => {
+    const mesh = paper.children.find(child => child.isMesh);
+    if (!mesh) return null;
+    const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    // 같은 종이 재질은 함께 사라진다. 깊이 기록을 꺼 얇은 겹침이 검게 번지는 것을 막는다.
+    materials.forEach(material => { material.transparent = true; material.depthWrite = false; });
+    mesh.castShadow = false;
+    return { mesh, materials, rest: mesh.geometry.attributes.position.array.slice(), bend: -1 };
+  });
 
-  /** 두 관절의 길이를 유지하며 손을 폴더 표면에 붙인다. 연출 전후에는 기존 달리기 자세와 섞는다. */
-  function alignArmToGrip(arm, target, weight) {
-    localTarget.copy(target); torso.worldToLocal(localTarget);
-    armDirection.subVectors(localTarget, arm.shoulder.position);
-    const distance = Math.min(0.839, Math.max(0.001, armDirection.length()));
+  /** 관절 길이와 좌우 굽힘 방향을 보존하는 두 뼈 IK. 매 프레임 초기 자세에서 계산한다. */
+  function alignLimb(parent, upper, lower, target, pole, upperLength, lowerLength, weight = 1) {
+    localTarget.copy(target); parent.worldToLocal(localTarget);
+    armDirection.subVectors(localTarget, upper.position);
+    const distance = Math.min(upperLength + lowerLength - 0.001, Math.max(0.02, armDirection.length()));
     armDirection.normalize();
-    torso.getWorldQuaternion(inverseRotation).invert();
-    bendDirection.set(0, 0, 1).applyQuaternion(inverseRotation);
+    bendDirection.set(...pole);
     bendDirection.addScaledVector(armDirection, -bendDirection.dot(armDirection)).normalize();
-    elbowPosition.copy(arm.shoulder.position).addScaledVector(armDirection, distance / 2)
-      .addScaledVector(bendDirection, Math.sqrt(0.42 ** 2 - (distance / 2) ** 2));
-    shoulderRotation.setFromUnitVectors(downDirection, armDirection.subVectors(elbowPosition, arm.shoulder.position).normalize());
+    const along = (upperLength ** 2 - lowerLength ** 2 + distance ** 2) / (2 * distance);
+    elbowPosition.copy(upper.position).addScaledVector(armDirection, along)
+      .addScaledVector(bendDirection, Math.sqrt(Math.max(0, upperLength ** 2 - along ** 2)));
+    shoulderRotation.setFromUnitVectors(downDirection, armDirection.subVectors(elbowPosition, upper.position).normalize());
     inverseRotation.copy(shoulderRotation).invert();
     armDirection.subVectors(localTarget, elbowPosition).normalize().applyQuaternion(inverseRotation);
     elbowRotation.setFromUnitVectors(downDirection, armDirection);
-    arm.shoulder.quaternion.slerp(shoulderRotation, weight); arm.elbow.quaternion.slerp(elbowRotation, weight);
+    upper.quaternion.slerp(shoulderRotation, weight); lower.quaternion.slerp(elbowRotation, weight);
   }
 
   /** 관절·시선·짧은 눈 깜빡임을 반영한다. 반복 고개 흔들기 없이 호흡만 미세하게 남긴다. */
   function update(pose, elapsedSeconds) {
     const step = Math.sin(elapsedSeconds * 10) * pose.stride;
     character.position.set(pose.characterX, 0, pose.characterZ); character.rotation.y = pose.characterYaw;
-    hips.position.y = pose.hipHeight + Math.sin(elapsedSeconds * 1.8) * 0.006 + Math.abs(step) * 0.035;
-    torso.rotation.set(pose.bodyPitch - pose.kneeBend * 0.16, pose.torsoYaw, pose.bodyLean);
+    hips.position.set(0, pose.hipHeight + Math.sin(elapsedSeconds * 1.8) * 0.004 * (1 - pose.grip), pose.hipDepth);
+    torso.rotation.set(pose.bodyPitch, pose.torsoYaw, pose.bodyLean);
     head.rotation.set(pose.headTilt, pose.headYaw, -pose.bodyLean * 0.2, 'YXZ');
     const blinkDistance = Math.min(...[0.55, 3.25, 4.23, 10.45].map(time => Math.abs(elapsedSeconds - time)));
     const blink = blinkDistance < 0.095 ? Math.cos(blinkDistance / 0.095 * Math.PI / 2) ** 2 : 0;
@@ -145,42 +204,67 @@ export function createPortfolioModel() {
     pupils.forEach(pupil => { pupil.position.x = pose.eyeYaw * 0.018; pupil.position.y = -0.001 + pose.eyePitch * 0.012; });
     leftArm.shoulder.rotation.set(pose.armReach + step * 0.32, 0, pose.leftArm);
     rightArm.shoulder.rotation.set(pose.armReach - step * 0.32, 0, pose.rightArm);
-    leftArm.elbow.rotation.x = -pose.elbowBend; rightArm.elbow.rotation.x = -pose.elbowBend;
-    for (const [leg, direction] of [[leftLeg, 1], [rightLeg, -1]]) {
-      leg.thigh.rotation.x = -pose.kneeBend * 1.05 + step * 0.32 * direction;
-      leg.knee.rotation.x = pose.kneeBend * 2.1 + Math.max(0, -step * direction) * 0.2;
-      leg.ankle.rotation.x = -pose.kneeBend * 1.05;
-    }
-    // 왼쪽 아래 모서리를 축으로 넘어져 바닥 아래로 폴더가 파고들지 않는다.
-    folder.position.set(pose.folderX - 1.44, pose.folderY, 0); folder.rotation.z = pose.folderTilt;
+    leftArm.elbow.rotation.set(-pose.elbowBend, 0, 0); rightArm.elbow.rotation.set(-pose.elbowBend, 0, 0);
+    leftArm.hand.rotation.set(0, 0, 0); rightArm.hand.rotation.set(0, 0, 0);
+    const footPlacements = [-1, 1].map(side => getPortfolioFootPlacement(elapsedSeconds, side));
+    root.updateMatrixWorld(true);
+    // 발을 끌어올리는 대신 골반을 조금 낮춰 다리 길이 안에서 디딤점을 유지한다.
+    feet.forEach((leg, index) => {
+      const foot = footPlacements[index]; leg.thigh.getWorldPosition(contactPosition);
+      const horizontalSquared = (contactPosition.x - foot.x) ** 2 + (contactPosition.z - foot.z) ** 2;
+      hips.position.y = Math.min(hips.position.y, foot.y + Math.sqrt(Math.max(0.20, 0.865 ** 2 - horizontalSquared)) + 0.08);
+    });
+    root.updateMatrixWorld(true);
+    feet.forEach((leg, index) => {
+      const foot = footPlacements[index]; contactPosition.set(foot.x, foot.y, foot.z);
+      leg.thigh.rotation.set(0, 0, 0); leg.knee.rotation.set(0, 0, 0);
+      alignLimb(hips, leg.thigh, leg.knee, contactPosition, [0, 0, 1], 0.44, 0.43);
+      root.updateMatrixWorld(true);
+      leg.knee.getWorldQuaternion(inverseRotation).invert();
+      worldRotation.setFromEuler(wristEuler.set(0, foot.yaw, 0));
+      leg.ankle.quaternion.copy(inverseRotation).multiply(worldRotation);
+    });
+    folder.position.set(pose.folderX - 1.44 * pose.folderScale, pose.folderY, 0); folder.rotation.z = pose.folderTilt;
     folder.visible = pose.folderVisible;
-    folder.scale.setScalar(pose.folderScale); folderFront.rotation.x = 0.035 + pose.paperReveal * 0.48;
+    folder.scale.setScalar(pose.folderScale); folderFront.rotation.x = pose.folderOpen * 0.48;
     papers.forEach((paper, index) => {
-      const spread = (index - 1.5) * 1.05;
-      paper.position.set(spread * pose.paperReveal, 1.42 + pose.paperReveal * 1.32, 0.03 + index * 0.028);
-      paper.rotation.z = -(index - 1.5) * 0.11 * pose.paperReveal;
-      // 날아가는 선택 면과 원래 메시가 겹쳐 잔상처럼 남지 않게 같은 순서로 감춘다.
-      paper.visible = pose.presentation <= index * 0.065 + 0.055;
+      const sheet = getPortfolioPaperPose(pose, index);
+      paper.position.set(sheet.x, sheet.y, sheet.z); paper.rotation.z = sheet.rotate; paper.visible = sheet.visible;
+      const surface = paperSurfaces[index];
+      if (!surface) return;
+      surface.materials.forEach(material => { material.opacity = sheet.opacity; });
+      if (surface.bend === sheet.bend) return;
+      surface.bend = sheet.bend;
+      const positions = surface.mesh.geometry.attributes.position;
+      for (let vertex = 0; vertex < positions.count; vertex += 1) {
+        const y = surface.rest[vertex * 3 + 1];
+        positions.setZ(vertex, surface.rest[vertex * 3 + 2] + sheet.bend * ((y + 0.875) / 1.75) ** 2);
+      }
+      positions.needsUpdate = true; surface.mesh.geometry.computeVertexNormals();
     });
     root.updateMatrixWorld(true);
     if (pose.grip > 0) {
-      const tiltAmount = Math.min(1, pose.folderTilt / 1.43);
       gripTargets.forEach((target, index) => {
-        // 폴더가 누웠을 때는 윗면을 잡고, 세울수록 왼쪽 면으로 손을 옮긴다.
-        target.set(0.2 + index * 0.45 + tiltAmount * 0.8, 0.8 - tiltAmount * 0.5, 0.28);
-        folder.localToWorld(target);
-        alignArmToGrip(index === 0 ? leftArm : rightArm, target, pose.grip);
+        const side = index === 0 ? -1 : 1, arm = index === 0 ? leftArm : rightArm;
+        target.set(side * 1.62, 2.08, -0.30); folderBody.localToWorld(target);
+        const weight = index === 0 ? pose.grip : THREE.MathUtils.smoothstep(pose.grip, 0.12, 1);
+        alignLimb(torso, arm.shoulder, arm.elbow, target, [side * 0.8, -0.6, -0.2], 0.42, 0.42, weight);
+        root.updateMatrixWorld(true);
+        folderBody.getWorldQuaternion(gripRotation);
+        worldRotation.setFromEuler(wristEuler.set(-0.25, 0, -side * Math.PI / 2)); gripRotation.multiply(worldRotation);
+        arm.elbow.getWorldQuaternion(inverseRotation).invert();
+        arm.hand.quaternion.slerp(inverseRotation.multiply(gripRotation), weight);
       });
       root.updateMatrixWorld(true);
     }
+    fingerGroups.forEach(fingers => { if (fingers) fingers.rotation.x = -0.65 * pose.grip; });
   }
 
-  /** 공유 재질과 중복 지오메트리를 한 번씩만 해제한다. */
+  /** 두 모델 경로 모두에서 공유 재질과 중복 지오메트리를 한 번씩만 해제한다. */
   function dispose() {
-    const geometries = new Set(); root.traverse(object => { if (object.isMesh) geometries.add(object.geometry); });
-    geometries.forEach(geometry => geometry.dispose()); Object.values(materials).forEach(material => material.dispose());
+    disposePortfolioResources(root);
   }
-  return { root, character, head, folder, papers, hands: [leftArm.hand, rightArm.hand], gripTargets, update, dispose };
+  return { root, character, head, folder, papers, hands: [leftArm.hand, rightArm.hand], feet: feet.map(leg => leg.ankle), gripTargets, update, dispose };
 }
 
 /** 인물과 폴더를 모두 담도록 화면비에 맞춰 카메라 거리를 조정한다. */
@@ -190,9 +274,18 @@ export function framePortfolioCamera(camera, width, height, pose) {
   // 얼굴은 처음에 화면을 크게 채우고, 달리기와 함께 인물·폴더 전체가 보이는 원근으로 풀린다.
   const closeDistance = Math.max(1.85, 0.84 / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect));
   const closePosition = new THREE.Vector3(-0.2, 2.28, 3.8 + closeDistance);
-  const wideCenterX = (pose.characterX + pose.folderX) * 0.5 + 0.55 - pose.folderTilt * 0.7;
-  const widePosition = new THREE.Vector3(wideCenterX, 3.8, Math.max(10.8, 12 / camera.aspect));
+  // 폴더가 열리는 동안 먼저 목록 자리를 확보해 등장 중 얼굴이 패널 뒤로 가려지지 않게 한다.
+  const presentation = THREE.MathUtils.smoothstep(pose.folderOpen * 0.25 + pose.paperReveal * 0.75, 0, 1);
+  const isStacked = camera.aspect < 0.9;
+  const wideCenterX = (pose.characterX + pose.folderX) * 0.5 + (isStacked ? 0 : presentation * 0.5);
+  // 세로 화면에서는 좌우 여백만 확보해 인물이 지나치게 작아지지 않도록 한다.
+  const distance = Math.max(7.8, 5.6 / camera.aspect);
+  // PC의 화면 높이만 커졌다고 모델이 비대해지지 않게 최종 전신 크기를 제한한다.
+  const finalDistance = isStacked ? Math.max(distance, 10.8) : distance * Math.max(1, height / 820);
+  const widePosition = new THREE.Vector3(wideCenterX, 3.3, distance + (finalDistance - distance) * presentation);
   camera.position.copy(closePosition).lerp(widePosition, reveal);
-  camera.lookAt(-0.2 + reveal * (wideCenterX + 0.2), 2.23 - reveal * 0.73, 3.8 * (1 - reveal));
+  // 목록의 자리를 만들되 인물과 폴더는 계속 화면 안에 남긴다. 세로 화면에서는 장면이 목록 아래로 내려간다.
+  const listClearance = isStacked ? (height < 740 ? 1.52 : 1.4) : -0.1;
+  camera.lookAt(-0.2 + reveal * (wideCenterX + 0.2), 2.23 - reveal * 0.73 + presentation * listClearance, 3.8 * (1 - reveal));
   camera.updateProjectionMatrix(); camera.updateMatrixWorld(true);
 }

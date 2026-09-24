@@ -1,25 +1,62 @@
-/* 인물 장면에서 화면 전체를 채우는 네 포트폴리오 선택 면으로 이어진다. */
-body{height:100svh;overflow:hidden;background:#edf1f6}
+/* 인물 장면 0, 폴더 투영광 1, 작업 목록 2, 화면 조작 5의 층으로 구성한다. */
+body{min-height:100dvh;overflow:hidden;background:var(--paper)}
 .portfolio-workspace{position:fixed;inset:0;overflow:hidden;isolation:isolate}
-.portfolio-stage{position:absolute;inset:0}
+.portfolio-stage{position:absolute;inset:0;z-index:0}
 .portfolio-stage canvas{display:block;width:100%;height:100%}
 .room-controls{position:fixed;z-index:5;top:max(18px,env(safe-area-inset-top));left:max(18px,env(safe-area-inset-left));right:max(18px,env(safe-area-inset-right));display:flex;gap:8px;pointer-events:none}
-.room-control{display:grid;place-items:center;width:44px;height:44px;flex-shrink:0;padding:0;border:1px solid #cad4e36b;border-radius:50%;color:#30466b;background:#ffffffa8;pointer-events:auto}
+.room-control{display:grid;place-items:center;width:44px;height:44px;flex-shrink:0;padding:0;border:1px solid #cad4e36b;border-radius:50%;color:#30466b;background:#ffffffb8;pointer-events:auto;transition:background-color .2s ease}
 .room-control svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .room-control:hover{background:#fff}
 .room-control:disabled{opacity:.4;cursor:default}
+.room-control:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 .back-button{margin-right:auto}
-.presentation-backdrop{position:absolute;inset:0;z-index:1;background:#e7edf6;opacity:0;pointer-events:none}
-.paper-links{position:absolute;inset:0;pointer-events:none;z-index:2}
-.paper-links[hidden]{display:none}
-.paper-link{position:absolute;display:grid;place-items:center;min-width:1px;min-height:1px;padding:0;border:1px solid #fff;border-radius:8px;background:linear-gradient(145deg,#fff,#f5f7fc);color:#244dc5;font-family:inherit;font-size:clamp(80px,12vw,224px);font-weight:450;font-variant-numeric:tabular-nums;line-height:1;text-decoration:none;pointer-events:none;touch-action:manipulation;transform-origin:center;backface-visibility:hidden;overflow:hidden;box-shadow:0 2px 3px #203d6310,0 16px 35px -12px #203d6324;will-change:transform,opacity}
-.paper-number{opacity:var(--number-opacity,1);transition:transform .3s ease,color .3s ease;pointer-events:none}
-.is-presented .paper-link{pointer-events:auto;will-change:auto;transition:border-color .25s ease,box-shadow .25s ease}
-.paper-link[aria-disabled="true"]{cursor:default}
-.paper-link.is-active{border-color:#a8bcee;box-shadow:0 3px 5px #203d6312,0 22px 44px -10px #244dc52e}
-.paper-link.is-active .paper-number{color:#123aa8;transform:translateY(-5px)}
-.paper-link:focus-visible,.room-control:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-/* 그래픽이 없어도 동일한 전면 선택 화면을 제공한다. */
-.is-fallback .portfolio-stage{display:none}
-@media(max-width:899px){.paper-link{font-size:clamp(72px,18vw,150px)}}
-@media(max-height:450px){.paper-link{font-size:clamp(52px,13vh,92px)}}
+
+/* 광원은 폴더 입구에 고정되고 양쪽 광선이 목록 아래까지 먼저 올라간다. */
+.presentation-backdrop{position:absolute;z-index:1;opacity:0;pointer-events:none}
+.presentation-backdrop::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#8aafff04,#669cf321 76%,#a1c9ff42);clip-path:polygon(12px 0,calc(100% - 12px) 0,var(--emitter-x) 100%);transform:scaleY(var(--projection-reach,0));transform-origin:var(--emitter-x) bottom}
+.presentation-backdrop::after{content:"";position:absolute;left:var(--emitter-x);bottom:-2px;width:44px;height:4px;border-radius:50%;background:#c6e0ff;box-shadow:0 0 10px 3px #82b7ff70;transform:translateX(-50%)}
+.projection-ray{position:absolute;left:var(--emitter-x);bottom:0;width:1px;background:linear-gradient(0deg,#a8cfff,#7cacf533);transform-origin:center bottom}
+.projection-ray.is-left{height:var(--left-ray-length);transform:rotate(var(--left-ray-angle)) scaleY(var(--projection-reach,0))}
+.projection-ray.is-right{height:var(--right-ray-length);transform:rotate(var(--right-ray-angle)) scaleY(var(--projection-reach,0))}
+
+/* 큰 흰 창 대신 분리된 네 개의 얇은 투영 면을 쓴다. 옛 종이 클래스와도 충돌하지 않는다. */
+.hologram-panel{position:absolute;z-index:2;box-sizing:border-box;color:var(--ink);pointer-events:none;isolation:isolate}
+.hologram-panel[hidden],.hologram-list[hidden]{display:none}
+.hologram-panel::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,#6697f29c 20%,#c5e2ff 50%,#6697f29c 80%,transparent);opacity:var(--header-reveal,0)}
+.hologram-header{display:flex;align-items:center;height:var(--hologram-header-height);padding:0 14px 12px;color:#3c609e;opacity:var(--header-reveal,0)}
+.hologram-header::before{content:"";width:4px;height:4px;margin-right:8px;border-radius:50%;background:#75a9ed;box-shadow:0 0 6px #75a9ed88}
+.hologram-header h2{margin:0;font-size:12px;font-weight:550;line-height:1.4;letter-spacing:.1em}
+.hologram-list{position:relative;display:grid;grid-template-rows:repeat(4,var(--hologram-row-height));gap:var(--hologram-row-gap);pointer-events:none}
+.hologram-item{position:relative;display:grid;grid-template-columns:32px minmax(0,1fr) auto;align-items:center;gap:12px;box-sizing:border-box;width:100%;height:var(--hologram-row-height);min-height:44px;padding:8px 14px;border:1px solid #ffffffd9;border-left-color:#94b8ed;border-radius:4px;background:linear-gradient(105deg,#ffffffc9,#e0ecff85);color:inherit;font:inherit;line-height:1.4;text-align:left;text-decoration:none;box-shadow:0 4px 18px -8px #3868bd24;backdrop-filter:blur(5px);pointer-events:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.hologram-item::after{content:"";position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,#7aa7ea99,#b9d6ff59,transparent);transform:scaleX(var(--row-reveal,0));transform-origin:left}
+.hologram-number{color:var(--blue);font-size:18px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+.hologram-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:17px;font-weight:500;letter-spacing:-.03em}
+.hologram-status{color:var(--muted);font-size:12px;font-weight:400;white-space:nowrap}
+.is-presented .hologram-item{pointer-events:auto;transition:background-color .2s ease,border-color .2s ease}
+.hologram-item[aria-disabled="true"]{cursor:default}
+.hologram-item.is-active{background-color:#dbe9ff;border-color:#709ad7}
+.hologram-item:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.hologram-scan{position:absolute;top:0;left:0;width:100%;height:24px;background:linear-gradient(180deg,transparent,#80b5ff66,transparent);opacity:var(--scan-opacity,0);transform:translate3d(0,var(--scan-y,-24px),0);pointer-events:none}
+.is-fallback .portfolio-stage,.is-fallback .presentation-backdrop{display:none}
+@media(max-width:360px){.hologram-item{grid-template-columns:26px minmax(0,1fr) auto;gap:8px;padding-inline:10px}.hologram-name{font-size:15px}}
+@media(max-height:620px){.hologram-name{font-size:15px}.hologram-number{font-size:16px}}
+@media(prefers-color-scheme:dark){
+  body{background:#101a2a}
+  .room-control{border-color:#adc6ef33;color:#d9e5f7;background:#1e3045cc}
+  .room-control:hover{background:#293f59}
+  .hologram-panel{color:#e4eefb}
+  .hologram-header{color:#a8c5ee}
+  .hologram-item{border-color:#a6c9ff38;border-left-color:#95c5ff;background:linear-gradient(105deg,#274467d4,#223e627a);box-shadow:inset 0 1px 0 #c4ddff14,0 4px 18px -8px #03091480}
+  .hologram-number{color:#b8d7ff}
+  .hologram-status{color:#bacce3}
+  .hologram-item.is-active{background-color:#314b6b;border-color:#a6c4ff}
+  .hologram-item:focus-visible,.room-control:focus-visible{outline-color:#a6c4ff}
+}
+/* 투명도를 줄여도 광선과 행 경계는 남겨 폴더에서 나온 목록임을 읽을 수 있게 한다. */
+@media(prefers-reduced-transparency:reduce){
+  .hologram-item{background:#edf3fc;backdrop-filter:none;box-shadow:none}
+  .presentation-backdrop::before,.hologram-scan{display:none}
+  .presentation-backdrop::after{box-shadow:none}
+}
+@media(prefers-reduced-transparency:reduce) and (prefers-color-scheme:dark){.hologram-item{background:#203855}}
+@media(prefers-reduced-motion:reduce){.room-control,.hologram-item{transition:none}.hologram-scan{display:none}}

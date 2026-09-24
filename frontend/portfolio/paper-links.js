@@ -1,4 +1,4 @@
-// 전면 선택 화면의 실제 HTML 링크를 관리한다. 미정 항목에는 가짜 목적지를 만들지 않는다.
+// 홀로그램 목록의 실제 HTML 링크를 관리한다. 미정 항목에는 가짜 목적지를 만들지 않는다.
 
 /** 안전한 웹 주소와 같은 사이트의 다운로드 경로만 링크로 구성한다. */
 export function resolveProjectAction(project, baseUrl) {
@@ -12,7 +12,7 @@ export function resolveProjectAction(project, baseUrl) {
   } catch { return null; }
 }
 
-/** 화면에는 큰 번호만, 보조기술에는 작품명·연결 상태를 제공한다. 면의 전개는 별도 모듈이 맡는다. */
+/** 작은 번호·작품명·연결 상태를 함께 보여 준다. 등장 연출은 별도 모듈이 맡는다. */
 export function createPaperLinks({ containerElement, projects, baseUrl, onActiveChange = () => {} }) {
   const document = containerElement.ownerDocument;
   const abortController = new document.defaultView.AbortController();
@@ -27,11 +27,17 @@ export function createPaperLinks({ containerElement, projects, baseUrl, onActive
   const elements = projects.map((project, index) => {
     const action = resolveProjectAction(project, baseUrl);
     const element = document.createElement(action ? 'a' : 'button');
-    element.className = 'paper-link';
+    element.className = 'hologram-item';
     const numberElement = document.createElement('span');
-    numberElement.className = 'paper-number'; numberElement.textContent = String(index + 1);
+    numberElement.className = 'hologram-number'; numberElement.textContent = String(index + 1).padStart(2, '0');
     numberElement.setAttribute('aria-hidden', 'true'); element.append(numberElement);
     const actionLabel = action ? (action.download ? '다운로드' : action.external ? '새 탭에서 열기' : '열기') : '준비 중';
+    const titleElement = document.createElement('span');
+    titleElement.className = 'hologram-name'; titleElement.textContent = project.title;
+    const statusElement = document.createElement('span');
+    statusElement.className = 'hologram-status'; statusElement.textContent = action ? (action.download ? '다운로드' : '열기') : '준비 중';
+    statusElement.setAttribute('aria-hidden', 'true');
+    element.append(titleElement, statusElement);
     element.setAttribute('aria-label', `${index + 1}. ${project.title}, ${actionLabel}`);
     if (action) {
       element.href = action.href;
@@ -40,7 +46,7 @@ export function createPaperLinks({ containerElement, projects, baseUrl, onActive
     } else {
       element.type = 'button';
       element.setAttribute('aria-disabled', 'true');
-      // 준비 중인 종이도 키보드로 살펴볼 수 있지만 클릭·Enter는 이동을 일으키지 않는다.
+      // 준비 중인 항목도 키보드로 살펴볼 수 있지만 클릭·Enter는 이동을 일으키지 않는다.
       element.addEventListener('click', event => event.preventDefault(), eventOptions);
     }
     element.addEventListener('pointerenter', () => { pointerIndex = index; updateActive(); }, eventOptions);
@@ -52,7 +58,7 @@ export function createPaperLinks({ containerElement, projects, baseUrl, onActive
   });
   return {
     elements,
-    /** 종이가 펼쳐진 뒤에만 링크를 노출해 보이지 않는 클릭 영역을 없앤다. */
+    /** 목록이 펼쳐진 뒤에만 링크를 노출해 보이지 않는 클릭 영역을 없앤다. */
     setReady(isReady) {
       containerElement.hidden = !isReady;
       if (!isReady) { pointerIndex = -1; focusIndex = -1; updateActive(); }

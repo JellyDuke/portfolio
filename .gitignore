@@ -3,3 +3,5 @@ node_modules/
 .vite/
 npm-debug.log*
 /docs/
+# 인체 제작 도구와 원본 팩은 다운로드 캐시이며 웹 배포·Git 보관 대상이 아니다.
+/assets/source/blender/vendor/

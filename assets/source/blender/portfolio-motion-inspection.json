@@ -1,0 +1,447 @@
+[
+  {
+    "frame": 1,
+    "phase": "closeup",
+    "characterWorld": [
+      -0.2,
+      0.0,
+      3.8
+    ],
+    "faceForward": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 8.0,
+    "handToGripMeters": [],
+    "feetWorld": [
+      [
+        -0.4,
+        0.042,
+        3.9
+      ],
+      [
+        -0.0,
+        0.042,
+        3.9
+      ]
+    ],
+    "visiblePapers": []
+  },
+  {
+    "frame": 43,
+    "phase": "running",
+    "characterWorld": [
+      -0.2,
+      0.0,
+      3.8
+    ],
+    "faceForward": [
+      0.0,
+      -0.179,
+      -0.984
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 8.0,
+    "handToGripMeters": [],
+    "feetWorld": [
+      [
+        -0.4,
+        0.042,
+        3.9
+      ],
+      [
+        0.0,
+        0.042,
+        3.9
+      ]
+    ],
+    "visiblePapers": []
+  },
+  {
+    "frame": 154,
+    "phase": "falling",
+    "characterWorld": [
+      0.0,
+      0.0,
+      -1.25
+    ],
+    "faceForward": [
+      0.277,
+      0.247,
+      0.928
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 8.0,
+    "handToGripMeters": [],
+    "feetWorld": [
+      [
+        -0.222,
+        0.042,
+        -1.28
+      ],
+      [
+        0.189,
+        0.042,
+        -1.131
+      ]
+    ],
+    "visiblePapers": []
+  },
+  {
+    "frame": 187,
+    "phase": "pickup",
+    "characterWorld": [
+      0.8,
+      0.0,
+      -0.64
+    ],
+    "faceForward": [
+      0.0,
+      -0.275,
+      0.961
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 0.0,
+    "handToGripMeters": [],
+    "feetWorld": [
+      [
+        0.498,
+        0.042,
+        -0.613
+      ],
+      [
+        1.0,
+        0.042,
+        -0.54
+      ]
+    ],
+    "visiblePapers": []
+  },
+  {
+    "frame": 196,
+    "phase": "pickup",
+    "characterWorld": [
+      0.8,
+      0.0,
+      -0.64
+    ],
+    "faceForward": [
+      0.0,
+      -0.238,
+      0.971
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 0.0,
+    "handToGripMeters": [
+      0.0,
+      0.0
+    ],
+    "feetWorld": [
+      [
+        0.498,
+        0.042,
+        -0.613
+      ],
+      [
+        1.0,
+        0.042,
+        -0.54
+      ]
+    ],
+    "visiblePapers": []
+  },
+  {
+    "frame": 203,
+    "phase": "pickup",
+    "characterWorld": [
+      0.8,
+      0.0,
+      -0.64
+    ],
+    "faceForward": [
+      0.0,
+      -0.257,
+      0.966
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 0.0,
+    "handToGripMeters": [
+      0.0,
+      0.0
+    ],
+    "feetWorld": [
+      [
+        0.498,
+        0.042,
+        -0.613
+      ],
+      [
+        1.0,
+        0.042,
+        -0.54
+      ]
+    ],
+    "visiblePapers": []
+  },
+  {
+    "frame": 229,
+    "phase": "lifting",
+    "characterWorld": [
+      0.8,
+      0.0,
+      -0.64
+    ],
+    "faceForward": [
+      0.0,
+      0.035,
+      0.999
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 0.58,
+    "handToGripMeters": [
+      0.0,
+      0.0
+    ],
+    "feetWorld": [
+      [
+        0.498,
+        0.042,
+        -0.613
+      ],
+      [
+        1.0,
+        0.042,
+        -0.54
+      ]
+    ],
+    "visiblePapers": []
+  },
+  {
+    "frame": 277,
+    "phase": "carrying",
+    "characterWorld": [
+      2.0,
+      0.0,
+      -0.64
+    ],
+    "faceForward": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 0.58,
+    "handToGripMeters": [
+      0.0,
+      0.0
+    ],
+    "feetWorld": [
+      [
+        1.768,
+        0.042,
+        -0.54
+      ],
+      [
+        2.2,
+        0.042,
+        -0.54
+      ]
+    ],
+    "visiblePapers": []
+  },
+  {
+    "frame": 297,
+    "phase": "placing",
+    "characterWorld": [
+      2.0,
+      0.0,
+      -0.64
+    ],
+    "faceForward": [
+      0.0,
+      -0.257,
+      0.966
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 0.0,
+    "handToGripMeters": [
+      0.0,
+      0.0
+    ],
+    "feetWorld": [
+      [
+        1.768,
+        0.042,
+        -0.54
+      ],
+      [
+        2.2,
+        0.042,
+        -0.54
+      ]
+    ],
+    "visiblePapers": []
+  },
+  {
+    "frame": 310,
+    "phase": "placing",
+    "characterWorld": [
+      2.0,
+      0.0,
+      -0.64
+    ],
+    "faceForward": [
+      0.0,
+      -0.1,
+      0.995
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 0.0,
+    "handToGripMeters": [],
+    "feetWorld": [
+      [
+        1.768,
+        0.042,
+        -0.54
+      ],
+      [
+        2.2,
+        0.042,
+        -0.54
+      ]
+    ],
+    "visiblePapers": []
+  },
+  {
+    "frame": 331,
+    "phase": "placing",
+    "characterWorld": [
+      0.35,
+      0.0,
+      -0.1
+    ],
+    "faceForward": [
+      0.179,
+      0.0,
+      0.984
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 0.0,
+    "handToGripMeters": [],
+    "feetWorld": [
+      [
+        0.194,
+        0.042,
+        -0.014
+      ],
+      [
+        0.55,
+        0.042,
+        0.0
+      ]
+    ],
+    "visiblePapers": []
+  },
+  {
+    "frame": 343,
+    "phase": "opening",
+    "characterWorld": [
+      0.35,
+      0.0,
+      -0.1
+    ],
+    "faceForward": [
+      0.167,
+      0.0,
+      0.986
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 0.0,
+    "handToGripMeters": [],
+    "feetWorld": [
+      [
+        0.194,
+        0.042,
+        -0.014
+      ],
+      [
+        0.55,
+        0.042,
+        0.0
+      ]
+    ],
+    "visiblePapers": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "frame": 356,
+    "phase": "opening",
+    "characterWorld": [
+      0.35,
+      0.0,
+      -0.1
+    ],
+    "faceForward": [
+      0.06,
+      0.0,
+      0.998
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 0.0,
+    "handToGripMeters": [],
+    "feetWorld": [
+      [
+        0.194,
+        0.042,
+        -0.014
+      ],
+      [
+        0.55,
+        0.042,
+        0.0
+      ]
+    ],
+    "visiblePapers": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "frame": 409,
+    "phase": "ready",
+    "characterWorld": [
+      0.35,
+      0.0,
+      -0.1
+    ],
+    "faceForward": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "shoeMinY": -0.064,
+    "folderY": 0.0,
+    "handToGripMeters": [],
+    "feetWorld": [
+      [
+        0.194,
+        0.042,
+        -0.014
+      ],
+      [
+        0.55,
+        0.042,
+        0.0
+      ]
+    ],
+    "visiblePapers": []
+  }
+]

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node scripts/prepare-assets.mjs && vite",
     "build": "node scripts/build-site.mjs",
-    "check": "npm run lint:css && node --check dist/deck.js && node --check dist/scene.js && node --check dist/assembly.js && node --check dist/portfolio/portfolio.js && node --check dist/portfolio/scene-model.js && node --check dist/portfolio/animation.js && node --check dist/portfolio/paper-links.js && node --check dist/portfolio/paper-presentation.js && node --check dist/portfolio/projects.js",
+    "check": "npm run lint:css && node --check dist/deck.js && node --check dist/scene.js && node --check dist/assembly.js && node --check dist/portfolio/portfolio.js && node --check dist/portfolio/scene-model.js && node --check dist/portfolio/animation.js && node --check dist/portfolio/paper-links.js && node --check dist/portfolio/hologram-presentation.js && node --check dist/portfolio/projects.js",
     "lint:css": "stylelint \"frontend/**/*.css\" --max-warnings 0",
     "lint:css:fix": "npm run lint:css -- --fix",
     "test": "node scripts/check-deck.mjs && node scripts/check-scene.mjs && node scripts/check-portfolio.mjs"

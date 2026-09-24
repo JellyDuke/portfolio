@@ -1,9 +1,10 @@
-// 독립 포트폴리오의 렌더링 수명, 근접 카메라 연출과 전면 선택 화면의 전환을 연결한다.
+// 독립 포트폴리오의 렌더링 수명, 근접 카메라 연출과 홀로그램 목록의 전환을 연결한다.
 import * as THREE from '../vendor/three.module.js';
 import { INTRO_DURATION_SECONDS, getPortfolioPose } from './animation.js';
 import { createPortfolioModel, framePortfolioCamera } from './scene-model.js';
+import { loadBlenderPortfolioModel } from './blender-model.js';
 import { createPaperLinks } from './paper-links.js';
-import { createPaperPresentation } from './paper-presentation.js';
+import { createHologramPresentation } from './hologram-presentation.js';
 import { portfolioProjects } from './projects.js';
 
 const workspaceElement = document.querySelector('.portfolio-workspace');
@@ -13,14 +14,21 @@ const replayElement = document.querySelector('.replay-button');
 const skipElement = document.querySelector('.skip-button');
 const abortController = new AbortController();
 const eventOptions = { signal: abortController.signal };
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+// 로컬에서만 특정 자세를 멈춰 검토한다. 공개 사이트의 연출·조작에는 영향을 주지 않는다.
+const reviewParameter = new URLSearchParams(window.location.search).get('review');
+const reviewSeconds = ['127.0.0.1', 'localhost', '[::1]'].includes(window.location.hostname)
+  && reviewParameter !== null && Number.isFinite(Number(reviewParameter))
+  ? THREE.MathUtils.clamp(Number(reviewParameter), 0, INTRO_DURATION_SECONDS) : null;
 let sceneController = null;
 const paperLinks = createPaperLinks({
-  containerElement: document.querySelector('.paper-links'),
+  containerElement: document.querySelector('.hologram-list'),
   projects: portfolioProjects,
   baseUrl: document.baseURI,
 });
-const presentation = createPaperPresentation({
-  containerElement: document.querySelector('.paper-links'), elements: paperLinks.elements,
+const presentation = createHologramPresentation({
+  panelElement: document.querySelector('.hologram-panel'),
+  containerElement: document.querySelector('.hologram-list'), elements: paperLinks.elements,
   backdropElement: document.querySelector('.presentation-backdrop'), stageElement,
 });
 
@@ -31,7 +39,7 @@ function showFallback() {
   paperLinks.setReady(true);
   presentation.showFallback(window.innerWidth, window.innerHeight);
   replayElement.disabled = true;
-  captionElement.textContent = '3D 연출 대신 포트폴리오 1부터 4를 표시합니다. 미등록 작품은 준비 중입니다.';
+  captionElement.textContent = '3D 연출 대신 작업 목록을 표시합니다. 미등록 작품은 준비 중입니다.';
 }
 
 /** 렌더러·조명·모델을 소유하며, 탭 숨김과 페이지 종료 시 불필요한 렌더링을 중단한다. */
@@ -47,37 +55,32 @@ function createRoomScene() {
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.12;
   renderer.setClearColor(0xedf1f6, 0);
-  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.domElement.setAttribute('aria-hidden', 'true'); stageElement.append(renderer.domElement);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 80);
-  scene.add(new THREE.HemisphereLight(0xf6f8ff, 0x8091b1, 2.25));
-  const keyLight = new THREE.DirectionalLight(0xfffbf3, 3.5); keyLight.position.set(-3, 8, 7);
+  scene.add(new THREE.HemisphereLight(0xf6f8ff, 0x8091b1, 1.6));
+  const keyLight = new THREE.DirectionalLight(0xfffbf3, 2.7); keyLight.position.set(-3, 8, 7);
   keyLight.castShadow = true; keyLight.shadow.mapSize.set(1024, 1024);
   Object.assign(keyLight.shadow.camera, { left: -8, right: 8, top: 8, bottom: -5, near: 0.1, far: 30 });
   keyLight.shadow.normalBias = 0.03; keyLight.shadow.bias = -0.0002; scene.add(keyLight);
-  const rimLight = new THREE.DirectionalLight(0xb5cdff, 2.1); rimLight.position.set(4, 5, -4); scene.add(rimLight);
+  const rimLight = new THREE.DirectionalLight(0xb5cdff, 1.5); rimLight.position.set(4, 5, -4); scene.add(rimLight);
   const groundGeometry = new THREE.PlaneGeometry(200, 200);
   const groundMaterial = new THREE.ShadowMaterial({ color: 0x38547d, opacity: 0.13 });
   const ground = new THREE.Mesh(groundGeometry, groundMaterial);
   ground.rotation.x = -Math.PI / 2; ground.position.y = -0.065; ground.receiveShadow = true; scene.add(ground);
-  const model = createPortfolioModel(); scene.add(model.root);
-  const projectedCorner = new THREE.Vector3();
+  let model = createPortfolioModel(); model.root.visible = false; scene.add(model.root);
+  const projectedAnchor = new THREE.Vector3();
   let width = 1, height = 1, elapsedSeconds = 0, previousTimeMs = 0, frameId = 0;
-  let isReady = false, isLost = false, isDisposed = false;
+  let isReady = false, isLost = false, isDisposed = false, isModelReady = false;
 
-  /** 작은 3D 종이의 화면 좌표를 전면 선택 면의 출발지로 전달한다. */
-  function getPaperOrigins() {
-    return model.papers.map(paper => {
-      let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
-      for (const x of [-0.46, 0.46]) for (const y of [-0.875, 0.875]) {
-        projectedCorner.set(x, y, 0.04).applyMatrix4(paper.matrixWorld).project(camera);
-        const screenX = (projectedCorner.x + 1) * width / 2, screenY = (1 - projectedCorner.y) * height / 2;
-        left = Math.min(left, screenX); right = Math.max(right, screenX);
-        top = Math.min(top, screenY); bottom = Math.max(bottom, screenY);
-      }
-      return { x: left, y: top, width: right - left, height: bottom - top, rotate: -paper.rotation.z * 180 / Math.PI };
-    });
+  /** 폴더 입구의 한 점을 투영 원점으로 사용해 목록과 광선이 소품에서 떨어져 보이지 않게 한다. */
+  function getHologramAnchor() {
+    // 탭의 윗면까지 확인해 목록 밑면이 폴더에 닿거나 겹치지 않게 한다.
+    projectedAnchor.set(1.44, 2.91, -0.15).applyMatrix4(model.folder.matrixWorld).project(camera);
+    const top = (1 - projectedAnchor.y) * height / 2;
+    projectedAnchor.set(1.44, 2.12, 0.65).applyMatrix4(model.folder.matrixWorld).project(camera);
+    return { x: (projectedAnchor.x + 1) * width / 2, y: (1 - projectedAnchor.y) * height / 2, top };
   }
 
   /** 카메라와 자세를 같은 시간축으로 움직여 정면 뒷걸음 대신 뒤돌아 달려가는 원근을 만든다. */
@@ -88,9 +91,9 @@ function createRoomScene() {
     workspaceElement.dataset.sceneState = pose.phase;
     if (!isReady && elapsedSeconds >= INTRO_DURATION_SECONDS) {
       isReady = true; paperLinks.setReady(true);
-      captionElement.textContent = '포트폴리오 1부터 4가 화면 앞으로 펼쳐졌습니다. 미등록 작품은 준비 중입니다.';
+      captionElement.textContent = '홀로그램 작업 목록이 열렸습니다. 미등록 작품은 준비 중입니다.';
     }
-    presentation.update(pose.presentation, pose.presentation > 0 ? getPaperOrigins() : [], width, height);
+    presentation.update(pose.presentation, pose.presentation > 0 ? getHologramAnchor() : null, width, height);
     renderer.render(scene, camera);
   }
 
@@ -100,10 +103,10 @@ function createRoomScene() {
     if (isDisposed || isLost || document.hidden) return;
     const deltaSeconds = Math.min(0.05, previousTimeMs ? (timeMs - previousTimeMs) / 1000 : 0);
     previousTimeMs = timeMs;
-    elapsedSeconds += deltaSeconds;
+    if (isModelReady && reviewSeconds === null) elapsedSeconds += deltaSeconds;
     updateScene();
-    // 전면 선택 화면이 완전히 덮은 뒤에는 보이지 않는 3D 장면을 계속 렌더링하지 않는다.
-    if (!isReady) frameId = requestAnimationFrame(render);
+    // 목록 등장 뒤에는 현재 3D 프레임을 보존하고 불필요한 연속 렌더링을 멈춘다.
+    if (!isReady && (reviewSeconds === null || !isModelReady)) frameId = requestAnimationFrame(render);
   }
   function resume() { if (!frameId && !isReady && !isDisposed && !isLost && !document.hidden) { previousTimeMs = 0; frameId = requestAnimationFrame(render); } }
   function pause() { cancelAnimationFrame(frameId); frameId = 0; previousTimeMs = 0; }
@@ -116,6 +119,20 @@ function createRoomScene() {
     renderer.setSize(width, height, false); updateScene(); resume();
   }
   const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(stageElement);
+  // 간이 모델이 얼굴 클로즈업에 잠깐 노출되지 않도록 자산 준비 뒤에 재생 시계를 시작한다.
+  loadBlenderPortfolioModel(abortController.signal).then(blenderModel => {
+    if (isDisposed) { blenderModel.dispose(); return; }
+    scene.remove(model.root); model.dispose(); model = blenderModel; scene.add(model.root);
+    isModelReady = true; previousTimeMs = 0;
+    elapsedSeconds = reviewSeconds ?? (reducedMotion.matches ? INTRO_DURATION_SECONDS : elapsedSeconds);
+    workspaceElement.dataset.modelSource = 'blender-v3'; updateScene(); resume();
+  }).catch(error => {
+    if (isDisposed) return;
+    console.warn('Blender 포트폴리오 모델을 읽지 못해 기본 장면을 유지합니다.', error);
+    model.root.visible = true; isModelReady = true;
+    if (reducedMotion.matches) elapsedSeconds = INTRO_DURATION_SECONDS;
+    workspaceElement.dataset.modelSource = 'procedural'; updateScene(); resume();
+  });
   renderer.domElement.addEventListener('webglcontextlost', event => {
     event.preventDefault(); isLost = true; pause(); showFallback();
   }, eventOptions);
@@ -127,12 +144,12 @@ function createRoomScene() {
 
   return {
     pause, resume,
-    /** 대기 없이 종이가 펼쳐진 최종 자세를 보여 준다. */
+    /** 대기 없이 목록이 펼쳐진 최종 자세를 보여 준다. */
     skipIntro() {
       if (isLost) return;
       elapsedSeconds = Math.max(elapsedSeconds, INTRO_DURATION_SECONDS); updateScene();
     },
-    /** 링크를 숨기고 근접 장면부터 재생한다. */
+    /** 사용자가 직접 다시보기를 선택하면 동작 줄이기 설정에서도 한 번은 재생한다. */
     replay() {
       if (isLost) return;
       elapsedSeconds = 0; isReady = false;
@@ -149,6 +166,7 @@ function createRoomScene() {
 }
 
 sceneController = createRoomScene();
+reducedMotion.addEventListener?.('change', () => { if (reducedMotion.matches) sceneController?.skipIntro(); }, eventOptions);
 skipElement.addEventListener('click', () => { sceneController?.skipIntro(); paperLinks.elements[0]?.focus({ preventScroll: true }); }, eventOptions);
 replayElement.addEventListener('click', () => sceneController?.replay(), eventOptions);
 document.addEventListener('visibilitychange', () => document.hidden ? sceneController?.pause() : sceneController?.resume(), eventOptions);
